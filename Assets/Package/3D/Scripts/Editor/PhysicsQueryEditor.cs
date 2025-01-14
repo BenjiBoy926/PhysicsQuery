@@ -14,16 +14,16 @@ namespace PhysicsQuery.Editor
         }
 
         private PhysicsQuery _query;
-        private PhysicsQueryPreview[] _previews;
+        private Preview[] _previews;
         private string[] _previewLabels;
 
         private void OnEnable()
         {
             _query = (PhysicsQuery)target;
-            _previews = new PhysicsQueryPreview[]
+            _previews = new Preview[]
             {
-                new PhysicsQueryPreview_Cast(_query),
-                new PhysicsQueryPreview_CastNonAlloc(_query),
+                new Preview_Cast(_query),
+                new Preview_CastNonAlloc(_query),
             };
             _previewLabels = _previews.Select(x => x.Label).ToArray();
         }

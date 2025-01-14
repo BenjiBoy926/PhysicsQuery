@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
-    public abstract class PhysicsQueryPreview
+    public abstract class Preview
     {
         private const float MaxDistance = 1000;
         private const float NormalLength = 0.1f;
@@ -14,7 +14,7 @@ namespace PhysicsQuery.Editor
 
         private readonly PhysicsQuery _query;
 
-        public PhysicsQueryPreview(PhysicsQuery query)
+        public Preview(PhysicsQuery query)
         {
             _query = query;
         }

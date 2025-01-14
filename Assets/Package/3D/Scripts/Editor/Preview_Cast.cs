@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
-    public class PhysicsQueryPreview_Cast : PhysicsQueryPreview
+    public class Preview_Cast : Preview
     {
         public override string Label => "Cast";
 
-        public PhysicsQueryPreview_Cast(PhysicsQuery query) : base(query) { }
+        public Preview_Cast(PhysicsQuery query) : base(query) { }
 
         public override void Draw()
         {

@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
-    public class PhysicsQueryPreview_CastNonAlloc : PhysicsQueryPreview
+    public class Preview_CastNonAlloc : Preview
     {
         public override string Label => "Cast Non Alloc";
         
-        public PhysicsQueryPreview_CastNonAlloc(PhysicsQuery query) : base(query)
+        public Preview_CastNonAlloc(PhysicsQuery query) : base(query)
         {
         }
 
