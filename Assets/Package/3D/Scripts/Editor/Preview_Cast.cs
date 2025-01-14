@@ -6,19 +6,13 @@ namespace PhysicsQuery.Editor
     {
         public override string Label => "Cast";
 
-        public Preview_Cast(PhysicsQuery query) : base(query) { }
+        public Preview_Cast(PreviewForm form) : base(form)
+        {
+        }
 
         public override void Draw()
         {
-            bool didHit = Query.Cast(out RaycastHit hit);
-            if (didHit)
-            {
-                DrawHit(hit);
-            }
-            else
-            {
-                DrawNoHit(WorldRay.origin);
-            }
+            Form.DrawCast();
         }
     }
 }

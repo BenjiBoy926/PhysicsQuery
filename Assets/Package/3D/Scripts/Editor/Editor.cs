@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
-    [CustomEditor(typeof(PhysicsQuery), true)]
-    public class PhysicsQueryEditor : UnityEditor.Editor
+    public abstract class Editor<TQuery> : UnityEditor.Editor where TQuery : PhysicsQuery
     {
         private int CurrentPreviewIndex
         {
@@ -13,17 +12,19 @@ namespace PhysicsQuery.Editor
             set => EditorPrefs.SetInt(GetPreviewPrefKey(), ValidatePreviewIndex(value));
         }
 
-        private PhysicsQuery _query;
+        private TQuery _query;
+        private PreviewForm _form;
         private Preview[] _previews;
         private string[] _previewLabels;
 
         private void OnEnable()
         {
-            _query = (PhysicsQuery)target;
+            _query = (TQuery)target;
+            _form = CreatePreviewForm(_query);
             _previews = new Preview[]
             {
-                new Preview_Cast(_query),
-                new Preview_CastNonAlloc(_query),
+                new Preview_Cast(_form),
+                new Preview_Overlap(_form)
             };
             _previewLabels = _previews.Select(x => x.Label).ToArray();
         }
@@ -35,18 +36,11 @@ namespace PhysicsQuery.Editor
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
-                CurrentPreviewIndex = EditorGUILayout.Popup("Preview", CurrentPreviewIndex, _previewLabels);
+                CurrentPreviewIndex = EditorGUILayout.Popup("Function", CurrentPreviewIndex, _previewLabels);
             }
         }
-        private void OnSceneGUI()
+        protected virtual void OnSceneGUI()
         {
-            if (_query is BoxQuery boxQuery)
-            {
-                Matrix4x4 oldMatrix = Handles.matrix;
-                Handles.matrix = Matrix4x4.Rotate(boxQuery.GetWorldOrientation());
-                Handles.DrawWireCube(_query.GetWorldOrigin(), boxQuery.GetWorldExtents() * 2);
-                Handles.matrix = oldMatrix;
-            }
             DrawPreview();
         }
         private void DrawPreview()
@@ -64,7 +58,9 @@ namespace PhysicsQuery.Editor
         }
         private string GetPreviewPrefKey()
         {
-            return $"Preview:{_query.GetInstanceID()}";
+            return $"PreviewFunction:{_query.GetInstanceID()}";
         }
+
+        protected abstract PreviewForm CreatePreviewForm(TQuery query);
     }
 }

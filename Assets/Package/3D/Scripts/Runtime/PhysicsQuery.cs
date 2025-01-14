@@ -75,10 +75,8 @@ namespace PhysicsQuery
         private RaycastHit[] _hitCache;
         private Collider[] _colliderCache;
 
-        public abstract bool Cast(out RaycastHit hit);
-        public abstract int CastNonAlloc(out RaycastHit[] hits);
-        public abstract bool Check();
-        public abstract int OverlapNonAlloc(out Collider[] overlaps);
+        public abstract int Cast(out RaycastHit[] hits);
+        public abstract int Overlap(out Collider[] overlaps);
 
         internal RaycastHit[] GetHitCache()
         {
