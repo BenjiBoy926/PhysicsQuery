@@ -14,7 +14,7 @@ namespace PhysicsQuery.Editor
     {
         protected TQuery Query => _query;
 
-        private TQuery _query;
+        private readonly TQuery _query;
 
         public PreviewForm(TQuery query)
         {
