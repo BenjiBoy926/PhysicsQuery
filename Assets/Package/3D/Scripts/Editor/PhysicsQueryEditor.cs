@@ -40,6 +40,11 @@ namespace PhysicsQuery.Editor
         }
         private void OnSceneGUI()
         {
+            if (_query is BoxQuery boxQuery)
+            {
+                Handles.matrix = Matrix4x4.Rotate(boxQuery.GetWorldOrientation());
+                Handles.DrawWireCube(_query.GetWorldOrigin(), boxQuery.GetWorldExtents() * 2);
+            }
             DrawPreview();
         }
         private void DrawPreview()

@@ -19,7 +19,7 @@ namespace PhysicsQuery
         [SerializeField]
         private Vector3 _extents;
         [SerializeField]
-        private Quaternion _orientation;
+        private Quaternion _orientation = Quaternion.identity;
 
         public override bool Cast(out RaycastHit hit)
         {
