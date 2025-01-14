@@ -13,8 +13,7 @@ namespace PhysicsQuery
             int hitCount = Query.Cast(out RaycastHit[] hits);
             if (hitCount > 0)
             {
-                DrawCastLine(hits[hitCount - 1]);
-                DrawHits(hits, hitCount);
+                DrawCastResults(hits, hitCount);
             }
             else
             {
@@ -35,13 +34,6 @@ namespace PhysicsQuery
             }
         }
 
-        private void DrawHits(RaycastHit[] hits, int count)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                DrawHitPoint(hits[i]);
-            }
-        }
         private void DrawNoHit()
         {
             DrawNoHit(Query.GetWorldOrigin());

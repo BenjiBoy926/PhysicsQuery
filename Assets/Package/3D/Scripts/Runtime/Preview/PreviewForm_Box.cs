@@ -13,7 +13,7 @@ namespace PhysicsQuery
             int hitCount = Query.Cast(out RaycastHit[] hits);
             if (hitCount > 0)
             {
-                DrawCastLine(hits[hitCount - 1]);
+                DrawCastResults(hits, hitCount);
                 DrawHits(hits, hitCount);
             }
             else
@@ -46,7 +46,6 @@ namespace PhysicsQuery
         }
         private void DrawHit(RaycastHit hit)
         {
-            DrawHitPoint(hit);
             DrawBox(GetBoxCenter(hit), Color.green);
         }
         private Vector3 GetBoxCenter(RaycastHit hit)

@@ -11,6 +11,13 @@ namespace PhysicsQuery
         public abstract void DrawCastGizmos();
         public abstract void DrawOverlapGizmos();
 
+        protected void DrawHitPoints(RaycastHit[] hits, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                DrawHitPoint(hits[i]);
+            }
+        }
         protected void DrawHitPoint(RaycastHit hit)
         {
             Ray normal = new(hit.point, hit.normal);
@@ -30,6 +37,11 @@ namespace PhysicsQuery
             _query = query;
         }
 
+        protected void DrawCastResults(RaycastHit[] hits, int count)
+        {
+            DrawHitPoints(hits, count);
+            DrawCastLine(hits[count - 1]);
+        }
         protected void DrawCastLine(RaycastHit lastHit)
         {
             Vector3 start = _query.GetWorldOrigin();
