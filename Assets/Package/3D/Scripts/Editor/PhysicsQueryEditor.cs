@@ -1,14 +1,12 @@
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 
 namespace PhysicsQuery.Editor
 {
     [CustomEditor(typeof(PhysicsQuery), true)]
     public class PhysicsQueryEditor : UnityEditor.Editor
     {
-        private const float MaxDistance = 1000;
-        private const float NormalLength = 0.1f;
-
         private int CurrentPreview
         {
             get => EditorPrefs.GetInt(GetPreviewPrefKey(), 0);
@@ -16,14 +14,18 @@ namespace PhysicsQuery.Editor
         }
 
         private PhysicsQuery _query;
-        private readonly string[] _previewNames = new string[]
-        {
-            "Cast", "CastAll"
-        };
+        private PhysicsQueryPreview[] _previews;
+        private string[] _previewLabels;
 
         private void OnEnable()
         {
             _query = (PhysicsQuery)target;
+            _previews = new PhysicsQueryPreview[]
+            {
+                new PhysicsQueryPreview_Cast(_query),
+                new PhysicsQueryPreview_CastAll(_query)
+            };
+            _previewLabels = _previews.Select(x => x.Label).ToArray();
         }
         public override void OnInspectorGUI()
         {
@@ -33,66 +35,18 @@ namespace PhysicsQuery.Editor
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
-                CurrentPreview = EditorGUILayout.Popup("Preview", CurrentPreview, _previewNames);
+                CurrentPreview = EditorGUILayout.Popup("Preview", CurrentPreview, _previewLabels);
             }
         }
         private void OnSceneGUI()
         {
-            switch (CurrentPreview)
-            {
-                case 0:
-                    bool didHit = _query.Cast(out RaycastHit hit);
-                    if (didHit)
-                    {
-                        DrawHit(hit);
-                    }
-                    else
-                    {
-                        DrawNoHit();
-                    }
-                    break;
-                case 1:
-                    RaycastHit[] hits = _query.CastAll();
-                    if (hits.Length > 0)
-                    {
-                        DrawHits(hits);
-                    }
-                    else
-                    {
-                        DrawNoHit();
-                    }
-                    break;
-            }
+            DrawPreview();
         }
-        private void DrawHits(RaycastHit[] hits)
+        private void DrawPreview()
         {
-            for (int i = 0; i < hits.Length; i++)
-            {
-                DrawHit(hits[i]);
-            }
+            _previews[CurrentPreview].Draw();
         }
-        private void DrawHit(RaycastHit hit)
-        {
-            Ray worldRay = _query.GetWorldRay();
-            Handles.color = Color.green;
-            Handles.DrawLine(worldRay.origin, hit.point);
 
-            Ray normal = new(hit.point, hit.normal);
-            Handles.color = Color.red;
-            Handles.DrawLine(normal.origin, normal.GetPoint(NormalLength));
-        }
-        private void DrawNoHit()
-        {
-            Ray worldRay = _query.GetWorldRay();
-            Vector3 start = worldRay.origin;
-            Vector3 end = worldRay.GetPoint(GetMaxDistance());
-            Handles.color = Color.gray;
-            Handles.DrawLine(start, end); 
-        }
-        private float GetMaxDistance()
-        {
-            return Mathf.Min(MaxDistance, _query.MaxDistance);
-        }
         private string GetPreviewPrefKey()
         {
             return $"Preview:{_query.GetInstanceID()}";
