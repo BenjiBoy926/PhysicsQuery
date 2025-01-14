@@ -1,12 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace PhysicsQuery
 {
     public abstract class PhysicsQuery : MonoBehaviour
     {
+        public const float MinDirectionSqrMagnitude = 0.0001f;
+
         [SerializeField] private Space _space = Space.Self;
         [SerializeField] private Vector3 _origin = Vector3.zero;
         [SerializeField] private Vector3 _direction = Vector3.forward;
@@ -14,7 +14,6 @@ namespace PhysicsQuery
         [SerializeField] private LayerMask _layerMask = Physics.DefaultRaycastLayers;
         [SerializeField] private QueryTriggerInteraction _triggerInteraction = QueryTriggerInteraction.UseGlobal;
         [SerializeField] private int _maxCachedHits = 8;
-
         private RaycastHit[] _hitCache;
 
         public Space Space
@@ -22,13 +21,21 @@ namespace PhysicsQuery
             get => _space;
             set => _space = value;
         }
-        public Ray Ray
+        public Vector3 Origin
         {
-            get => new(_origin, _direction);
+            get => _origin;
+            set => _origin = value;
+        }
+        public Vector3 Direction
+        {
+            get => _direction;
             set
             {
-                _origin = value.origin;
-                _direction = value.direction;
+                if (_direction.sqrMagnitude < MinDirectionSqrMagnitude)
+                {
+                    throw new InvalidOperationException($"Direction vector cannot be zero (must have a squared magnitude greater than {MinDirectionSqrMagnitude})");
+                }
+                _direction = value;
             }
         }
         public float MaxDistance
@@ -38,7 +45,7 @@ namespace PhysicsQuery
             {
                 if (value < 0)
                 {
-                    throw new InvalidOperationException($"Max distance of physics query must be non-negative");
+                    throw new InvalidOperationException("Max distance must be non-negative");
                 }
                 _maxDistance = value;
             }
@@ -60,7 +67,7 @@ namespace PhysicsQuery
             {
                 if (value < 0)
                 {
-                    throw new InvalidOperationException($"Max cached hits of physics query must be non-negative");
+                    throw new InvalidOperationException($"Max cached hits must be non-negative");
                 }
                 _maxCachedHits = value;
             }
@@ -89,9 +96,9 @@ namespace PhysicsQuery
             {
                 Vector3 start = transform.TransformPoint(_origin);
                 Vector3 end = transform.TransformPoint(_origin + _direction);
-                return new Ray(start, end - start);
+                return new(start, end - start);
             }
-            return Ray;
+            return new(_origin, _direction);
         }
         private bool HitCacheNeedsRebuild()
         {

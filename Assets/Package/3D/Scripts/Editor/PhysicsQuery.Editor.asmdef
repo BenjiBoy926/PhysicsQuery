@@ -1,7 +1,9 @@
 {
-    "name": "PhQuery.Editor",
+    "name": "PhysicsQuery.Editor",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:dbbaee1bae544974c83ee0e5f6f7e6dd"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
