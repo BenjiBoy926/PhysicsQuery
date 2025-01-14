@@ -15,8 +15,8 @@ namespace PhysicsQuery.PlayModeTests
         {
             Space space = Space.World;
             CreatePhysicsQuery();
-            _query.RaySpace = space;
-            Assert.AreEqual(_query.RaySpace, space);
+            _query.Space = space;
+            Assert.AreEqual(_query.Space, space);
             yield return null;
         }
         [UnityTest]
@@ -140,9 +140,9 @@ namespace PhysicsQuery.PlayModeTests
         }
         private void AssertRay(Ray transformedRay)
         {
-            _query.RaySpace = Space.Self;
+            _query.Space = Space.Self;
             Assert.IsTrue(ApproximatelyEqual(transformedRay, _query.GetWorldRay()));
-            _query.RaySpace = Space.World;
+            _query.Space = Space.World;
             Assert.IsTrue(ApproximatelyEqual(_query.Ray, _query.GetWorldRay()));
         }
         private bool ApproximatelyEqual(Ray ray1, Ray ray2)

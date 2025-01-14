@@ -7,8 +7,9 @@ namespace PhysicsQuery
 {
     public abstract class PhysicsQuery : MonoBehaviour
     {
-        [SerializeField] private Space _raySpace = Space.Self;
-        [SerializeField] private Ray _ray = new Ray(Vector3.zero, Vector3.forward);
+        [SerializeField] private Space _space = Space.Self;
+        [SerializeField] private Vector3 _origin = Vector3.zero;
+        [SerializeField] private Vector3 _direction = Vector3.forward;
         [SerializeField] private float _maxDistance = Mathf.Infinity;
         [SerializeField] private LayerMask _layerMask = Physics.DefaultRaycastLayers;
         [SerializeField] private QueryTriggerInteraction _triggerInteraction = QueryTriggerInteraction.UseGlobal;
@@ -16,15 +17,19 @@ namespace PhysicsQuery
 
         private RaycastHit[] _hitCache;
 
-        public Space RaySpace
+        public Space Space
         {
-            get => _raySpace;
-            set => _raySpace = value;
+            get => _space;
+            set => _space = value;
         }
         public Ray Ray
         {
-            get => _ray;
-            set => _ray = value;
+            get => new(_origin, _direction);
+            set
+            {
+                _origin = value.origin;
+                _direction = value.direction;
+            }
         }
         public float MaxDistance
         {
@@ -62,35 +67,6 @@ namespace PhysicsQuery
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
 
-        internal RaycastHit[] GetHitCache()
-        {
-            if (_hitCache == null)
-            {
-                _hitCache = new RaycastHit[_maxCachedHits];
-            }
-            if (_hitCache.Length != _maxCachedHits)
-            {
-                _hitCache = new RaycastHit[_maxCachedHits];
-            }
-            return _hitCache;
-        }
-        internal Ray GetWorldRay()
-        {
-            if (_raySpace == Space.Self)
-            {
-                Vector3 start = transform.TransformPoint(_ray.origin);
-                Vector3 end = transform.TransformPoint(_ray.origin + _ray.direction);
-                return new Ray(start, end - start);
-            }
-            return _ray;
-        }
-
-        private void OnValidate()
-        {
-            _maxDistance = Mathf.Max(0, _maxDistance);
-            _maxCachedHits = Mathf.Max(0, _maxCachedHits);
-        }
-
         public abstract bool Cast();
         public abstract bool Cast(out RaycastHit hit);
         public abstract RaycastHit[] CastAll();
@@ -98,5 +74,38 @@ namespace PhysicsQuery
         public abstract bool Check();
         public abstract RaycastHit[] Overlap();
         public abstract int OverlapNonAlloc(out RaycastHit[] hits);
+
+        internal RaycastHit[] GetHitCache()
+        {
+            if (HitCacheNeedsRebuild())
+            {
+                RebuildHitCache();
+            }
+            return _hitCache;
+        }
+        internal Ray GetWorldRay()
+        {
+            if (_space == Space.Self)
+            {
+                Vector3 start = transform.TransformPoint(_origin);
+                Vector3 end = transform.TransformPoint(_origin + _direction);
+                return new Ray(start, end - start);
+            }
+            return Ray;
+        }
+        private bool HitCacheNeedsRebuild()
+        {
+            return _hitCache == null || _hitCache.Length != _maxCachedHits;
+        }
+        private void RebuildHitCache()
+        {
+            _hitCache = new RaycastHit[_maxCachedHits];
+        }
+
+        private void OnValidate()
+        {
+            _maxDistance = Mathf.Max(0, _maxDistance);
+            _maxCachedHits = Mathf.Max(0, _maxCachedHits);
+        }
     }
 }
