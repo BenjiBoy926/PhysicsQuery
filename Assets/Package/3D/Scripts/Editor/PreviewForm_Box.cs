@@ -32,7 +32,15 @@ namespace PhysicsQuery.Editor
         }
         public override void DrawOverlap()
         {
-
+            int overlapCount = Query.Overlap(out Collider[] overlaps);
+            if (overlapCount > 0)
+            {
+                DrawBox(Query.GetWorldOrigin(), Color.green);
+            }
+            else
+            {
+                DrawBox(Query.GetWorldOrigin(), Color.gray);
+            }
         }
 
         private void DrawHits(RaycastHit[] hits, int hitCount)
