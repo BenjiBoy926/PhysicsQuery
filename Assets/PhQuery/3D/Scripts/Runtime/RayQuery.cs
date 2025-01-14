@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PhQuery
+namespace PhysicsQuery
 {
     public class RayQuery : PhysicsQuery
     {

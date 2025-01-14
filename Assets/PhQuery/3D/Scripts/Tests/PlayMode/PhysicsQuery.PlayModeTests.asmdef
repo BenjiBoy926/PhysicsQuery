@@ -1,10 +1,10 @@
 {
-    "name": "PhQuery.PlayModeTests",
+    "name": "PhysicsQuery.PlayModeTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "PhQuery"
+        "PhysicsQuery"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

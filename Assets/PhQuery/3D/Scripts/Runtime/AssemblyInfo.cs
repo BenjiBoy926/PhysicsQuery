@@ -1,4 +1,4 @@
 using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("PhQuery.EditModeTests")]
-[assembly:InternalsVisibleTo("PhQuery.PlayModeTests")]
+[assembly:InternalsVisibleTo("PhysicsQuery.EditModeTests")]
+[assembly:InternalsVisibleTo("PhysicsQuery.PlayModeTests")]

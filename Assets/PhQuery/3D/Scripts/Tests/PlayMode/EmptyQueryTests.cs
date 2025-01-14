@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using NUnit.Framework;
 
-namespace PhQuery.PlayModeTests
+namespace PhysicsQuery.PlayModeTests
 {
     public class EmptyQueryTests
     {
