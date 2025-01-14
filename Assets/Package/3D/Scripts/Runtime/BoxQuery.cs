@@ -17,7 +17,7 @@ namespace PhysicsQuery
 
         [Space]
         [SerializeField]
-        private Vector3 _extents = Vector3.one;
+        private Vector3 _extents = Vector3.one * 0.5f;
         [SerializeField]
         private Quaternion _orientation = Quaternion.identity;
 
@@ -34,6 +34,10 @@ namespace PhysicsQuery
             return Physics.OverlapBoxNonAlloc(center, GetWorldExtents(), overlaps, GetWorldOrientation(), LayerMask, TriggerInteraction);
         }
 
+        public Vector3 GetWorldSize()
+        {
+            return GetWorldExtents() * 2;
+        }
         public Vector3 GetWorldExtents()
         {
             if (Space == Space.World)

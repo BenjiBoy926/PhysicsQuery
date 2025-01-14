@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
-    public abstract class Editor<TQuery> : UnityEditor.Editor where TQuery : PhysicsQuery
+    public abstract class QueryEditor<TQuery> : UnityEditor.Editor where TQuery : PhysicsQuery
     {
         private int CurrentPreviewIndex
         {

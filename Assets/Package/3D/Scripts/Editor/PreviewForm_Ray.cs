@@ -27,6 +27,7 @@ namespace PhysicsQuery.Editor
             int overlapCount = Query.Overlap(out Collider[] colliders);
             if (overlapCount > 0)
             {
+                // TODO: draw an outline of the colliders
                 DrawLineStartToEnd(Color.green);
             }
             else
@@ -39,17 +40,18 @@ namespace PhysicsQuery.Editor
         {
             for (int i = 0; i < count; i++)
             {
-                DrawHit(hits[i]);
+                Vector3 start = i == 0 ? Query.GetWorldOrigin() : hits[i - 1].point;
+                DrawHit(start, hits[i]);
             }
         }
-        private void DrawHit(RaycastHit hit)
+        private void DrawHit(Vector3 start, RaycastHit hit)
         {
             Ray normal = new(hit.point, hit.normal);
             Handles.color = Color.red;
             Handles.DrawLine(normal.origin, normal.GetPoint(NormalLength));
 
             Handles.color = Color.green;
-            Handles.DrawLine(Query.GetWorldOrigin(), hit.point);
+            Handles.DrawLine(start, hit.point);
         }
         private void DrawNoHit()
         {
@@ -65,14 +67,8 @@ namespace PhysicsQuery.Editor
         }
         private void DrawLineToEnd(Vector3 start, Color color)
         {
-            Vector3 end = Query.GetWorldRay().GetPoint(GetMaxDistance());
             Handles.color = color;
-            Handles.DrawLine(start, end);
-        }
-
-        private float GetMaxDistance()
-        {
-            return Mathf.Min(MaxDistance, Query.MaxDistance);
+            Handles.DrawLine(start, GetEndPoint());
         }
     }
 }

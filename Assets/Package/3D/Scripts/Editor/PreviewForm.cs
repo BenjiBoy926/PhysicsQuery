@@ -20,5 +20,14 @@ namespace PhysicsQuery.Editor
         {
             _query = query;
         }
+
+        protected Vector3 GetEndPoint()
+        {
+            return Query.GetWorldRay().GetPoint(GetMaxDistance());
+        }
+        private float GetMaxDistance()
+        {
+            return Mathf.Min(MaxDistance, Query.MaxDistance);
+        }
     }
 }
