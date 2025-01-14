@@ -17,7 +17,7 @@ namespace PhysicsQuery
             }
             else
             {
-                DrawNoHit();
+                DrawDefaultLine();
             }
         }
         public override void DrawOverlapGizmos()
@@ -26,30 +26,12 @@ namespace PhysicsQuery
             if (overlapCount > 0)
             {
                 // TODO: draw an outline of the colliders
-                DrawLineStartToEnd(Color.green);
+                DrawDefaultLine(Color.green);
             }
             else
             {
-                DrawNoHit();
+                DrawDefaultLine();
             }
-        }
-
-        private void DrawNoHit()
-        {
-            DrawNoHit(Query.GetWorldOrigin());
-        }
-        private void DrawNoHit(Vector3 start)
-        {
-            DrawLineToEnd(start, Color.gray);
-        }
-        private void DrawLineStartToEnd(Color color)
-        {
-            DrawLineToEnd(Query.GetWorldOrigin(), color);
-        }
-        private void DrawLineToEnd(Vector3 start, Color color)
-        {
-            Gizmos.color = color;
-            Gizmos.DrawLine(start, GetEndPoint());
         }
     }
 }

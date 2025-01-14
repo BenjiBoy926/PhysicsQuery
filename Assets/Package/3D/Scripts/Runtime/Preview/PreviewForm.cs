@@ -37,6 +37,15 @@ namespace PhysicsQuery
             _query = query;
         }
 
+        protected void DrawDefaultLine()
+        {
+            DrawDefaultLine(Color.gray);
+        }
+        protected void DrawDefaultLine(Color color)
+        {
+            Gizmos.color = color;
+            Gizmos.DrawLine(_query.GetWorldOrigin(), GetEndPoint());
+        }
         protected void DrawCastResults(RaycastHit[] hits, int count)
         {
             DrawHitPoints(hits, count);

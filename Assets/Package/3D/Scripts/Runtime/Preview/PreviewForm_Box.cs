@@ -14,14 +14,15 @@ namespace PhysicsQuery
             if (hitCount > 0)
             {
                 DrawCastResults(hits, hitCount);
-                DrawHits(hits, hitCount);
+                DrawBoxesAtHits(hits, hitCount);
             }
             else
             {
                 Vector3 start = Query.GetWorldOrigin();
                 Vector3 end = GetEndPoint();
                 DrawBox(start, Color.gray);
-                DrawLineAndBox(start, end, Color.gray);
+                DrawBox(end, Color.gray);
+                DrawDefaultLine();
             }
         }
         public override void DrawOverlapGizmos()
@@ -37,7 +38,7 @@ namespace PhysicsQuery
             }
         }
 
-        private void DrawHits(RaycastHit[] hits, int hitCount)
+        private void DrawBoxesAtHits(RaycastHit[] hits, int hitCount)
         {
             for (int i = 0; i < hitCount; i++)
             {
@@ -52,12 +53,6 @@ namespace PhysicsQuery
         {
             Ray worldRay = Query.GetWorldRay();
             return worldRay.GetPoint(hit.distance);
-        }
-        private void DrawLineAndBox(Vector3 start, Vector3 end, Color color)
-        {
-            Gizmos.color = color;
-            Gizmos.DrawLine(start, end);
-            DrawBox(end, color);
         }
         private void DrawBox(Vector3 center, Color color)
         {
