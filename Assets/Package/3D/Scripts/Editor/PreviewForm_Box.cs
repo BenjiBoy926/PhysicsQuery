@@ -11,21 +11,24 @@ namespace PhysicsQuery.Editor
 
         public override void DrawCast()
         {
-            Vector3 noHitStart;
             int hitCount = Query.Cast(out RaycastHit[] hits);
             if (hitCount > 0)
             {
-                noHitStart = Query.GetWorldRay().GetPoint(hits[hitCount - 1].distance);
+                Vector3 start = Query.GetWorldOrigin();
+                Vector3 midpoint = GetBoxCenter(hits[hitCount - 1]);
+                Vector3 end = GetEndPoint();
                 Handles.color = Color.green;
-                Handles.DrawLine(Query.GetWorldOrigin(), noHitStart);
+                Handles.DrawLine(start, midpoint);
+                DrawLineAndBox(midpoint, end, Color.gray);
                 DrawHits(hits, hitCount);
             }
             else
             {
-                noHitStart = Query.GetWorldOrigin();
-                DrawBox(noHitStart, Color.gray);
+                Vector3 start = Query.GetWorldOrigin();
+                Vector3 end = GetEndPoint();
+                DrawBox(start, Color.gray);
+                DrawLineAndBox(start, end, Color.gray);
             }
-            DrawLineAndBox(noHitStart, GetEndPoint(), Color.gray);
         }
         public override void DrawOverlap()
         {
@@ -41,9 +44,12 @@ namespace PhysicsQuery.Editor
         }
         private void DrawHit(RaycastHit hit)
         {
+            DrawBox(GetBoxCenter(hit), Color.green);
+        }
+        private Vector3 GetBoxCenter(RaycastHit hit)
+        {
             Ray worldRay = Query.GetWorldRay();
-            Vector3 center = worldRay.GetPoint(hit.distance);
-            DrawBox(center, Color.green);
+            return worldRay.GetPoint(hit.distance);
         }
         private void DrawLineAndBox(Vector3 start, Vector3 end, Color color)
         {
