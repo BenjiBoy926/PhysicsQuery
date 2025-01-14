@@ -51,6 +51,7 @@ namespace PhysicsQuery
         }
         private void DrawHit(RaycastHit hit)
         {
+            DrawHitPoint(hit);
             DrawBox(GetBoxCenter(hit), Color.green);
         }
         private Vector3 GetBoxCenter(RaycastHit hit)

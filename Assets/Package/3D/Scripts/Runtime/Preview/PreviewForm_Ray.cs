@@ -45,9 +45,7 @@ namespace PhysicsQuery
         }
         private void DrawHit(Vector3 start, RaycastHit hit)
         {
-            Ray normal = new(hit.point, hit.normal);
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
+            DrawHitPoint(hit);
 
             Gizmos.color = Color.green;
             Gizmos.DrawLine(start, hit.point);
