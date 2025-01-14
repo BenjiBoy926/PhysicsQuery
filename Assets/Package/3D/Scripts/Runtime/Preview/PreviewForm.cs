@@ -30,6 +30,18 @@ namespace PhysicsQuery
             _query = query;
         }
 
+        protected void DrawCastLine(RaycastHit lastHit)
+        {
+            Vector3 start = _query.GetWorldOrigin();
+            Vector3 midpoint = _query.GetWorldRay().GetPoint(lastHit.distance);
+            Vector3 end = GetEndPoint();
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(start, midpoint);
+
+            Gizmos.color = Color.gray;
+            Gizmos.DrawLine(midpoint, end);
+        }
         protected Vector3 GetEndPoint()
         {
             return Query.GetWorldRay().GetPoint(GetMaxDistance());

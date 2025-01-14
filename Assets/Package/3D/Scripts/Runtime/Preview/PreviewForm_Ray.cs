@@ -13,8 +13,8 @@ namespace PhysicsQuery
             int hitCount = Query.Cast(out RaycastHit[] hits);
             if (hitCount > 0)
             {
+                DrawCastLine(hits[hitCount - 1]);
                 DrawHits(hits, hitCount);
-                DrawNoHit(hits[hitCount - 1].point);
             }
             else
             {
@@ -39,16 +39,8 @@ namespace PhysicsQuery
         {
             for (int i = 0; i < count; i++)
             {
-                Vector3 start = i == 0 ? Query.GetWorldOrigin() : hits[i - 1].point;
-                DrawHit(start, hits[i]);
+                DrawHitPoint(hits[i]);
             }
-        }
-        private void DrawHit(Vector3 start, RaycastHit hit)
-        {
-            DrawHitPoint(hit);
-
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(start, hit.point);
         }
         private void DrawNoHit()
         {

@@ -13,12 +13,7 @@ namespace PhysicsQuery
             int hitCount = Query.Cast(out RaycastHit[] hits);
             if (hitCount > 0)
             {
-                Vector3 start = Query.GetWorldOrigin();
-                Vector3 midpoint = GetBoxCenter(hits[hitCount - 1]);
-                Vector3 end = GetEndPoint();
-                Gizmos.color = Color.green;
-                Gizmos.DrawLine(start, midpoint);
-                DrawLineAndBox(midpoint, end, Color.gray);
+                DrawCastLine(hits[hitCount - 1]);
                 DrawHits(hits, hitCount);
             }
             else
