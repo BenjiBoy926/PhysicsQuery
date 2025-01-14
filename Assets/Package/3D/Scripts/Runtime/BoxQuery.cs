@@ -17,7 +17,7 @@ namespace PhysicsQuery
 
         [Space]
         [SerializeField]
-        private Vector3 _extents;
+        private Vector3 _extents = Vector3.one;
         [SerializeField]
         private Quaternion _orientation = Quaternion.identity;
 
