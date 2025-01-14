@@ -15,7 +15,7 @@ namespace PhysicsQuery.Editor
             RaycastHit[] hits = Query.CastAll();
             if (hits.Length > 0)
             {
-                DrawHits(hits);
+                DrawHits(hits, hits.Length);
                 DrawNoHit(hits[^1].point);
             }
             else

@@ -23,7 +23,8 @@ namespace PhysicsQuery.Editor
             _previews = new PhysicsQueryPreview[]
             {
                 new PhysicsQueryPreview_Cast(_query),
-                new PhysicsQueryPreview_CastAll(_query)
+                new PhysicsQueryPreview_CastAll(_query),
+                new PhysicsQueryPreview_CastNonAlloc(_query),
             };
             _previewLabels = _previews.Select(x => x.Label).ToArray();
         }

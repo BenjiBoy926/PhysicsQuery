@@ -21,9 +21,9 @@ namespace PhysicsQuery.Editor
 
         public abstract void Draw();
 
-        protected void DrawHits(RaycastHit[] hits)
+        protected void DrawHits(RaycastHit[] hits, int count)
         {
-            for (int i = 0; i < hits.Length; i++)
+            for (int i = 0; i < count; i++)
             {
                 DrawHit(hits[i]);
             }
