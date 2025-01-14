@@ -10,14 +10,13 @@ namespace PhysicsQuery.Editor
 
         public abstract string Label { get; }
         protected PhysicsQuery Query => _query;
+        protected Ray WorldRay => _query.GetWorldRay();
 
-        private PhysicsQuery _query;
-        private Ray _worldRay;
+        private readonly PhysicsQuery _query;
 
         public PhysicsQueryPreview(PhysicsQuery query)
         {
             _query = query;
-            _worldRay = query.GetWorldRay();
         }
 
         public abstract void Draw();
@@ -32,16 +31,15 @@ namespace PhysicsQuery.Editor
         protected void DrawHit(RaycastHit hit)
         {
             Handles.color = Color.green;
-            Handles.DrawLine(_worldRay.origin, hit.point);
+            Handles.DrawLine(WorldRay.origin, hit.point);
 
             Ray normal = new(hit.point, hit.normal);
             Handles.color = Color.red;
             Handles.DrawLine(normal.origin, normal.GetPoint(NormalLength));
         }
-        protected void DrawNoHit()
+        protected void DrawNoHit(Vector3 start)
         {
-            Vector3 start = _worldRay.origin;
-            Vector3 end = _worldRay.GetPoint(GetMaxDistance());
+            Vector3 end = WorldRay.GetPoint(GetMaxDistance());
             Handles.color = Color.gray;
             Handles.DrawLine(start, end);
         }

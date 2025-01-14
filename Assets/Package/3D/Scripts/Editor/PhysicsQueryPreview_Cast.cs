@@ -17,7 +17,7 @@ namespace PhysicsQuery.Editor
             }
             else
             {
-                DrawNoHit();
+                DrawNoHit(WorldRay.origin);
             }
         }
     }

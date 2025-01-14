@@ -16,10 +16,11 @@ namespace PhysicsQuery.Editor
             if (hits.Length > 0)
             {
                 DrawHits(hits);
+                DrawNoHit(hits[^1].point);
             }
             else
             {
-                DrawNoHit();
+                DrawNoHit(WorldRay.origin);
             }
         }
     }
