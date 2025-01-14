@@ -4,10 +4,6 @@ namespace PhysicsQuery
 {
     public class RayQuery : PhysicsQuery
     {
-        public override bool Cast()
-        {
-            return Cast(out _);
-        }
         public override bool Cast(out RaycastHit hit)
         {
             Ray ray = GetWorldRay();
@@ -21,11 +17,18 @@ namespace PhysicsQuery
         }
         public override bool Check()
         {
-            return Cast();
+            Ray ray = GetWorldRay();
+            return Physics.Linecast(ray.origin, ray.GetPoint(MaxDistance), LayerMask, TriggerInteraction);
         }
-        public override int OverlapNonAlloc(out RaycastHit[] hits)
+        public override int OverlapNonAlloc(out Collider[] overlaps)
         {
-            return CastNonAlloc(out hits);
+            int hitCount = CastNonAlloc(out RaycastHit[] hits);
+            overlaps = GetColliderCache();
+            for (int i = 0; i < hitCount; i++)
+            {
+                overlaps[i] = hits[i].collider;
+            }
+            return hitCount;
         }
     }
 }

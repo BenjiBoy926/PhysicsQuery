@@ -7,14 +7,22 @@ namespace PhysicsQuery
     {
         public const float MinDirectionSqrMagnitude = 0.0001f;
 
-        [SerializeField] private Space _space = Space.Self;
-        [SerializeField] private Vector3 _origin = Vector3.zero;
-        [SerializeField] private Vector3 _direction = Vector3.forward;
-        [SerializeField] private float _maxDistance = Mathf.Infinity;
-        [SerializeField] private LayerMask _layerMask = Physics.DefaultRaycastLayers;
-        [SerializeField] private QueryTriggerInteraction _triggerInteraction = QueryTriggerInteraction.UseGlobal;
-        [SerializeField] private int _maxCachedHits = 8;
+        [SerializeField] 
+        private Space _space = Space.Self;
+        [SerializeField] 
+        private Vector3 _origin = Vector3.zero;
+        [SerializeField] 
+        private Vector3 _direction = Vector3.forward;
+        [SerializeField] 
+        private float _maxDistance = Mathf.Infinity;
+        [SerializeField] 
+        private LayerMask _layerMask = Physics.DefaultRaycastLayers;
+        [SerializeField] 
+        private QueryTriggerInteraction _triggerInteraction = QueryTriggerInteraction.UseGlobal;
+        [SerializeField] 
+        private int _cacheSize = 8;
         private RaycastHit[] _hitCache;
+        private Collider[] _colliderCache;
 
         public Space Space
         {
@@ -60,57 +68,68 @@ namespace PhysicsQuery
             get => _triggerInteraction;
             set => _triggerInteraction = value;
         }
-        public int MaxCachedHits
+        public int CacheSize
         {
-            get => _maxCachedHits;
+            get => _cacheSize;
             set
             {
                 if (value < 0)
                 {
                     throw new InvalidOperationException($"Max cached hits must be non-negative");
                 }
-                _maxCachedHits = value;
+                _cacheSize = value;
             }
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
 
-        public abstract bool Cast();
         public abstract bool Cast(out RaycastHit hit);
         public abstract int CastNonAlloc(out RaycastHit[] hits);
         public abstract bool Check();
-        public abstract int OverlapNonAlloc(out RaycastHit[] hits);
+        public abstract int OverlapNonAlloc(out Collider[] overlaps);
 
         internal RaycastHit[] GetHitCache()
         {
-            if (HitCacheNeedsRebuild())
+            if (CacheNeedsRebuild(_hitCache))
             {
-                RebuildHitCache();
+                RebuildCache(ref _hitCache);
             }
             return _hitCache;
         }
-        internal Ray GetWorldRay()
+        internal Collider[] GetColliderCache()
         {
-            if (_space == Space.Self)
+            if (CacheNeedsRebuild(_colliderCache))
             {
-                Vector3 start = transform.TransformPoint(_origin);
-                Vector3 end = transform.TransformPoint(_origin + _direction);
-                return new(start, end - start);
+                RebuildCache(ref _colliderCache);
             }
-            return new(_origin, _direction);
+            return _colliderCache;
         }
-        private bool HitCacheNeedsRebuild()
+        private bool CacheNeedsRebuild<TElement>(TElement[] cache)
         {
-            return _hitCache == null || _hitCache.Length != _maxCachedHits;
+            return cache == null || cache.Length != _cacheSize;
         }
-        private void RebuildHitCache()
+        private void RebuildCache<TElement>(ref TElement[] cache)
         {
-            _hitCache = new RaycastHit[_maxCachedHits];
+            cache = new TElement[_cacheSize];
         }
+
+        public Ray GetWorldRay()
+        {
+            return new(GetWorldOrigin(), GetWorldDirection());
+        }
+        public Vector3 GetWorldOrigin()
+        {
+            return _space == Space.Self ? transform.TransformPoint(_origin) : _origin;
+        }
+        public Vector3 GetWorldDirection()
+        {
+            return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
+        }
+        
 
         private void OnValidate()
         {
             _maxDistance = Mathf.Max(0, _maxDistance);
-            _maxCachedHits = Mathf.Max(0, _maxCachedHits);
+            _cacheSize = Mathf.Max(0, _cacheSize);
         }
     }
 }

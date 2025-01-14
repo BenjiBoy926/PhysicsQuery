@@ -64,15 +64,15 @@ namespace PhysicsQuery.PlayModeTests
             int maxCachedHits = 16;
             CreatePhysicsQuery();
 
-            _query.MaxCachedHits = maxCachedHits;
-            Assert.AreEqual(_query.MaxCachedHits, maxCachedHits);
+            _query.CacheSize = maxCachedHits;
+            Assert.AreEqual(_query.CacheSize, maxCachedHits);
 
             maxCachedHits = 0;
-            _query.MaxCachedHits = maxCachedHits;
-            Assert.AreEqual(_query.MaxCachedHits, maxCachedHits);
+            _query.CacheSize = maxCachedHits;
+            Assert.AreEqual(_query.CacheSize, maxCachedHits);
 
-            Assert.Throws<InvalidOperationException>(() => _query.MaxCachedHits = -1);
-            Assert.AreEqual(_query.MaxCachedHits, maxCachedHits);
+            Assert.Throws<InvalidOperationException>(() => _query.CacheSize = -1);
+            Assert.AreEqual(_query.CacheSize, maxCachedHits);
 
             yield return null;
         }
@@ -81,15 +81,15 @@ namespace PhysicsQuery.PlayModeTests
         {
             CreatePhysicsQuery();
             RaycastHit[] cache = _query.GetHitCache();
-            Assert.AreEqual(cache.Length, _query.MaxCachedHits);
+            Assert.AreEqual(cache.Length, _query.CacheSize);
 
-            _query.MaxCachedHits++;
+            _query.CacheSize++;
             cache = _query.GetHitCache();
-            Assert.AreEqual(cache.Length, _query.MaxCachedHits);
+            Assert.AreEqual(cache.Length, _query.CacheSize);
 
-            _query.MaxCachedHits -= 2;
+            _query.CacheSize -= 2;
             cache = _query.GetHitCache();
-            Assert.AreEqual(cache.Length, _query.MaxCachedHits);
+            Assert.AreEqual(cache.Length, _query.CacheSize);
 
             yield return null;
         }

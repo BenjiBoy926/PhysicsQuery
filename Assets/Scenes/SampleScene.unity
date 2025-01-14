@@ -571,7 +571,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 51
   _triggerInteraction: 0
-  _maxCachedHits: 3
+  _cacheSize: 8
 --- !u!4 &1676319916
 Transform:
   m_ObjectHideFlags: 0
@@ -580,13 +580,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1676319914}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0035341722, y: -0, z: -0, w: 0.9999938}
+  m_LocalRotation: {x: -0.036630813, y: -0, z: -0, w: 0.99932885}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0.405, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -4.199, y: 0, z: 0}
 --- !u!1 &1700303084
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,6 +803,61 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2119687229
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2119687231}
+  - component: {fileID: 2119687232}
+  m_Layer: 0
+  m_Name: BoxQuery
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2119687231
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119687229}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.23809987, y: -0, z: -0, w: 0.9712407}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 27.549, y: 0, z: 0}
+--- !u!114 &2119687232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119687229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b2c0b2a7f7f94841921121afda3a6d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _space: 1
+  _origin: {x: 0, y: 0, z: 0}
+  _direction: {x: 0, y: 0, z: 1}
+  _maxDistance: Infinity
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967291
+  _triggerInteraction: 0
+  _cacheSize: 8
+  _extents: {x: 0, y: 0, z: 0}
+  _orientation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -811,6 +866,7 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1676319916}
+  - {fileID: 2119687231}
   - {fileID: 2043887169}
   - {fileID: 1700303088}
   - {fileID: 1539442403}

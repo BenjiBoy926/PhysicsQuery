@@ -4,10 +4,6 @@ namespace PhysicsQuery
 {
     public class EmptyQuery : PhysicsQuery
     {
-        public override bool Cast()
-        {
-            return false;
-        }
         public override bool Cast(out RaycastHit hit)
         {
             hit = new RaycastHit();
@@ -22,9 +18,9 @@ namespace PhysicsQuery
         {
             return false;
         }
-        public override int OverlapNonAlloc(out RaycastHit[] hits)
+        public override int OverlapNonAlloc(out Collider[] overlaps)
         {
-            hits = GetHitCache();
+            overlaps = GetColliderCache();
             return 0;
         }
     }
