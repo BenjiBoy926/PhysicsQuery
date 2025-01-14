@@ -16,7 +16,7 @@ namespace PhysicsQuery
             Ray normal = new(hit.point, hit.normal);
             Gizmos.color = Color.red;
             Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
-            Gizmos.DrawSphere(normal.origin, HitSphereRadius);
+            Gizmos.DrawWireSphere(normal.origin, HitSphereRadius);
         }
     }
     public abstract class PreviewForm<TQuery> : PreviewForm where TQuery : PhysicsQuery
