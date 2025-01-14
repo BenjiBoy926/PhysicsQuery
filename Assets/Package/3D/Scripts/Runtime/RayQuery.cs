@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace PhysicsQuery
@@ -15,11 +13,6 @@ namespace PhysicsQuery
             Ray ray = GetWorldRay();
             return Physics.Raycast(ray, out hit, MaxDistance, LayerMask, TriggerInteraction);
         }
-        public override RaycastHit[] CastAll()
-        {
-            Ray ray = GetWorldRay();
-            return Physics.RaycastAll(ray, MaxDistance, LayerMask, TriggerInteraction);
-        }
         public override int CastNonAlloc(out RaycastHit[] hits)
         {
             Ray ray = GetWorldRay();
@@ -29,10 +22,6 @@ namespace PhysicsQuery
         public override bool Check()
         {
             return Cast();
-        }
-        public override RaycastHit[] Overlap()
-        {
-            return CastAll();
         }
         public override int OverlapNonAlloc(out RaycastHit[] hits)
         {

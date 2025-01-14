@@ -76,10 +76,8 @@ namespace PhysicsQuery
 
         public abstract bool Cast();
         public abstract bool Cast(out RaycastHit hit);
-        public abstract RaycastHit[] CastAll();
         public abstract int CastNonAlloc(out RaycastHit[] hits);
         public abstract bool Check();
-        public abstract RaycastHit[] Overlap();
         public abstract int OverlapNonAlloc(out RaycastHit[] hits);
 
         internal RaycastHit[] GetHitCache()

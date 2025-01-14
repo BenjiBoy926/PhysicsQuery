@@ -1,16 +1,16 @@
-using UnityEngine;
 using UnityEditor;
 using System.Linq;
+using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
     [CustomEditor(typeof(PhysicsQuery), true)]
     public class PhysicsQueryEditor : UnityEditor.Editor
     {
-        private int CurrentPreview
+        private int CurrentPreviewIndex
         {
-            get => EditorPrefs.GetInt(GetPreviewPrefKey(), 0);
-            set => EditorPrefs.SetInt(GetPreviewPrefKey(), value);
+            get => ValidatePreviewIndex(GetPreviewPrefValue());
+            set => EditorPrefs.SetInt(GetPreviewPrefKey(), ValidatePreviewIndex(value));
         }
 
         private PhysicsQuery _query;
@@ -23,7 +23,6 @@ namespace PhysicsQuery.Editor
             _previews = new PhysicsQueryPreview[]
             {
                 new PhysicsQueryPreview_Cast(_query),
-                new PhysicsQueryPreview_CastAll(_query),
                 new PhysicsQueryPreview_CastNonAlloc(_query),
             };
             _previewLabels = _previews.Select(x => x.Label).ToArray();
@@ -36,7 +35,7 @@ namespace PhysicsQuery.Editor
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
-                CurrentPreview = EditorGUILayout.Popup("Preview", CurrentPreview, _previewLabels);
+                CurrentPreviewIndex = EditorGUILayout.Popup("Preview", CurrentPreviewIndex, _previewLabels);
             }
         }
         private void OnSceneGUI()
@@ -45,9 +44,17 @@ namespace PhysicsQuery.Editor
         }
         private void DrawPreview()
         {
-            _previews[CurrentPreview].Draw();
+            _previews[CurrentPreviewIndex].Draw();
         }
 
+        private int ValidatePreviewIndex(int index)
+        {
+            return Mathf.Clamp(index, 0, _previewLabels.Length - 1);
+        }
+        private int GetPreviewPrefValue()
+        {
+            return EditorPrefs.GetInt(GetPreviewPrefKey(), 0);
+        }
         private string GetPreviewPrefKey()
         {
             return $"Preview:{_query.GetInstanceID()}";

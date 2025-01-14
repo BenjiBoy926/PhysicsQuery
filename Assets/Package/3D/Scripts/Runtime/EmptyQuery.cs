@@ -13,10 +13,6 @@ namespace PhysicsQuery
             hit = new RaycastHit();
             return false;
         }
-        public override RaycastHit[] CastAll()
-        {
-            return new RaycastHit[0];
-        }
         public override int CastNonAlloc(out RaycastHit[] hits)
         {
             hits = GetHitCache();
@@ -25,10 +21,6 @@ namespace PhysicsQuery
         public override bool Check()
         {
             return false;
-        }
-        public override RaycastHit[] Overlap()
-        {
-            return new RaycastHit[0];
         }
         public override int OverlapNonAlloc(out RaycastHit[] hits)
         {
