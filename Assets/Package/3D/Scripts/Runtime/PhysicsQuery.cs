@@ -7,23 +7,6 @@ namespace PhysicsQuery
     {
         public const float MinDirectionSqrMagnitude = 0.0001f;
 
-        [SerializeField] 
-        private Space _space = Space.Self;
-        [SerializeField] 
-        private Vector3 _origin = Vector3.zero;
-        [SerializeField] 
-        private Vector3 _direction = Vector3.forward;
-        [SerializeField] 
-        private float _maxDistance = Mathf.Infinity;
-        [SerializeField] 
-        private LayerMask _layerMask = Physics.DefaultRaycastLayers;
-        [SerializeField] 
-        private QueryTriggerInteraction _triggerInteraction = QueryTriggerInteraction.UseGlobal;
-        [SerializeField] 
-        private int _cacheSize = 8;
-        private RaycastHit[] _hitCache;
-        private Collider[] _colliderCache;
-
         public Space Space
         {
             get => _space;
@@ -37,14 +20,7 @@ namespace PhysicsQuery
         public Vector3 Direction
         {
             get => _direction;
-            set
-            {
-                if (_direction.sqrMagnitude < MinDirectionSqrMagnitude)
-                {
-                    throw new InvalidOperationException($"Direction vector cannot be zero (must have a squared magnitude greater than {MinDirectionSqrMagnitude})");
-                }
-                _direction = value;
-            }
+            set => _direction = value;
         }
         public float MaxDistance
         {
@@ -81,6 +57,23 @@ namespace PhysicsQuery
             }
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
+
+        [SerializeField] 
+        private Space _space = Space.Self;
+        [SerializeField] 
+        private Vector3 _origin = Vector3.zero;
+        [SerializeField] 
+        private Vector3 _direction = Vector3.forward;
+        [SerializeField] 
+        private float _maxDistance = Mathf.Infinity;
+        [SerializeField] 
+        private LayerMask _layerMask = Physics.DefaultRaycastLayers;
+        [SerializeField] 
+        private QueryTriggerInteraction _triggerInteraction = QueryTriggerInteraction.UseGlobal;
+        [SerializeField] 
+        private int _cacheSize = 8;
+        private RaycastHit[] _hitCache;
+        private Collider[] _colliderCache;
 
         public abstract bool Cast(out RaycastHit hit);
         public abstract int CastNonAlloc(out RaycastHit[] hits);
@@ -125,7 +118,6 @@ namespace PhysicsQuery
             return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
         }
         
-
         private void OnValidate()
         {
             _maxDistance = Mathf.Max(0, _maxDistance);

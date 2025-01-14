@@ -4,6 +4,17 @@ namespace PhysicsQuery
 {
     public class BoxQuery : PhysicsQuery
     {
+        public Vector3 Extents
+        {
+            get => _extents;
+            set => _extents = value;
+        }
+        public Quaternion Orientation
+        {
+            get => _orientation;
+            set => _orientation = value;
+        }
+
         [Space]
         [SerializeField]
         private Vector3 _extents;
@@ -33,7 +44,7 @@ namespace PhysicsQuery
             return Physics.OverlapBoxNonAlloc(center, GetWorldExtents(), overlaps, GetWorldOrientation(), LayerMask, TriggerInteraction);
         }
 
-        private Vector3 GetWorldExtents()
+        public Vector3 GetWorldExtents()
         {
             if (Space == Space.World)
             {
@@ -42,13 +53,9 @@ namespace PhysicsQuery
             Vector3 lossyScale = transform.lossyScale;
             return new(_extents.x * lossyScale.x, _extents.y * lossyScale.y, _extents.z * lossyScale.z);
         }
-        private Quaternion GetWorldOrientation()
+        public Quaternion GetWorldOrientation()
         {
-            if (Space == Space.World)
-            {
-                return _orientation;
-            }
-            return transform.rotation * _orientation;
+            return Space == Space.Self ? transform.rotation * _orientation : _orientation;
         }
     }
 }
