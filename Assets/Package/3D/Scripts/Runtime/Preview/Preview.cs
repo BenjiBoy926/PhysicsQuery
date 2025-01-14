@@ -1,7 +1,4 @@
-using UnityEditor;
-using UnityEngine;
-
-namespace PhysicsQuery.Editor
+namespace PhysicsQuery
 {
     public abstract class Preview
     {
@@ -15,6 +12,6 @@ namespace PhysicsQuery.Editor
             _form = form;
         }
 
-        public abstract void Draw();
+        public abstract void DrawGizmos();
     }
 }

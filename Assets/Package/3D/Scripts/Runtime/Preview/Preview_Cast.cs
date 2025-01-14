@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PhysicsQuery.Editor
+namespace PhysicsQuery
 {
     public class Preview_Cast : Preview
     {
@@ -10,9 +10,9 @@ namespace PhysicsQuery.Editor
         {
         }
 
-        public override void Draw()
+        public override void DrawGizmos()
         {
-            Form.DrawCast();
+            Form.DrawCastGizmos();
         }
     }
 }

@@ -27,6 +27,7 @@ namespace PhysicsQuery.Editor
                 new Preview_Overlap(_form)
             };
             _previewLabels = _previews.Select(x => x.Label).ToArray();
+            SetPreview();
         }
         public override void OnInspectorGUI()
         {
@@ -37,17 +38,14 @@ namespace PhysicsQuery.Editor
             {
                 EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
                 CurrentPreviewIndex = EditorGUILayout.Popup("Function", CurrentPreviewIndex, _previewLabels);
+                SetPreview();
             }
         }
-        protected virtual void OnSceneGUI()
-        {
-            DrawPreview();
-        }
-        private void DrawPreview()
-        {
-            _previews[CurrentPreviewIndex].Draw();
-        }
 
+        private void SetPreview()
+        {
+            _query.SetPreview(_previews[CurrentPreviewIndex]);
+        }
         private int ValidatePreviewIndex(int index)
         {
             return Mathf.Clamp(index, 0, _previewLabels.Length - 1);

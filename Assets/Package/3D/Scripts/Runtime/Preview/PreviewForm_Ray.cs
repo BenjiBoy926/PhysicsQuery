@@ -1,7 +1,6 @@
-using UnityEditor;
 using UnityEngine;
 
-namespace PhysicsQuery.Editor
+namespace PhysicsQuery
 {
     public class PreviewForm_Ray : PreviewForm<RayQuery>
     {
@@ -9,7 +8,7 @@ namespace PhysicsQuery.Editor
         {
         }
 
-        public override void DrawCast()
+        public override void DrawCastGizmos()
         {
             int hitCount = Query.Cast(out RaycastHit[] hits);
             if (hitCount > 0)
@@ -22,7 +21,7 @@ namespace PhysicsQuery.Editor
                 DrawNoHit();
             }
         }
-        public override void DrawOverlap()
+        public override void DrawOverlapGizmos()
         {
             int overlapCount = Query.Overlap(out Collider[] colliders);
             if (overlapCount > 0)
@@ -47,11 +46,11 @@ namespace PhysicsQuery.Editor
         private void DrawHit(Vector3 start, RaycastHit hit)
         {
             Ray normal = new(hit.point, hit.normal);
-            Handles.color = Color.red;
-            Handles.DrawLine(normal.origin, normal.GetPoint(NormalLength));
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
 
-            Handles.color = Color.green;
-            Handles.DrawLine(start, hit.point);
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(start, hit.point);
         }
         private void DrawNoHit()
         {
@@ -67,8 +66,8 @@ namespace PhysicsQuery.Editor
         }
         private void DrawLineToEnd(Vector3 start, Color color)
         {
-            Handles.color = color;
-            Handles.DrawLine(start, GetEndPoint());
+            Gizmos.color = color;
+            Gizmos.DrawLine(start, GetEndPoint());
         }
     }
 }

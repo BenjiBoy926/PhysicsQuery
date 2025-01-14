@@ -74,6 +74,7 @@ namespace PhysicsQuery
         private int _cacheSize = 8;
         private RaycastHit[] _hitCache;
         private Collider[] _colliderCache;
+        private Preview _preview;
 
         public abstract int Cast(out RaycastHit[] hits);
         public abstract int Overlap(out Collider[] overlaps);
@@ -115,11 +116,20 @@ namespace PhysicsQuery
         {
             return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
         }
+
+        internal void SetPreview(Preview preview)
+        {
+            _preview = preview;
+        }
         
         private void OnValidate()
         {
             _maxDistance = Mathf.Max(0, _maxDistance);
             _cacheSize = Mathf.Max(0, _cacheSize);
+        }
+        private void OnDrawGizmosSelected()
+        {
+            _preview?.DrawGizmos();
         }
     }
 }

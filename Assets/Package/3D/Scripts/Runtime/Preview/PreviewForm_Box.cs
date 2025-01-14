@@ -1,7 +1,6 @@
-using UnityEditor;
 using UnityEngine;
 
-namespace PhysicsQuery.Editor
+namespace PhysicsQuery
 {
     public class PreviewForm_Box : PreviewForm<BoxQuery>
     {
@@ -9,7 +8,7 @@ namespace PhysicsQuery.Editor
         {
         }
 
-        public override void DrawCast()
+        public override void DrawCastGizmos()
         {
             int hitCount = Query.Cast(out RaycastHit[] hits);
             if (hitCount > 0)
@@ -17,8 +16,8 @@ namespace PhysicsQuery.Editor
                 Vector3 start = Query.GetWorldOrigin();
                 Vector3 midpoint = GetBoxCenter(hits[hitCount - 1]);
                 Vector3 end = GetEndPoint();
-                Handles.color = Color.green;
-                Handles.DrawLine(start, midpoint);
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(start, midpoint);
                 DrawLineAndBox(midpoint, end, Color.gray);
                 DrawHits(hits, hitCount);
             }
@@ -30,7 +29,7 @@ namespace PhysicsQuery.Editor
                 DrawLineAndBox(start, end, Color.gray);
             }
         }
-        public override void DrawOverlap()
+        public override void DrawOverlapGizmos()
         {
             int overlapCount = Query.Overlap(out Collider[] overlaps);
             if (overlapCount > 0)
@@ -61,8 +60,8 @@ namespace PhysicsQuery.Editor
         }
         private void DrawLineAndBox(Vector3 start, Vector3 end, Color color)
         {
-            Handles.color = color;
-            Handles.DrawLine(start, end);
+            Gizmos.color = color;
+            Gizmos.DrawLine(start, end);
             DrawBox(end, color);
         }
         private void DrawBox(Vector3 center, Color color)
@@ -70,10 +69,10 @@ namespace PhysicsQuery.Editor
             Quaternion worldOrientation = Query.GetWorldOrientation();
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
             center = rotationMatrix.inverse.MultiplyVector(center);
-            Handles.matrix = rotationMatrix;
-            Handles.color = color;
-            Handles.DrawWireCube(center, Query.GetWorldSize());
-            Handles.matrix = Matrix4x4.identity;
+            Gizmos.matrix = rotationMatrix;
+            Gizmos.color = color;
+            Gizmos.DrawWireCube(center, Query.GetWorldSize());
+            Gizmos.matrix = Matrix4x4.identity;
         }
     }
 }

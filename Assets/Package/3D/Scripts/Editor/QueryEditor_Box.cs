@@ -9,9 +9,5 @@ namespace PhysicsQuery.Editor
         {
             return new PreviewForm_Box(query);
         }
-        protected override void OnSceneGUI()
-        {
-            base.OnSceneGUI();
-        }
     }
 }

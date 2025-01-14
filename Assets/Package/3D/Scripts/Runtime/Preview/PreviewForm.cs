@@ -1,14 +1,14 @@
 using UnityEngine;
 
-namespace PhysicsQuery.Editor
+namespace PhysicsQuery
 {
     public abstract class PreviewForm
     {
         protected const float MaxDistance = 1000;
         protected const float NormalLength = 0.1f;
 
-        public abstract void DrawCast();
-        public abstract void DrawOverlap();
+        public abstract void DrawCastGizmos();
+        public abstract void DrawOverlapGizmos();
     }
     public abstract class PreviewForm<TQuery> : PreviewForm where TQuery : PhysicsQuery
     {

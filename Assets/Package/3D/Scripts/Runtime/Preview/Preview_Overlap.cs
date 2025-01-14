@@ -1,4 +1,4 @@
-namespace PhysicsQuery.Editor
+namespace PhysicsQuery
 {
     public class Preview_Overlap : Preview
     {
@@ -8,9 +8,9 @@ namespace PhysicsQuery.Editor
         {
         }
 
-        public override void Draw()
+        public override void DrawGizmos()
         {
-            Form.DrawOverlap();
+            Form.DrawOverlapGizmos();
         }
     }
 }
