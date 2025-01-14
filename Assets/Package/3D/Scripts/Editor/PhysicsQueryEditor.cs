@@ -3,16 +3,16 @@ using UnityEditor;
 
 namespace PhysicsQuery.Editor
 {
-    [CustomEditor(typeof(RayQuery))]
-    public class RayQueryEditor : UnityEditor.Editor
+    [CustomEditor(typeof(PhysicsQuery), true)]
+    public class PhysicsQueryEditor : UnityEditor.Editor
     {
         private const float MaxDistance = 1000;
 
-        private RayQuery _query;
+        private PhysicsQuery _query;
 
         private void OnEnable()
         {
-            _query = (RayQuery)target;
+            _query = (PhysicsQuery)target;
         }
         private void OnSceneGUI()
         {
