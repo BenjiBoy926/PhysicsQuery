@@ -4,10 +4,20 @@ namespace PhysicsQuery
 {
     public class CapsuleQuery : PhysicsQuery
     {
-        public Vector3 OtherCapPosition
+        public Vector3 Axis
         {
-            get => _otherCapPosition;
-            set => _otherCapPosition = value;
+            get => _axis;
+            set => _axis = value;
+        }
+        public float Height
+        {
+            get => _height;
+            set => _height = Mathf.Max(value, MinNonZeroFloat);
+        }
+        public float Extent
+        {
+            get => _height / 2;
+            set => _height = value * 2;
         }
         public float Radius
         {
@@ -17,28 +27,36 @@ namespace PhysicsQuery
 
         [Space]
         [SerializeField]
-        private Vector3 _otherCapPosition = Vector3.down;
+        private Vector3 _axis = Vector3.up;
+        [SerializeField]
+        private float _height = 1;
         [SerializeField]
         private float _radius = 0.5f;
 
         protected override int PerformCast(Ray worldRay, RaycastHit[] cache)
         {
-            Vector3 otherCapWorldPosition = GetOtherCapWorldPosition();
-            return Physics.CapsuleCastNonAlloc(worldRay.origin, otherCapWorldPosition, _radius, worldRay.direction, cache, MaxDistance, LayerMask, TriggerInteraction);
+            GetCapPositions(worldRay.origin, out Vector3 cap1, out Vector3 cap2);
+            return Physics.CapsuleCastNonAlloc(cap1, cap2, _radius, worldRay.direction, cache, MaxDistance, LayerMask, TriggerInteraction);
         }
         protected override int PerformOverlap(Vector3 worldOrigin, Collider[] cache)
         {
-            Vector3 otherCapWorldPosition = GetOtherCapWorldPosition();
-            return Physics.OverlapCapsuleNonAlloc(worldOrigin, otherCapWorldPosition, _radius, cache, LayerMask, TriggerInteraction);
+            GetCapPositions(worldOrigin, out Vector3 cap1, out Vector3 cap2);
+            return Physics.OverlapCapsuleNonAlloc(cap1, cap2, _radius, cache, LayerMask, TriggerInteraction);
         }
 
-        public Vector3 GetOtherCapWorldPosition()
+        private void GetCapPositions(Vector3 worldOrigin, out Vector3 cap1, out Vector3 cap2)
+        {
+            Vector3 worldAxis = GetWorldAxis();
+            cap1 = worldOrigin + worldAxis;
+            cap2 = worldOrigin - worldAxis;
+        }
+        public Vector3 GetWorldAxis()
         {
             if (Space == Space.World)
             {
-                return _otherCapPosition;
+                return _axis.normalized * Extent;
             }
-            return transform.TransformPoint(_otherCapPosition);
+            return transform.TransformDirection(_axis).normalized * Extent;
         }
     }
 }
