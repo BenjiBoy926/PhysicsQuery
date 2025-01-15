@@ -8,18 +8,6 @@ namespace PhysicsQuery
         {
         }
 
-        public override void DrawCastGizmos()
-        {
-            PhysicsCastResult result = Query.Cast();
-            if (result.IsEmpty)
-            {
-                DrawDefaultLine();
-            }
-            else
-            {
-                DrawCastResults(result);
-            }
-        }
         public override void DrawOverlapGizmos()
         {
             PhysicsOverlapResult result = Query.Overlap();

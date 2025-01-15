@@ -23,6 +23,11 @@ namespace PhysicsQuery
             _query = query;
         }
 
+        public override void DrawCastGizmos()
+        {
+            DrawCastResults(Query.Cast());
+        }
+
         protected void DrawDefaultLine()
         {
             DrawDefaultLine(Color.gray);
@@ -35,13 +40,34 @@ namespace PhysicsQuery
 
         protected void DrawCastResults(PhysicsCastResult result)
         {
+            if (result.IsEmpty)
+            {
+                DrawEmptyResult();
+            }
+            else
+            {
+                DrawNonEmptyResult(result);
+            }
+        }
+        private void DrawEmptyResult()
+        {
+            Vector3 start = _query.GetWorldOrigin();
+            Vector3 end = GetEndPoint();
+            DrawShape(start, Color.gray);
+            DrawShape(end, Color.gray);
+            DrawLine(start, end, Color.gray);
+        }
+        private void DrawNonEmptyResult(PhysicsCastResult result)
+        {
             for (int i = 0; i < result.Count; i++)
             {
                 DrawHitPoint(result.Get(i));
-                DrawShapeAtHit(result.Get(i));    
+                DrawShapeAtHit(result.Get(i));
             }
             DrawCastLine(result.FurthestHit);
+            DrawShape(GetEndPoint(), Color.gray);
         }
+
         private void DrawShapeAtHit(RaycastHit hit)
         {
             Vector3 center = GetShapeCenter(hit);
@@ -59,12 +85,13 @@ namespace PhysicsQuery
             Vector3 start = _query.GetWorldOrigin();
             Vector3 midpoint = _query.GetWorldRay().GetPoint(furthestHit.distance);
             Vector3 end = GetEndPoint();
-
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(start, midpoint);
-
-            Gizmos.color = Color.gray;
-            Gizmos.DrawLine(midpoint, end);
+            DrawLine(start, midpoint, Color.green);
+            DrawLine(midpoint, end, Color.gray);
+        }
+        private void DrawLine(Vector3 start, Vector3 end, Color color)
+        {
+            Gizmos.color = color;
+            Gizmos.DrawLine(start, end);
         }
 
         protected Vector3 GetEndPoint()

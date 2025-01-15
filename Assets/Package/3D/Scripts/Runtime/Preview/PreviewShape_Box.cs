@@ -8,23 +8,6 @@ namespace PhysicsQuery
         {
         }
 
-        public override void DrawCastGizmos()
-        {
-            PhysicsCastResult result = Query.Cast();
-            if (result.IsEmpty)
-            {
-                Vector3 start = Query.GetWorldOrigin();
-                Vector3 end = GetEndPoint();
-                DrawShape(start, Color.gray);
-                DrawShape(end, Color.gray);
-                DrawDefaultLine();
-            }
-            else
-            {
-                DrawCastResults(result);
-                DrawShape(GetEndPoint(), Color.gray);
-            }
-        }
         public override void DrawOverlapGizmos()
         {
             PhysicsOverlapResult result = Query.Overlap();
