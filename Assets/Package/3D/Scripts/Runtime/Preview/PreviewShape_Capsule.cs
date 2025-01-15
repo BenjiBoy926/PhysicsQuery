@@ -15,23 +15,32 @@ namespace PhysicsQuery
         }
         protected override void DrawShape(Vector3 center, Color color)
         {
-            Vector3 offset = Query.GetWorldAxis();
-            Vector3 cap1 = center + offset;
-            Vector3 cap2 = center - offset;
-            Vector3 up = offset.normalized;
-            Vector3 down = -up;
-
-            Gizmos.color = color;
-            DrawHemisphere(cap1, up);
-            DrawHemisphere(cap2, down);
-        }
-
-        private void DrawHemisphere(Vector3 center, Vector3 up)
-        {
+            Vector3 up = Query.GetWorldAxis();
+            Vector3 cap1 = center + up;
+            Vector3 cap2 = center - up;
             Vector3 direction = GetWorldRay().direction;
             Vector3 crossAxis = Colinear(up, direction) ? GetArbitraryCrossAxis(up) : direction;
-            Vector3 right = Vector3.Cross(up, crossAxis).normalized;
-            Vector3 forward = Vector3.Cross(up, right).normalized;
+            Vector3 right = Vector3.Cross(up, crossAxis).normalized * Query.Radius;
+            Vector3 forward = Vector3.Cross(up, right).normalized * Query.Radius;
+
+            Vector3 left = -right;
+            Vector3 down = -up;
+            Vector3 back = -forward;
+
+            Gizmos.color = color;
+            DrawHemisphere(cap1, right, up, forward);
+            DrawHemisphere(cap2, right, down, forward);
+            DrawLine(center + forward + up, center + forward + down, color);
+            DrawLine(center + back + up, center + back + down, color);
+            DrawLine(center + right + up, center + right + down, color);
+            DrawLine(center + left + up, center + left + down, color);
+        }
+
+        private void DrawHemisphere(Vector3 center, Vector3 right, Vector3 up, Vector3 forward)
+        {
+            right = right.normalized;
+            up = up.normalized;
+            forward = forward.normalized;
             DrawCircle(center, forward, right, Query.Radius);
             DrawHalfCircle(center, forward, up, Query.Radius);
             DrawHalfCircle(center, right, up, Query.Radius);

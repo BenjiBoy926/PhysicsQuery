@@ -787,7 +787,7 @@ MonoBehaviour:
     m_Bits: 4294967291
   _triggerInteraction: 0
   _cacheCapacity: 8
-  _axis: {x: 0, y: 1, z: 0}
+  _axis: {x: -0.24, y: 1, z: 0}
   _height: 1
   _radius: 0.5
 --- !u!4 &1726772719
@@ -798,13 +798,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1726772717}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.026772695, y: -0.04008076, z: -0.0010743209, w: 0.9988371}
+  m_LocalRotation: {x: 0.041472375, y: -0.11288011, z: -0.0061117765, w: 0.99272394}
   m_LocalPosition: {x: 0, y: 0, z: -0.345}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 3.061, y: -4.602, z: -0.246}
+  m_LocalEulerAnglesHint: {x: 4.644, y: -13.024, z: -1.236}
 --- !u!1 &2043887165
 GameObject:
   m_ObjectHideFlags: 0
