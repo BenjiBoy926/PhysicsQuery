@@ -23,51 +23,48 @@ namespace PhysicsQuery
             Gizmos.DrawWireSphere(cap1, Query.Radius);
             Gizmos.DrawWireSphere(cap2, Query.Radius);
 
-            GetRightAndForward(offset, out Vector3 right, out Vector3 forward);
-            DrawCircle(center, offset, Query.Radius);
-            DrawHalfCircle(center, right, Query.Radius);
-            DrawHalfCircle(center, forward, Query.Radius);
+            Vector3 up = offset.normalized;
+            Vector3 direction = GetWorldRay().direction;
+            Vector3 crossAxis = Vector3.Angle(up, direction) > 0.001f ? direction : GetArbitraryCrossAxis(up);
+            Vector3 right = Vector3.Cross(up, crossAxis).normalized;
+            Vector3 forward = Vector3.Cross(up, right).normalized;
+            DrawCircle(center, forward, right, Query.Radius);
+            DrawHalfCircle(center, forward, up, Query.Radius);
+            DrawHalfCircle(center, right, up, Query.Radius);
         }
 
-        private void DrawHalfCircle(Vector3 center, Vector3 planeNormal, float radius)
+        private void DrawHalfCircle(Vector3 center, Vector3 xAxis, Vector3 yAxis, float radius)
         {
-            DrawArc(center, planeNormal, radius, Mathf.PI, 8);
+            DrawArc(center, xAxis, yAxis, radius, Mathf.PI, 8);
         }
-        private void DrawCircle(Vector3 center, Vector3 planeNormal, float radius)
+        private void DrawCircle(Vector3 center, Vector3 xAxis, Vector3 yAxis, float radius)
         {
-            DrawArc(center, planeNormal, radius, Mathf.PI * 2, 16);
+            DrawArc(center, xAxis, yAxis, radius, Mathf.PI * 2, 16);
         }
-        private void DrawArc(Vector3 center, Vector3 planeNormal, float radius, float maxAngle, int segmentCount)
+        private void DrawArc(Vector3 center, Vector3 xAxis, Vector3 yAxis, float radius, float maxAngle, int segmentCount)
         {
             for (int i = 0; i < segmentCount; i++)
             {
-                DrawArcSegment(center, planeNormal, radius, maxAngle, i, segmentCount);
+                DrawArcSegment(center, xAxis, yAxis, radius, maxAngle, i, segmentCount);
             }
         }
-        private void DrawArcSegment(Vector3 center, Vector3 planeNormal, float radius, float maxAngle, int segment, int segmentCount)
+        private void DrawArcSegment(Vector3 center, Vector3 xAxis, Vector3 yAxis, float radius, float maxAngle, int segment, int segmentCount)
         {
-            Vector3 position1 = GetPositionOnArc(center, planeNormal, radius, maxAngle, segment, segmentCount);
-            Vector3 position2 = GetPositionOnArc(center, planeNormal, radius, maxAngle, segment + 1, segmentCount);
+            Vector3 position1 = GetPositionOnArc(center, xAxis, yAxis, radius, maxAngle, segment, segmentCount);
+            Vector3 position2 = GetPositionOnArc(center, xAxis, yAxis, radius, maxAngle, segment + 1, segmentCount);
             Gizmos.DrawLine(position1, position2);
         }
-        private Vector3 GetPositionOnArc(Vector3 center, Vector3 planeAxis, float radius, float maxAngle, int position, int segmentCount)
+        private Vector3 GetPositionOnArc(Vector3 center, Vector3 xAxis, Vector3 yAxis, float radius, float maxAngle, int position, int segmentCount)
         {
             float proportion = (float)position / segmentCount;
             float angle = maxAngle * proportion;
             float x = Mathf.Cos(angle) * radius;
             float y = Mathf.Sin(angle) * radius;
-
-            GetRightAndForward(planeAxis, out Vector3 right, out Vector3 forward);
-            right *= x;
-            forward *= y;
-
-            return center + right + forward;
+            return center + xAxis * x + yAxis * y;
         }
-        private void GetRightAndForward(Vector3 up, out Vector3 right, out Vector3 forward)
+        private Vector3 GetArbitraryCrossAxis(Vector3 initial)
         {
-            Vector3 initialCross = Vector3.Angle(up, Vector3.forward) > 0.001f ? Vector3.forward : Vector3.down;
-            right = Vector3.Cross(initialCross, up).normalized;
-            forward = Vector3.Cross(up, right).normalized;
+            return Vector3.Angle(initial, Vector3.up) > 0.001f ? Vector3.up : Vector3.right;
         }
     }
 }
