@@ -18,21 +18,24 @@ namespace PhysicsQuery
             Vector3 offset = Query.GetWorldAxis();
             Vector3 cap1 = center + offset;
             Vector3 cap2 = center - offset;
+            Vector3 up = offset.normalized;
+            Vector3 down = -up;
 
             Gizmos.color = color;
-            Gizmos.DrawWireSphere(cap1, Query.Radius);
-            Gizmos.DrawWireSphere(cap2, Query.Radius);
+            DrawHemisphere(cap1, up);
+            DrawHemisphere(cap2, down);
+        }
 
-            Vector3 up = offset.normalized;
+        private void DrawHemisphere(Vector3 center, Vector3 up)
+        {
             Vector3 direction = GetWorldRay().direction;
-            Vector3 crossAxis = Vector3.Angle(up, direction) > 0.001f ? direction : GetArbitraryCrossAxis(up);
+            Vector3 crossAxis = Colinear(up, direction) ? GetArbitraryCrossAxis(up) : direction;
             Vector3 right = Vector3.Cross(up, crossAxis).normalized;
             Vector3 forward = Vector3.Cross(up, right).normalized;
             DrawCircle(center, forward, right, Query.Radius);
             DrawHalfCircle(center, forward, up, Query.Radius);
             DrawHalfCircle(center, right, up, Query.Radius);
         }
-
         private void DrawHalfCircle(Vector3 center, Vector3 xAxis, Vector3 yAxis, float radius)
         {
             DrawArc(center, xAxis, yAxis, radius, Mathf.PI, 8);
@@ -64,7 +67,12 @@ namespace PhysicsQuery
         }
         private Vector3 GetArbitraryCrossAxis(Vector3 initial)
         {
-            return Vector3.Angle(initial, Vector3.up) > 0.001f ? Vector3.up : Vector3.right;
+            return Colinear(initial, Vector3.up) ? Vector3.right : Vector3.up;
+        }
+        private bool Colinear(Vector3 a, Vector3 b)
+        {
+            float dot = Vector3.Dot(a, b);
+            return Mathf.Abs(dot) > 0.99f;
         }
     }
 }
