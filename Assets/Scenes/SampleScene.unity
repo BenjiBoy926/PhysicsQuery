@@ -787,9 +787,9 @@ MonoBehaviour:
     m_Bits: 4294967291
   _triggerInteraction: 0
   _cacheCapacity: 8
-  _axis: {x: 0, y: 1, z: 0}
+  _axis: {x: -0.53, y: 1.72, z: 1.5}
   _height: 1
-  _radius: 0.5
+  _radius: 0.33
 --- !u!4 &1726772719
 Transform:
   m_ObjectHideFlags: 0
