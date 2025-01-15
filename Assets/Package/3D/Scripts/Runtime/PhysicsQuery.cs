@@ -46,14 +46,14 @@ namespace PhysicsQuery
         }
         public int CacheSize
         {
-            get => _cacheSize;
+            get => _cacheCapacity;
             set
             {
                 if (value < 0)
                 {
                     throw new InvalidOperationException($"Max cached hits must be non-negative");
                 }
-                _cacheSize = value;
+                _cacheCapacity = value;
             }
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
@@ -71,13 +71,13 @@ namespace PhysicsQuery
         [SerializeField] 
         private QueryTriggerInteraction _triggerInteraction = QueryTriggerInteraction.UseGlobal;
         [SerializeField] 
-        private int _cacheSize = 8;
+        private int _cacheCapacity = 8;
         private RaycastHit[] _hitCache;
         private Collider[] _colliderCache;
         private Preview _preview;
 
-        public abstract int Cast(out RaycastHit[] hits);
-        public abstract int Overlap(out Collider[] overlaps);
+        public abstract PhysicsCastResult Cast();
+        public abstract PhysicsOverlapResult Overlap();
 
         internal RaycastHit[] GetHitCache()
         {
@@ -97,11 +97,11 @@ namespace PhysicsQuery
         }
         private bool CacheNeedsRebuild<TElement>(TElement[] cache)
         {
-            return cache == null || cache.Length != _cacheSize;
+            return cache == null || cache.Length != _cacheCapacity;
         }
         private void RebuildCache<TElement>(ref TElement[] cache)
         {
-            cache = new TElement[_cacheSize];
+            cache = new TElement[_cacheCapacity];
         }
 
         public Ray GetWorldRay()
@@ -125,7 +125,7 @@ namespace PhysicsQuery
         private void OnValidate()
         {
             _maxDistance = Mathf.Max(0, _maxDistance);
-            _cacheSize = Mathf.Max(0, _cacheSize);
+            _cacheCapacity = Mathf.Max(0, _cacheCapacity);
         }
         private void OnDrawGizmosSelected()
         {

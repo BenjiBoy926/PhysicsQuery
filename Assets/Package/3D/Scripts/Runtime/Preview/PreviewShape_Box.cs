@@ -10,13 +10,8 @@ namespace PhysicsQuery
 
         public override void DrawCastGizmos()
         {
-            int hitCount = Query.Cast(out RaycastHit[] hits);
-            if (hitCount > 0)
-            {
-                DrawCastResults(hits, hitCount);
-                DrawBoxesAtHits(hits, hitCount);
-            }
-            else
+            PhysicsCastResult result = Query.Cast();
+            if (result.IsEmpty)
             {
                 Vector3 start = Query.GetWorldOrigin();
                 Vector3 end = GetEndPoint();
@@ -24,25 +19,31 @@ namespace PhysicsQuery
                 DrawBox(end, Color.gray);
                 DrawDefaultLine();
             }
+            else
+            {
+                DrawCastResults(result);
+                DrawBoxesFromResult(result);
+                DrawBox(GetEndPoint(), Color.gray);
+            }
         }
         public override void DrawOverlapGizmos()
         {
-            int overlapCount = Query.Overlap(out Collider[] overlaps);
-            if (overlapCount > 0)
-            {
-                DrawBox(Query.GetWorldOrigin(), Color.green);
-            }
-            else
+            PhysicsOverlapResult result = Query.Overlap();
+            if (result.IsEmpty)
             {
                 DrawBox(Query.GetWorldOrigin(), Color.gray);
             }
+            else
+            {
+                DrawBox(Query.GetWorldOrigin(), Color.green);
+            }
         }
 
-        private void DrawBoxesAtHits(RaycastHit[] hits, int hitCount)
+        private void DrawBoxesFromResult(PhysicsCastResult result)
         {
-            for (int i = 0; i < hitCount; i++)
+            for (int i = 0; i < result.Count; i++)
             {
-                DrawBoxAtHit(hits[i]);
+                DrawBoxAtHit(result.Get(i));
             }
         }
         private void DrawBoxAtHit(RaycastHit hit)

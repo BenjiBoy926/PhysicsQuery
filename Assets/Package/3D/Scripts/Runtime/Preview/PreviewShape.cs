@@ -10,21 +10,6 @@ namespace PhysicsQuery
 
         public abstract void DrawCastGizmos();
         public abstract void DrawOverlapGizmos();
-
-        protected void DrawHitPoints(RaycastHit[] hits, int count)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                DrawHitPoint(hits[i]);
-            }
-        }
-        protected void DrawHitPoint(RaycastHit hit)
-        {
-            Ray normal = new(hit.point, hit.normal);
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
-            Gizmos.DrawWireSphere(normal.origin, HitSphereRadius);
-        }
     }
     public abstract class PreviewShape<TQuery> : PreviewShape where TQuery : PhysicsQuery
     {
@@ -46,15 +31,26 @@ namespace PhysicsQuery
             Gizmos.color = color;
             Gizmos.DrawLine(_query.GetWorldOrigin(), GetEndPoint());
         }
-        protected void DrawCastResults(RaycastHit[] hits, int count)
+
+        protected void DrawCastResults(PhysicsCastResult result)
         {
-            DrawHitPoints(hits, count);
-            DrawCastLine(hits[count - 1]);
+            for (int i = 0; i < result.Count; i++)
+            {
+                DrawHitPoint(result.Get(i));
+            }
+            DrawCastLine(result.FurthestHit);
         }
-        protected void DrawCastLine(RaycastHit lastHit)
+        protected void DrawHitPoint(RaycastHit hit)
+        {
+            Ray normal = new(hit.point, hit.normal);
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
+            Gizmos.DrawWireSphere(normal.origin, HitSphereRadius);
+        }
+        protected void DrawCastLine(RaycastHit furthestHit)
         {
             Vector3 start = _query.GetWorldOrigin();
-            Vector3 midpoint = _query.GetWorldRay().GetPoint(lastHit.distance);
+            Vector3 midpoint = _query.GetWorldRay().GetPoint(furthestHit.distance);
             Vector3 end = GetEndPoint();
 
             Gizmos.color = Color.green;
@@ -63,6 +59,7 @@ namespace PhysicsQuery
             Gizmos.color = Color.gray;
             Gizmos.DrawLine(midpoint, end);
         }
+
         protected Vector3 GetEndPoint()
         {
             return Query.GetWorldRay().GetPoint(GetMaxDistance());

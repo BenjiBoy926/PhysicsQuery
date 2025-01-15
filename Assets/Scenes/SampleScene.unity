@@ -571,7 +571,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 51
   _triggerInteraction: 0
-  _cacheSize: 8
+  _cacheCapacity: 8
 --- !u!4 &1676319916
 Transform:
   m_ObjectHideFlags: 0
@@ -580,13 +580,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1676319914}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.012542639, y: -0, z: -0, w: 0.9999214}
+  m_LocalRotation: {x: 0.024237454, y: -0, z: -0, w: 0.99970627}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -1.437, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 2.778, y: 0, z: 0}
 --- !u!1 &1700303084
 GameObject:
   m_ObjectHideFlags: 0
@@ -797,7 +797,7 @@ Transform:
   m_GameObject: {fileID: 2043887165}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.88, z: 1.23}
+  m_LocalPosition: {x: 0, y: -0.02, z: 7.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -828,13 +828,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2119687229}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.041422695, y: -0.091024704, z: 0.062289074, w: 0.9930352}
+  m_LocalRotation: {x: -0.043795433, y: -0.05263792, z: 0.060644273, w: 0.99580795}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -4.067, y: -10.743, z: 7.561}
+  m_LocalEulerAnglesHint: {x: -4.637, y: -6.345, z: 7.227}
 --- !u!114 &2119687232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -850,12 +850,12 @@ MonoBehaviour:
   _space: 1
   _origin: {x: 0, y: 0, z: 0}
   _direction: {x: 0, y: 0, z: 1}
-  _maxDistance: Infinity
+  _maxDistance: 8
   _layerMask:
     serializedVersion: 2
     m_Bits: 4294967291
   _triggerInteraction: 0
-  _cacheSize: 8
+  _cacheCapacity: 8
   _extents: {x: 0.5, y: 0.5, z: 0.5}
   _orientation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1660057539 &9223372036854775807

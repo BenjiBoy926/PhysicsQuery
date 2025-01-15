@@ -10,27 +10,27 @@ namespace PhysicsQuery
 
         public override void DrawCastGizmos()
         {
-            int hitCount = Query.Cast(out RaycastHit[] hits);
-            if (hitCount > 0)
+            PhysicsCastResult result = Query.Cast();
+            if (result.IsEmpty)
             {
-                DrawCastResults(hits, hitCount);
+                DrawDefaultLine();
             }
             else
             {
-                DrawDefaultLine();
+                DrawCastResults(result);
             }
         }
         public override void DrawOverlapGizmos()
         {
-            int overlapCount = Query.Overlap(out Collider[] colliders);
-            if (overlapCount > 0)
+            PhysicsOverlapResult result = Query.Overlap();
+            if (result.IsEmpty)
             {
-                // TODO: draw an outline of the colliders
-                DrawDefaultLine(Color.green);
+                DrawDefaultLine();
             }
             else
             {
-                DrawDefaultLine();
+                // TODO: draw an outline of the colliders
+                DrawDefaultLine(Color.green);
             }
         }
     }
