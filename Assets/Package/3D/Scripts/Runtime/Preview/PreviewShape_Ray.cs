@@ -33,5 +33,9 @@ namespace PhysicsQuery
                 DrawDefaultLine(Color.green);
             }
         }
+        protected override void DrawShape(Vector3 center, Color color)
+        {
+            // No shapes to draw for raycasting
+        }
     }
 }

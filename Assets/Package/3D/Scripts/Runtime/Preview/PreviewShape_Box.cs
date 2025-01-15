@@ -15,15 +15,14 @@ namespace PhysicsQuery
             {
                 Vector3 start = Query.GetWorldOrigin();
                 Vector3 end = GetEndPoint();
-                DrawBox(start, Color.gray);
-                DrawBox(end, Color.gray);
+                DrawShape(start, Color.gray);
+                DrawShape(end, Color.gray);
                 DrawDefaultLine();
             }
             else
             {
                 DrawCastResults(result);
-                DrawBoxesFromResult(result);
-                DrawBox(GetEndPoint(), Color.gray);
+                DrawShape(GetEndPoint(), Color.gray);
             }
         }
         public override void DrawOverlapGizmos()
@@ -31,31 +30,14 @@ namespace PhysicsQuery
             PhysicsOverlapResult result = Query.Overlap();
             if (result.IsEmpty)
             {
-                DrawBox(Query.GetWorldOrigin(), Color.gray);
+                DrawShape(Query.GetWorldOrigin(), Color.gray);
             }
             else
             {
-                DrawBox(Query.GetWorldOrigin(), Color.green);
+                DrawShape(Query.GetWorldOrigin(), Color.green);
             }
         }
-
-        private void DrawBoxesFromResult(PhysicsCastResult result)
-        {
-            for (int i = 0; i < result.Count; i++)
-            {
-                DrawBoxAtHit(result.Get(i));
-            }
-        }
-        private void DrawBoxAtHit(RaycastHit hit)
-        {
-            DrawBox(GetBoxCenter(hit), Color.green);
-        }
-        private Vector3 GetBoxCenter(RaycastHit hit)
-        {
-            Ray worldRay = Query.GetWorldRay();
-            return worldRay.GetPoint(hit.distance);
-        }
-        private void DrawBox(Vector3 center, Color color)
+        protected override void DrawShape(Vector3 center, Color color)
         {
             Quaternion worldOrientation = Query.GetWorldOrientation();
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);

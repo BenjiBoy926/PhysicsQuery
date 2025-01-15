@@ -10,6 +10,7 @@ namespace PhysicsQuery
 
         public abstract void DrawCastGizmos();
         public abstract void DrawOverlapGizmos();
+        protected abstract void DrawShape(Vector3 center, Color color);
     }
     public abstract class PreviewShape<TQuery> : PreviewShape where TQuery : PhysicsQuery
     {
@@ -37,8 +38,14 @@ namespace PhysicsQuery
             for (int i = 0; i < result.Count; i++)
             {
                 DrawHitPoint(result.Get(i));
+                DrawShapeAtHit(result.Get(i));    
             }
             DrawCastLine(result.FurthestHit);
+        }
+        private void DrawShapeAtHit(RaycastHit hit)
+        {
+            Vector3 center = GetShapeCenter(hit);
+            DrawShape(center, Color.green);
         }
         protected void DrawHitPoint(RaycastHit hit)
         {
@@ -67,6 +74,11 @@ namespace PhysicsQuery
         private float GetMaxDistance()
         {
             return Mathf.Min(MaxDistance, Query.MaxDistance);
+        }
+        private Vector3 GetShapeCenter(RaycastHit hit)
+        {
+            Ray ray = Query.GetWorldRay();
+            return ray.GetPoint(hit.distance);
         }
     }
 }
