@@ -58,8 +58,8 @@ namespace PhysicsQuery
 
         private void DrawEmptyCastResult()
         {
-            Vector3 start = _query.GetWorldOrigin();
-            Vector3 end = GetEndPoint();
+            Vector3 start = GetStartPosition();
+            Vector3 end = GetEndPosition();
             DrawShape(start, Color.gray);
             DrawShape(end, Color.gray);
             DrawLine(start, end, Color.gray);
@@ -72,7 +72,7 @@ namespace PhysicsQuery
                 DrawShapeAtHit(result.Get(i));
             }
             DrawCastLine(result.FurthestHit);
-            DrawShape(GetEndPoint(), Color.gray);
+            DrawShape(GetEndPosition(), Color.gray);
         }
         private void DrawEmptyOverlapResult()
         {
@@ -98,9 +98,9 @@ namespace PhysicsQuery
         }
         private void DrawCastLine(RaycastHit furthestHit)
         {
-            Vector3 start = _query.GetWorldOrigin();
-            Vector3 midpoint = _query.GetWorldRay().GetPoint(furthestHit.distance);
-            Vector3 end = GetEndPoint();
+            Vector3 start = GetStartPosition();
+            Vector3 midpoint = GetWorldRay().GetPoint(furthestHit.distance);
+            Vector3 end = GetEndPosition();
             DrawLine(start, midpoint, Color.green);
             DrawLine(midpoint, end, Color.gray);
         }
@@ -110,9 +110,13 @@ namespace PhysicsQuery
             Gizmos.DrawLine(start, end);
         }
 
-        protected Vector3 GetEndPoint()
+        protected Vector3 GetStartPosition()
         {
-            return Query.GetWorldRay().GetPoint(GetMaxDistance());
+            return GetWorldRay().origin;
+        }
+        protected Vector3 GetEndPosition()
+        {
+            return GetWorldRay().GetPoint(GetMaxDistance());
         }
         private float GetMaxDistance()
         {
@@ -120,8 +124,12 @@ namespace PhysicsQuery
         }
         private Vector3 GetShapeCenter(RaycastHit hit)
         {
-            Ray ray = Query.GetWorldRay();
-            return ray.GetPoint(hit.distance);
+            return GetWorldRay().GetPoint(hit.distance);
+        }
+
+        protected virtual Ray GetWorldRay()
+        {
+            return Query.GetWorldRay();
         }
     }
 }

@@ -10,24 +10,28 @@ namespace PhysicsQuery
 
         protected override void DrawOverlapShape(Color color)
         {
-            DrawShape(GetWorldCenter(), color);
+            DrawShape(GetStartPosition(), color);
         }
         protected override void DrawShape(Vector3 center, Color color)
         {
+            Vector3 offset = GetCapCenterOffset();
+            Vector3 cap1 = center + offset;
+            Vector3 cap2 = center - offset;
+
             Gizmos.color = color;
-            Gizmos.DrawWireSphere(center, Query.Radius);
-            Gizmos.DrawWireSphere(center + GetOtherCapOffset(), Query.Radius);
+            Gizmos.DrawWireSphere(cap1, Query.Radius);
+            Gizmos.DrawWireSphere(cap2, Query.Radius);
         }
 
-        private Vector3 GetWorldCenter()
+        protected override Ray GetWorldRay()
         {
-            Vector3 cap1 = Query.GetWorldOrigin();
-            Vector3 cap2 = Query.GetOtherCapWorldPosition();
-            return Vector3.Lerp(cap1, cap2, 0.5f);
+            Ray ray = base.GetWorldRay();
+            ray.origin -= GetCapCenterOffset();
+            return ray;
         }
-        private Vector3 GetOtherCapOffset()
+        private Vector3 GetCapCenterOffset()
         {
-            return Query.GetOtherCapWorldPosition() - Query.GetWorldOrigin();
+            return (Query.GetWorldOrigin() - Query.GetOtherCapWorldPosition()) / 2;
         }
     }
 }

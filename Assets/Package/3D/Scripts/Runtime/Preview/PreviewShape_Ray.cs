@@ -10,7 +10,7 @@ namespace PhysicsQuery
 
         protected override void DrawOverlapShape(Color color)
         {
-            DrawLine(Query.GetWorldOrigin(), GetEndPoint(), color);
+            DrawLine(GetStartPosition(), GetEndPosition(), color);
         }
         protected override void DrawShape(Vector3 center, Color color)
         {
