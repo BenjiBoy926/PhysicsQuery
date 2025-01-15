@@ -8,17 +8,9 @@ namespace PhysicsQuery
         {
         }
 
-        public override void DrawOverlapGizmos()
+        protected override void DrawOverlapShape(Color color)
         {
-            PhysicsOverlapResult result = Query.Overlap();
-            if (result.IsEmpty)
-            {
-                DrawShape(Query.GetWorldOrigin(), Color.gray);
-            }
-            else
-            {
-                DrawShape(Query.GetWorldOrigin(), Color.green);
-            }
+            DrawShape(Query.GetWorldOrigin(), color);
         }
         protected override void DrawShape(Vector3 center, Color color)
         {

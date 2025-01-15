@@ -8,18 +8,9 @@ namespace PhysicsQuery
         {
         }
 
-        public override void DrawOverlapGizmos()
+        protected override void DrawOverlapShape(Color color)
         {
-            PhysicsOverlapResult result = Query.Overlap();
-            if (result.IsEmpty)
-            {
-                DrawDefaultLine();
-            }
-            else
-            {
-                // TODO: draw an outline of the colliders
-                DrawDefaultLine(Color.green);
-            }
+            DrawLine(Query.GetWorldOrigin(), GetEndPoint(), color);
         }
         protected override void DrawShape(Vector3 center, Color color)
         {

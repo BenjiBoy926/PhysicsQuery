@@ -11,6 +11,7 @@ namespace PhysicsQuery
         public abstract void DrawCastGizmos();
         public abstract void DrawOverlapGizmos();
         protected abstract void DrawShape(Vector3 center, Color color);
+        protected abstract void DrawOverlapShape(Color color);
     }
     public abstract class PreviewShape<TQuery> : PreviewShape where TQuery : PhysicsQuery
     {
@@ -27,29 +28,35 @@ namespace PhysicsQuery
         {
             DrawCastResults(Query.Cast());
         }
-
-        protected void DrawDefaultLine()
+        public override void DrawOverlapGizmos()
         {
-            DrawDefaultLine(Color.gray);
-        }
-        protected void DrawDefaultLine(Color color)
-        {
-            Gizmos.color = color;
-            Gizmos.DrawLine(_query.GetWorldOrigin(), GetEndPoint());
+            DrawOverlapResult(Query.Overlap());
         }
 
-        protected void DrawCastResults(PhysicsCastResult result)
+        private void DrawCastResults(PhysicsCastResult result)
         {
             if (result.IsEmpty)
             {
-                DrawEmptyResult();
+                DrawEmptyCastResult();
             }
             else
             {
                 DrawNonEmptyResult(result);
             }
         }
-        private void DrawEmptyResult()
+        private void DrawOverlapResult(PhysicsOverlapResult result)
+        {
+            if (result.IsEmpty)
+            {
+                DrawEmptyOverlapResult();
+            }
+            else
+            {
+                DrawNonEmptyOverlapResult(result);
+            }
+        }
+
+        private void DrawEmptyCastResult()
         {
             Vector3 start = _query.GetWorldOrigin();
             Vector3 end = GetEndPoint();
@@ -67,20 +74,29 @@ namespace PhysicsQuery
             DrawCastLine(result.FurthestHit);
             DrawShape(GetEndPoint(), Color.gray);
         }
+        private void DrawEmptyOverlapResult()
+        {
+            DrawOverlapShape(Color.gray);
+        }
+        private void DrawNonEmptyOverlapResult(PhysicsOverlapResult result)
+        {
+            DrawOverlapShape(Color.green);
+            // TODO: highlight colliders
+        }
 
         private void DrawShapeAtHit(RaycastHit hit)
         {
             Vector3 center = GetShapeCenter(hit);
             DrawShape(center, Color.green);
         }
-        protected void DrawHitPoint(RaycastHit hit)
+        private void DrawHitPoint(RaycastHit hit)
         {
             Ray normal = new(hit.point, hit.normal);
             Gizmos.color = Color.red;
             Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
             Gizmos.DrawWireSphere(normal.origin, HitSphereRadius);
         }
-        protected void DrawCastLine(RaycastHit furthestHit)
+        private void DrawCastLine(RaycastHit furthestHit)
         {
             Vector3 start = _query.GetWorldOrigin();
             Vector3 midpoint = _query.GetWorldRay().GetPoint(furthestHit.distance);
@@ -88,7 +104,7 @@ namespace PhysicsQuery
             DrawLine(start, midpoint, Color.green);
             DrawLine(midpoint, end, Color.gray);
         }
-        private void DrawLine(Vector3 start, Vector3 end, Color color)
+        protected void DrawLine(Vector3 start, Vector3 end, Color color)
         {
             Gizmos.color = color;
             Gizmos.DrawLine(start, end);
