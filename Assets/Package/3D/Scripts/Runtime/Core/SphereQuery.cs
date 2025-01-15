@@ -5,31 +5,23 @@ namespace PhysicsQuery
 {
     public class SphereQuery : PhysicsQuery
     {
-        private const float MinRadius = 0.001f;
-
         public float Radius
         {
             get => _radius;
-            set => _radius = Mathf.Max(value, MinRadius);
+            set => _radius = Mathf.Max(value, MinNonZeroFloat);
         }
 
         [Space]
         [SerializeField]
         private float _radius = 0.5f;
 
-        public override PhysicsCastResult Cast()
+        protected override int PerformCast(Ray worldRay, RaycastHit[] cache)
         {
-            Ray worldRay = GetWorldRay();
-            RaycastHit[] hits = GetHitCache();
-            int count = Physics.SphereCastNonAlloc(worldRay.origin, _radius, worldRay.direction, hits, MaxDistance, LayerMask);
-            return new(hits, count);
+            return Physics.SphereCastNonAlloc(worldRay, _radius, cache, MaxDistance, LayerMask, TriggerInteraction);
         }
-        public override PhysicsOverlapResult Overlap()
+        protected override int PerformOverlap(Vector3 worldOrigin, Collider[] cache)
         {
-            Vector3 origin = GetWorldOrigin();
-            Collider[] overlaps = GetColliderCache();
-            int count = Physics.OverlapSphereNonAlloc(origin, _radius, overlaps, LayerMask, TriggerInteraction);
-            return new(overlaps, count);
+            return Physics.OverlapSphereNonAlloc(worldOrigin, _radius, cache, LayerMask, TriggerInteraction);
         }
     }
 }

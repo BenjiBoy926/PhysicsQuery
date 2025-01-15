@@ -5,7 +5,7 @@ namespace PhysicsQuery
 {
     public abstract class PhysicsQuery : MonoBehaviour
     {
-        private const float MinDistance = float.MinValue;
+        protected const float MinNonZeroFloat = 1E-5f;
         private const int MinCacheCapacity = 1;
 
         public Space Space
@@ -26,7 +26,7 @@ namespace PhysicsQuery
         public float MaxDistance
         {
             get => _maxDistance;
-            set => _maxDistance = Mathf.Max(value, MinDistance);
+            set => _maxDistance = Mathf.Max(value, MinNonZeroFloat);
         }
         public LayerMask LayerMask
         {
@@ -63,8 +63,23 @@ namespace PhysicsQuery
         private Collider[] _colliderCache;
         private Preview _preview;
 
-        public abstract PhysicsCastResult Cast();
-        public abstract PhysicsOverlapResult Overlap();
+        public PhysicsCastResult Cast()
+        {
+            Ray worldRay = GetWorldRay();
+            RaycastHit[] hits = GetHitCache();
+            int count = PerformCast(worldRay, hits);
+            return new(hits, count);
+        }
+        public PhysicsOverlapResult Overlap()
+        {
+            Vector3 origin = GetWorldOrigin();
+            Collider[] overlaps = GetColliderCache();
+            int count = PerformOverlap(origin, overlaps);
+            return new(overlaps, count);
+        }
+
+        protected abstract int PerformCast(Ray worldRay, RaycastHit[] cache);
+        protected abstract int PerformOverlap(Vector3 worldOrigin, Collider[] cache);
 
         internal RaycastHit[] GetHitCache()
         {

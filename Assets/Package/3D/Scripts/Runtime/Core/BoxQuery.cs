@@ -26,19 +26,15 @@ namespace PhysicsQuery
         [SerializeField]
         private Quaternion _orientation = Quaternion.identity;
 
-        public override PhysicsCastResult Cast()
+        protected override int PerformCast(Ray worldRay, RaycastHit[] cache)
         {
-            Ray worldRay = GetWorldRay();
-            RaycastHit[] hits = GetHitCache();
-            int hitCount = Physics.BoxCastNonAlloc(worldRay.origin, Extents, worldRay.direction, hits, GetWorldOrientation(), MaxDistance, LayerMask);
-            return new(hits, hitCount);
+            Quaternion worldOrientation = GetWorldOrientation();
+            return Physics.BoxCastNonAlloc(worldRay.origin, Extents, worldRay.direction, cache, worldOrientation, MaxDistance, LayerMask, TriggerInteraction);
         }
-        public override PhysicsOverlapResult Overlap()
+        protected override int PerformOverlap(Vector3 worldOrigin, Collider[] cache)
         {
-            Vector3 center = GetWorldOrigin();
-            Collider[] overlaps = GetColliderCache();
-            int overlapCount = Physics.OverlapBoxNonAlloc(center, Extents, overlaps, GetWorldOrientation(), LayerMask, TriggerInteraction);
-            return new(overlaps, overlapCount);
+            Quaternion worldOrientation = GetWorldOrientation();
+            return Physics.OverlapBoxNonAlloc(worldOrigin, Extents, cache, worldOrientation, LayerMask, TriggerInteraction);
         }
 
         public Quaternion GetWorldOrientation()

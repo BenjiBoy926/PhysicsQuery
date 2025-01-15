@@ -4,13 +4,13 @@ namespace PhysicsQuery
 {
     public class EmptyQuery : PhysicsQuery
     {
-        public override PhysicsCastResult Cast()
+        protected override int PerformCast(Ray worldRay, RaycastHit[] cache)
         {
-            return PhysicsCastResult.Empty;
+            return 0;
         }
-        public override PhysicsOverlapResult Overlap()
+        protected override int PerformOverlap(Vector3 worldOrigin, Collider[] cache)
         {
-            return PhysicsOverlapResult.Empty;
+            return 0;
         }
     }
 }
