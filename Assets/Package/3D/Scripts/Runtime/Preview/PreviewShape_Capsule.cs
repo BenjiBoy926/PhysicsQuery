@@ -23,29 +23,32 @@ namespace PhysicsQuery
             Gizmos.DrawWireSphere(cap1, Query.Radius);
             Gizmos.DrawWireSphere(cap2, Query.Radius);
 
+            GetRightAndForward(offset, out Vector3 right, out Vector3 forward);
             DrawCircle(center, offset, Query.Radius);
+            DrawHalfCircle(center, right, Query.Radius);
+            DrawHalfCircle(center, forward, Query.Radius);
         }
 
-        private void DrawHalfCircle(Vector3 center, Vector3 planeAxis, float radius)
+        private void DrawHalfCircle(Vector3 center, Vector3 planeNormal, float radius)
         {
-            int segmentCount = 8;
-            for (int i = 0; i < segmentCount; i++)
-            {
-
-            }
+            DrawArc(center, planeNormal, radius, Mathf.PI, 8);
         }
         private void DrawCircle(Vector3 center, Vector3 planeNormal, float radius)
         {
-            float maxAngle = Mathf.PI * 2;
-            int segmentCount = 16;
-
+            DrawArc(center, planeNormal, radius, Mathf.PI * 2, 16);
+        }
+        private void DrawArc(Vector3 center, Vector3 planeNormal, float radius, float maxAngle, int segmentCount)
+        {
             for (int i = 0; i < segmentCount; i++)
             {
-                Vector3 position1 = GetPositionOnArc(center, planeNormal, radius, maxAngle, i, segmentCount);
-                Vector3 position2 = GetPositionOnArc(center, planeNormal, radius, maxAngle, i + 1, segmentCount);
-
-                Gizmos.DrawLine(position1, position2);
+                DrawArcSegment(center, planeNormal, radius, maxAngle, i, segmentCount);
             }
+        }
+        private void DrawArcSegment(Vector3 center, Vector3 planeNormal, float radius, float maxAngle, int segment, int segmentCount)
+        {
+            Vector3 position1 = GetPositionOnArc(center, planeNormal, radius, maxAngle, segment, segmentCount);
+            Vector3 position2 = GetPositionOnArc(center, planeNormal, radius, maxAngle, segment + 1, segmentCount);
+            Gizmos.DrawLine(position1, position2);
         }
         private Vector3 GetPositionOnArc(Vector3 center, Vector3 planeAxis, float radius, float maxAngle, int position, int segmentCount)
         {
