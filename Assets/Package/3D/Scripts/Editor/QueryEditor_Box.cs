@@ -5,9 +5,9 @@ namespace PhysicsQuery.Editor
     [CustomEditor(typeof(BoxQuery))]
     public class QueryEditor_Box : QueryEditor<BoxQuery>
     {
-        protected override PreviewForm CreatePreviewForm(BoxQuery query)
+        protected override PreviewShape CreatePreviewShape(BoxQuery query)
         {
-            return new PreviewForm_Box(query);
+            return new PreviewShape_Box(query);
         }
     }
 }

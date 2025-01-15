@@ -5,9 +5,9 @@ namespace PhysicsQuery.Editor
     [CustomEditor(typeof(RayQuery))]
     public class QueryEditor_Ray : QueryEditor<RayQuery>
     {
-        protected override PreviewForm CreatePreviewForm(RayQuery query)
+        protected override PreviewShape CreatePreviewShape(RayQuery query)
         {
-            return new PreviewForm_Ray(query);
+            return new PreviewShape_Ray(query);
         }
     }
 }

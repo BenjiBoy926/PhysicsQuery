@@ -3,13 +3,13 @@ namespace PhysicsQuery
     public abstract class Preview
     {
         public abstract string Label { get; }
-        protected PreviewForm Form => _form;
+        protected PreviewShape Shape => _shape;
 
-        private readonly PreviewForm _form;
+        private readonly PreviewShape _shape;
 
-        public Preview(PreviewForm form)
+        public Preview(PreviewShape form)
         {
-            _form = form;
+            _shape = form;
         }
 
         public abstract void DrawGizmos();

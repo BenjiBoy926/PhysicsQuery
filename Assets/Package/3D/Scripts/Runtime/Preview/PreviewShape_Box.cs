@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace PhysicsQuery
 {
-    public class PreviewForm_Box : PreviewForm<BoxQuery>
+    public class PreviewShape_Box : PreviewShape<BoxQuery>
     {
-        public PreviewForm_Box(BoxQuery query) : base(query)
+        public PreviewShape_Box(BoxQuery query) : base(query)
         {
         }
 
@@ -42,10 +42,10 @@ namespace PhysicsQuery
         {
             for (int i = 0; i < hitCount; i++)
             {
-                DrawHit(hits[i]);
+                DrawBoxAtHit(hits[i]);
             }
         }
-        private void DrawHit(RaycastHit hit)
+        private void DrawBoxAtHit(RaycastHit hit)
         {
             DrawBox(GetBoxCenter(hit), Color.green);
         }
@@ -59,6 +59,7 @@ namespace PhysicsQuery
             Quaternion worldOrientation = Query.GetWorldOrientation();
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
             center = rotationMatrix.inverse.MultiplyVector(center);
+
             Gizmos.matrix = rotationMatrix;
             Gizmos.color = color;
             Gizmos.DrawWireCube(center, Query.GetWorldSize());

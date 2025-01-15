@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PhysicsQuery
 {
-    public abstract class PreviewForm
+    public abstract class PreviewShape
     {
         protected const float MaxDistance = 1000;
         protected const float NormalLength = 0.1f;
@@ -26,13 +26,13 @@ namespace PhysicsQuery
             Gizmos.DrawWireSphere(normal.origin, HitSphereRadius);
         }
     }
-    public abstract class PreviewForm<TQuery> : PreviewForm where TQuery : PhysicsQuery
+    public abstract class PreviewShape<TQuery> : PreviewShape where TQuery : PhysicsQuery
     {
         protected TQuery Query => _query;
 
         private readonly TQuery _query;
 
-        public PreviewForm(TQuery query)
+        public PreviewShape(TQuery query)
         {
             _query = query;
         }

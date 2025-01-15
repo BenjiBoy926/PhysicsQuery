@@ -13,18 +13,18 @@ namespace PhysicsQuery.Editor
         }
 
         private TQuery _query;
-        private PreviewForm _form;
+        private PreviewShape _shape;
         private Preview[] _previews;
         private string[] _previewLabels;
 
         private void OnEnable()
         {
             _query = (TQuery)target;
-            _form = CreatePreviewForm(_query);
+            _shape = CreatePreviewShape(_query);
             _previews = new Preview[]
             {
-                new Preview_Cast(_form),
-                new Preview_Overlap(_form)
+                new Preview_Cast(_shape),
+                new Preview_Overlap(_shape)
             };
             _previewLabels = _previews.Select(x => x.Label).ToArray();
             SetPreview();
@@ -59,6 +59,6 @@ namespace PhysicsQuery.Editor
             return $"PreviewFunction:{_query.GetInstanceID()}";
         }
 
-        protected abstract PreviewForm CreatePreviewForm(TQuery query);
+        protected abstract PreviewShape CreatePreviewShape(TQuery query);
     }
 }

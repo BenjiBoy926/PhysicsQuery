@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace PhysicsQuery
 {
-    public class PreviewForm_Ray : PreviewForm<RayQuery>
+    public class PreviewShape_Ray : PreviewShape<RayQuery>
     {
-        public PreviewForm_Ray(RayQuery query) : base(query)
+        public PreviewShape_Ray(RayQuery query) : base(query)
         {
         }
 

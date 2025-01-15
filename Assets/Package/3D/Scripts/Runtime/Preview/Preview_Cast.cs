@@ -6,13 +6,13 @@ namespace PhysicsQuery
     {
         public override string Label => "Cast";
 
-        public Preview_Cast(PreviewForm form) : base(form)
+        public Preview_Cast(PreviewShape form) : base(form)
         {
         }
 
         public override void DrawGizmos()
         {
-            Form.DrawCastGizmos();
+            Shape.DrawCastGizmos();
         }
     }
 }
