@@ -5,6 +5,8 @@ namespace PhysicsQuery
 {
     public class PreviewShape_Capsule : PreviewShape<CapsuleQuery>
     {
+        private const int LineSegmentsPerCircle = 16;
+
         public PreviewShape_Capsule(CapsuleQuery query) : base(query)
         {
         }
@@ -47,11 +49,11 @@ namespace PhysicsQuery
         }
         private void DrawHalfCircle(Vector3 center, Vector3 xAxis, Vector3 yAxis, float radius)
         {
-            DrawArc(center, xAxis, yAxis, radius, Mathf.PI, 8);
+            DrawArc(center, xAxis, yAxis, radius, Mathf.PI, LineSegmentsPerCircle / 2);
         }
         private void DrawCircle(Vector3 center, Vector3 xAxis, Vector3 yAxis, float radius)
         {
-            DrawArc(center, xAxis, yAxis, radius, Mathf.PI * 2, 16);
+            DrawArc(center, xAxis, yAxis, radius, Mathf.PI * 2, LineSegmentsPerCircle);
         }
         private void DrawArc(Vector3 center, Vector3 xAxis, Vector3 yAxis, float radius, float maxAngle, int segmentCount)
         {
@@ -80,8 +82,8 @@ namespace PhysicsQuery
         }
         private bool Colinear(Vector3 a, Vector3 b)
         {
-            float dot = Vector3.Dot(a, b);
-            return Mathf.Abs(dot) > 0.99f;
+            float angle = Vector3.Angle(a, b);
+            return angle < 0.01f || angle > 179.99f;
         }
     }
 }
