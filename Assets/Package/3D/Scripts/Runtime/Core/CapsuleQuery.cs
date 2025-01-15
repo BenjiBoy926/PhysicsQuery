@@ -32,7 +32,7 @@ namespace PhysicsQuery
             return Physics.OverlapCapsuleNonAlloc(worldOrigin, otherCapWorldPosition, _radius, cache, LayerMask, TriggerInteraction);
         }
 
-        private Vector3 GetOtherCapWorldPosition()
+        public Vector3 GetOtherCapWorldPosition()
         {
             if (Space == Space.World)
             {
