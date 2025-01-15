@@ -5,17 +5,12 @@ namespace PhysicsQuery
 {
     public class SphereQuery : PhysicsQuery
     {
+        private const float MinRadius = 0.001f;
+
         public float Radius
         {
             get => _radius;
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new InvalidOperationException("Radius must be non-negative");
-                }
-                _radius = value;
-            }
+            set => _radius = Mathf.Max(value, MinRadius);
         }
 
         [Space]

@@ -5,7 +5,8 @@ namespace PhysicsQuery
 {
     public abstract class PhysicsQuery : MonoBehaviour
     {
-        public const float MinDirectionSqrMagnitude = 0.0001f;
+        private const float MinDistance = float.MinValue;
+        private const int MinCacheCapacity = 1;
 
         public Space Space
         {
@@ -25,14 +26,7 @@ namespace PhysicsQuery
         public float MaxDistance
         {
             get => _maxDistance;
-            set
-            {
-                if (value < 0)
-                {
-                    throw new InvalidOperationException("Max distance must be non-negative");
-                }
-                _maxDistance = value;
-            }
+            set => _maxDistance = Mathf.Max(value, MinDistance);
         }
         public LayerMask LayerMask
         {
@@ -44,17 +38,10 @@ namespace PhysicsQuery
             get => _triggerInteraction;
             set => _triggerInteraction = value;
         }
-        public int CacheSize
+        public int CacheCapacity
         {
             get => _cacheCapacity;
-            set
-            {
-                if (value < 0)
-                {
-                    throw new InvalidOperationException($"Max cached hits must be non-negative");
-                }
-                _cacheCapacity = value;
-            }
+            set => _cacheCapacity = Mathf.Max(value, MinCacheCapacity);
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
 

@@ -5,7 +5,7 @@ namespace PhysicsQuery
 {
     public readonly struct PhysicsOverlapResult
     {
-        public static PhysicsOverlapResult Empty => new(null, 0);
+        public static readonly PhysicsOverlapResult Empty = new(null, 0);
         public bool IsEmpty => _colliderCache == null || _colliderCache.Length == 0 || _count == 0;
 
         private readonly Collider[] _colliderCache;

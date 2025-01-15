@@ -4,10 +4,15 @@ namespace PhysicsQuery
 {
     public class BoxQuery : PhysicsQuery
     {
+        public Vector3 Size
+        {
+            get => _size;
+            set => _size = value;
+        }
         public Vector3 Extents
         {
-            get => _extents;
-            set => _extents = value;
+            get => _size / 2;
+            set => _size = value * 2;
         }
         public Quaternion Orientation
         {
@@ -17,7 +22,7 @@ namespace PhysicsQuery
 
         [Space]
         [SerializeField]
-        private Vector3 _extents = Vector3.one * 0.5f;
+        private Vector3 _size = Vector3.one;
         [SerializeField]
         private Quaternion _orientation = Quaternion.identity;
 
@@ -25,30 +30,17 @@ namespace PhysicsQuery
         {
             Ray worldRay = GetWorldRay();
             RaycastHit[] hits = GetHitCache();
-            int hitCount = Physics.BoxCastNonAlloc(worldRay.origin, GetWorldExtents(), worldRay.direction, hits, GetWorldOrientation(), MaxDistance, LayerMask);
+            int hitCount = Physics.BoxCastNonAlloc(worldRay.origin, Extents, worldRay.direction, hits, GetWorldOrientation(), MaxDistance, LayerMask);
             return new(hits, hitCount);
         }
         public override PhysicsOverlapResult Overlap()
         {
             Vector3 center = GetWorldOrigin();
             Collider[] overlaps = GetColliderCache();
-            int overlapCount = Physics.OverlapBoxNonAlloc(center, GetWorldExtents(), overlaps, GetWorldOrientation(), LayerMask, TriggerInteraction);
+            int overlapCount = Physics.OverlapBoxNonAlloc(center, Extents, overlaps, GetWorldOrientation(), LayerMask, TriggerInteraction);
             return new(overlaps, overlapCount);
         }
 
-        public Vector3 GetWorldSize()
-        {
-            return GetWorldExtents() * 2;
-        }
-        public Vector3 GetWorldExtents()
-        {
-            if (Space == Space.World)
-            {
-                return _extents;
-            }
-            Vector3 lossyScale = transform.lossyScale;
-            return new(_extents.x * lossyScale.x, _extents.y * lossyScale.y, _extents.z * lossyScale.z);
-        }
         public Quaternion GetWorldOrientation()
         {
             return Space == Space.Self ? transform.rotation * _orientation : _orientation;

@@ -20,7 +20,7 @@ namespace PhysicsQuery
 
             Gizmos.matrix = rotationMatrix;
             Gizmos.color = color;
-            Gizmos.DrawWireCube(center, Query.GetWorldSize());
+            Gizmos.DrawWireCube(center, Query.Size);
             Gizmos.matrix = Matrix4x4.identity;
         }
     }
