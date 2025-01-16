@@ -10,6 +10,7 @@ namespace PhysicsQuery
 
         public abstract void DrawCastGizmos();
         public abstract void DrawOverlapGizmos();
+
         protected abstract void DrawShape(Vector3 center, Color color);
         protected abstract void DrawOverlapShape(Color color);
     }
@@ -33,7 +34,7 @@ namespace PhysicsQuery
             DrawOverlapResult(Query.Overlap());
         }
 
-        private void DrawCastResults(PhysicsCastResult result)
+        private void DrawCastResults(CastResult result)
         {
             if (result.IsEmpty)
             {
@@ -41,10 +42,10 @@ namespace PhysicsQuery
             }
             else
             {
-                DrawNonEmptyResult(result);
+                DrawNonEmptyCastResult(result);
             }
         }
-        private void DrawOverlapResult(PhysicsOverlapResult result)
+        private void DrawOverlapResult(OverlapResult result)
         {
             if (result.IsEmpty)
             {
@@ -64,7 +65,7 @@ namespace PhysicsQuery
             DrawShape(end, Color.gray);
             DrawLine(start, end, Color.gray);
         }
-        private void DrawNonEmptyResult(PhysicsCastResult result)
+        private void DrawNonEmptyCastResult(CastResult result)
         {
             for (int i = 0; i < result.Count; i++)
             {
@@ -78,7 +79,7 @@ namespace PhysicsQuery
         {
             DrawOverlapShape(Color.gray);
         }
-        private void DrawNonEmptyOverlapResult(PhysicsOverlapResult result)
+        private void DrawNonEmptyOverlapResult(OverlapResult result)
         {
             DrawOverlapShape(Color.green);
             // TODO: highlight colliders

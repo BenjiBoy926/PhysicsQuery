@@ -3,15 +3,15 @@ using System;
 
 namespace PhysicsQuery
 {
-    public readonly struct PhysicsOverlapResult
+    public readonly struct OverlapResult
     {
-        public static readonly PhysicsOverlapResult Empty = new(null, 0);
+        public static readonly OverlapResult Empty = new(null, 0);
         public bool IsEmpty => _colliderCache == null || _colliderCache.Length == 0 || _count == 0;
 
         private readonly Collider[] _colliderCache;
         private readonly int _count;
 
-        public PhysicsOverlapResult(Collider[] colliderCache, int count)
+        public OverlapResult(Collider[] colliderCache, int count)
         {
             _colliderCache = colliderCache;
             _count = count;

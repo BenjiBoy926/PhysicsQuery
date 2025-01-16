@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PhysicsQuery
 {
-    public readonly struct PhysicsCastResult
+    public readonly struct CastResult
     {
         private struct DistanceComparer : IComparer<RaycastHit>
         {
@@ -15,7 +15,7 @@ namespace PhysicsQuery
         }
 
         private static readonly DistanceComparer Comparer = new();
-        public static readonly PhysicsCastResult Empty = new(null, 0);
+        public static readonly CastResult Empty = new(null, 0);
         public bool IsEmpty => _hitCache == null || _hitCache.Length == 0 || _count == 0;
         public int Count => _count;
         public RaycastHit ClosestHit => Get(0);
@@ -24,7 +24,7 @@ namespace PhysicsQuery
         private readonly RaycastHit[] _hitCache;
         private readonly int _count;
 
-        public PhysicsCastResult(RaycastHit[] hitCache, int count)
+        public CastResult(RaycastHit[] hitCache, int count)
         {
             if (count > 1)
             {

@@ -63,7 +63,7 @@ namespace PhysicsQuery
         private Collider[] _colliderCache;
         private Preview _preview;
 
-        public PhysicsCastResult Cast(ResultSort sort)
+        public CastResult Cast(ResultSort sort)
         {
             Ray worldRay = GetWorldRay();
             RaycastHit[] hits = GetHitCache();
@@ -71,7 +71,7 @@ namespace PhysicsQuery
             sort.Sort(hits, count);
             return new(hits, count);
         }
-        public PhysicsOverlapResult Overlap()
+        public OverlapResult Overlap()
         {
             Vector3 origin = GetWorldOrigin();
             Collider[] overlaps = GetColliderCache();
