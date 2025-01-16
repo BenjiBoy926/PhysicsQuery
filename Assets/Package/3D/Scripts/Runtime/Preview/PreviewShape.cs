@@ -5,8 +5,8 @@ namespace PhysicsQuery
     public abstract class PreviewShape
     {
         protected const float MaxDistance = 1000;
-        protected const float NormalLength = 0.1f;
-        protected const float HitSphereRadius = NormalLength * 0.3f;
+        protected const float NormalLength = 0.3f;
+        protected const float HitSphereRadius = NormalLength * 0.2f;
 
         public abstract void DrawCastGizmos();
         public abstract void DrawOverlapGizmos();
@@ -92,9 +92,9 @@ namespace PhysicsQuery
         private void DrawHitPoint(RaycastHit hit)
         {
             Ray normal = new(hit.point, hit.normal);
-            Gizmos.color = Color.red;
+            Gizmos.color = Color.blue;
             Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
-            Gizmos.DrawWireSphere(normal.origin, HitSphereRadius);
+            Gizmos.DrawSphere(normal.origin, HitSphereRadius);
         }
         private void DrawCastLine(RaycastHit furthestHit)
         {
