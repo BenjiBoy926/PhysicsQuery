@@ -10,6 +10,7 @@ namespace PhysicsQuery
             get => _radius;
             set => _radius = Mathf.Max(value, MinNonZeroFloat);
         }
+        protected override PreviewShape Shape => new PreviewShape_Sphere(this);
 
         [Space]
         [SerializeField]

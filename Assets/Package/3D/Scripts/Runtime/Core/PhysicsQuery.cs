@@ -61,7 +61,7 @@ namespace PhysicsQuery
         private int _cacheCapacity = 8;
         private RaycastHit[] _hitCache;
         private Collider[] _colliderCache;
-        private Preview _preview;
+        private IPreview _preview;
 
         public CastResult Cast(ResultSort sort)
         {
@@ -78,9 +78,6 @@ namespace PhysicsQuery
             int count = PerformOverlap(origin, overlaps);
             return new(overlaps, count);
         }
-
-        protected abstract int PerformCast(Ray worldRay, RaycastHit[] cache);
-        protected abstract int PerformOverlap(Vector3 worldOrigin, Collider[] cache);
 
         internal RaycastHit[] GetHitCache()
         {
@@ -120,7 +117,7 @@ namespace PhysicsQuery
             return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
         }
 
-        internal void SetPreview(Preview preview)
+        internal void SetPreview(IPreview preview)
         {
             _preview = preview;
         }
@@ -132,7 +129,11 @@ namespace PhysicsQuery
         }
         private void OnDrawGizmosSelected()
         {
-            _preview?.DrawGizmos();
+            _preview?.DrawGizmos(Shape);
         }
+
+        protected abstract PreviewShape Shape { get; }
+        protected abstract int PerformCast(Ray worldRay, RaycastHit[] cache);
+        protected abstract int PerformOverlap(Vector3 worldOrigin, Collider[] cache);
     }
 }

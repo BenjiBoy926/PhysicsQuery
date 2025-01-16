@@ -4,6 +4,7 @@ namespace PhysicsQuery
 {
     public class CapsuleQuery : PhysicsQuery
     {
+        protected override PreviewShape Shape => new PreviewShape_Capsule(this);
         public Vector3 Axis
         {
             get => _axis;

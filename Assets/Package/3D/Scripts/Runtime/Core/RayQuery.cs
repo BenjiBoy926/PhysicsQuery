@@ -4,6 +4,8 @@ namespace PhysicsQuery
 {
     public class RayQuery : PhysicsQuery
     {
+        protected override PreviewShape Shape => new PreviewShape_Ray(this);
+
         protected override int PerformCast(Ray worldRay, RaycastHit[] cache)
         {
             return Physics.RaycastNonAlloc(worldRay, cache, MaxDistance, LayerMask, TriggerInteraction);

@@ -2,17 +2,12 @@ using UnityEngine;
 
 namespace PhysicsQuery
 {
-    public class Preview_Cast : Preview
+    public class Preview_Cast : IPreview
     {
-        public override string Label => "Cast";
-
-        public Preview_Cast(PreviewShape form) : base(form)
+        public string Label => "Cast";
+        public void DrawGizmos(PreviewShape shape)
         {
-        }
-
-        public override void DrawGizmos()
-        {
-            Shape.DrawCastGizmos();
+            shape.DrawCastGizmos();
         }
     }
 }

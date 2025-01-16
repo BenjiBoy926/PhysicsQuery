@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
-    public abstract class QueryEditor<TQuery> : UnityEditor.Editor where TQuery : PhysicsQuery
+    [CustomEditor(typeof(PhysicsQuery), true)]
+    public class PhysicsQueryEditor : UnityEditor.Editor
     {
         private int CurrentPreviewIndex
         {
@@ -12,19 +13,17 @@ namespace PhysicsQuery.Editor
             set => EditorPrefs.SetInt(GetPreviewPrefKey(), ValidatePreviewIndex(value));
         }
 
-        private TQuery _query;
-        private PreviewShape _shape;
-        private Preview[] _previews;
+        private PhysicsQuery _query;
+        private IPreview[] _previews;
         private string[] _previewLabels;
 
         private void OnEnable()
         {
-            _query = (TQuery)target;
-            _shape = CreatePreviewShape(_query);
-            _previews = new Preview[]
+            _query = (PhysicsQuery)target;
+            _previews = new IPreview[]
             {
-                new Preview_Cast(_shape),
-                new Preview_Overlap(_shape)
+                new Preview_Cast(),
+                new Preview_Overlap()
             };
             _previewLabels = _previews.Select(x => x.Label).ToArray();
             SetPreview();
@@ -58,7 +57,5 @@ namespace PhysicsQuery.Editor
         {
             return $"PreviewFunction:{_query.GetInstanceID()}";
         }
-
-        protected abstract PreviewShape CreatePreviewShape(TQuery query);
     }
 }

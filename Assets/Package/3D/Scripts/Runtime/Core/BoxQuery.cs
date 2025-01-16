@@ -4,6 +4,7 @@ namespace PhysicsQuery
 {
     public class BoxQuery : PhysicsQuery
     {
+        protected override PreviewShape Shape => new PreviewShape_Box(this);
         public Vector3 Size
         {
             get => _size;

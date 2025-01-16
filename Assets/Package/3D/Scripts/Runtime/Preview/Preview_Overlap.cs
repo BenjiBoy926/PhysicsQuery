@@ -1,16 +1,11 @@
 namespace PhysicsQuery
 {
-    public class Preview_Overlap : Preview
+    public class Preview_Overlap : IPreview
     {
-        public override string Label => "Overlap";
-
-        public Preview_Overlap(PreviewShape form) : base(form)
+        public string Label => "Overlap";
+        public void DrawGizmos(PreviewShape shape)
         {
-        }
-
-        public override void DrawGizmos()
-        {
-            Shape.DrawOverlapGizmos();
+            shape.DrawOverlapGizmos();
         }
     }
 }

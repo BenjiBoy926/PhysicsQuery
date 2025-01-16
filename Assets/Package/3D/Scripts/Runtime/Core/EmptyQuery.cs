@@ -4,6 +4,8 @@ namespace PhysicsQuery
 {
     public class EmptyQuery : PhysicsQuery
     {
+        protected override PreviewShape Shape => new PreviewShape_Empty(this);
+
         protected override int PerformCast(Ray worldRay, RaycastHit[] cache)
         {
             return 0;

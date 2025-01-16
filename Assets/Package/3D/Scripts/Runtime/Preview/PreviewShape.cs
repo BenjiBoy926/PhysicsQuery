@@ -8,6 +8,20 @@ namespace PhysicsQuery
         protected const float NormalLength = 0.3f;
         protected const float HitSphereRadius = NormalLength * 0.2f;
 
+        public CastResult CastResult
+        {
+            get => _castResult;
+            protected set => _castResult = value;
+        }
+        public OverlapResult OverlapResult
+        {
+            get => _overlapResult;
+            protected set => _overlapResult = value;
+        }
+
+        private CastResult _castResult;
+        private OverlapResult _overlapResult;
+
         public abstract void DrawCastGizmos();
         public abstract void DrawOverlapGizmos();
 
@@ -27,11 +41,13 @@ namespace PhysicsQuery
 
         public override void DrawCastGizmos()
         {
-            DrawCastResults(Query.Cast(ResultSort.Distance));
+            CastResult = Query.Cast(ResultSort.Distance);
+            DrawCastResults(CastResult);
         }
         public override void DrawOverlapGizmos()
         {
-            DrawOverlapResult(Query.Overlap());
+            OverlapResult = Query.Overlap();
+            DrawOverlapResult(OverlapResult);
         }
 
         private void DrawCastResults(CastResult result)
