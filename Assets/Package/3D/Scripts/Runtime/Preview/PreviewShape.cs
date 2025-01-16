@@ -72,7 +72,7 @@ namespace PhysicsQuery
                 DrawHitPoint(result.Get(i));
                 DrawShapeAtHit(result.Get(i));
             }
-            DrawCastLine(result.FurthestHit);
+            DrawCastLine(result.Last);
             DrawShape(GetEndPosition(), Color.gray);
         }
         private void DrawEmptyOverlapResult()

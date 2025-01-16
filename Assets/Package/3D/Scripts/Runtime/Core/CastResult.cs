@@ -6,30 +6,17 @@ namespace PhysicsQuery
 {
     public readonly struct CastResult
     {
-        private struct DistanceComparer : IComparer<RaycastHit>
-        {
-            public readonly int Compare(RaycastHit x, RaycastHit y)
-            {
-                return x.distance.CompareTo(y.distance);
-            }
-        }
-
-        private static readonly DistanceComparer Comparer = new();
         public static readonly CastResult Empty = new(null, 0);
         public bool IsEmpty => _hitCache == null || _hitCache.Length == 0 || _count == 0;
         public int Count => _count;
-        public RaycastHit ClosestHit => Get(0);
-        public RaycastHit FurthestHit => Get(_count - 1);
+        public RaycastHit First => Get(0);
+        public RaycastHit Last => Get(_count - 1);
 
         private readonly RaycastHit[] _hitCache;
         private readonly int _count;
 
         public CastResult(RaycastHit[] hitCache, int count)
         {
-            if (count > 1)
-            {
-                Array.Sort(hitCache, 0, count, Comparer);
-            }
             _hitCache = hitCache;
             _count = count;
         }
