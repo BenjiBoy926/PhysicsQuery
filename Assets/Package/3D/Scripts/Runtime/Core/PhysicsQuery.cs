@@ -63,11 +63,12 @@ namespace PhysicsQuery
         private Collider[] _colliderCache;
         private Preview _preview;
 
-        public PhysicsCastResult Cast()
+        public PhysicsCastResult Cast(ResultSort sort)
         {
             Ray worldRay = GetWorldRay();
             RaycastHit[] hits = GetHitCache();
             int count = PerformCast(worldRay, hits);
+            sort.Sort(hits, count);
             return new(hits, count);
         }
         public PhysicsOverlapResult Overlap()

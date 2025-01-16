@@ -26,7 +26,7 @@ namespace PhysicsQuery
 
         public override void DrawCastGizmos()
         {
-            DrawCastResults(Query.Cast());
+            DrawCastResults(Query.Cast(ResultSort.Distance));
         }
         public override void DrawOverlapGizmos()
         {
