@@ -67,6 +67,10 @@ namespace PhysicsQuery
 
         public Result<RaycastHit> Cast(ResultSort sort)
         {
+            if (sort == null)
+            {
+                throw new ArgumentNullException(nameof(sort));
+            }
             Ray worldRay = GetWorldRay();
             RaycastHit[] hits = GetHitCache();
             int count = PerformCast(worldRay, hits);

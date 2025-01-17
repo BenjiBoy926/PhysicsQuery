@@ -8,22 +8,8 @@ namespace PhysicsQuery
         protected const float NormalLength = 0.3f;
         protected const float HitSphereRadius = NormalLength * 0.2f;
 
-        public Result<RaycastHit> CastResult
-        {
-            get => _castResult;
-            protected set => _castResult = value;
-        }
-        public Result<Collider> OverlapResult
-        {
-            get => _overlapResult;
-            protected set => _overlapResult = value;
-        }
-
-        private Result<RaycastHit> _castResult;
-        private Result<Collider> _overlapResult;
-
-        public abstract void DrawCastGizmos();
-        public abstract void DrawOverlapGizmos();
+        public abstract Result<RaycastHit> DrawCastGizmos();
+        public abstract Result<Collider> DrawOverlapGizmos();
 
         protected abstract void DrawShape(Vector3 center, Color color);
         protected abstract void DrawOverlapShape(Color color);
@@ -39,15 +25,17 @@ namespace PhysicsQuery
             _query = query;
         }
 
-        public override void DrawCastGizmos()
+        public override Result<RaycastHit> DrawCastGizmos()
         {
-            CastResult = _query.Cast(ResultSort.Distance);
-            DrawCastResults(CastResult);
+            Result<RaycastHit> result = _query.Cast(ResultSort.Distance);
+            DrawCastResults(result);
+            return result;
         }
-        public override void DrawOverlapGizmos()
+        public override Result<Collider> DrawOverlapGizmos()
         {
-            OverlapResult = _query.Overlap();
-            DrawOverlapResult(OverlapResult);
+            Result<Collider> result = _query.Overlap();
+            DrawOverlapResult(result);
+            return result;
         }
 
         private void DrawCastResults(Result<RaycastHit> result)

@@ -18,7 +18,7 @@ namespace PhysicsQuery
             _count = count;
         }
 
-        public readonly TElement Get(int i)
+        public TElement Get(int i)
         {
             ValidateIndex(i);
             return _cache[i];
@@ -30,7 +30,7 @@ namespace PhysicsQuery
                 throw new IndexOutOfRangeException($"Expected index to be in the range [0, {_count}), but the index is {i}");
             }
         }
-        private readonly bool IsIndexValid(int i)
+        private bool IsIndexValid(int i)
         {
             return i >= 0 && i < _count;
         }
