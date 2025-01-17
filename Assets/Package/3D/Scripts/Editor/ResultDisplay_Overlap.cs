@@ -10,9 +10,9 @@ namespace PhysicsQuery.Editor
             string label = $"Element {index}";
             EditorGUILayout.ObjectField(label, element, element.GetType(), true);
         }
-        protected override Result<Collider> GetResult(GizmoMode preview)
+        protected override Result<Collider> GetResult(GizmoMode gizmos)
         {
-            return preview.OverlapResult;
+            return gizmos.OverlapResult;
         }
     }
 }

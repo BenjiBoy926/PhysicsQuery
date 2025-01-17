@@ -9,9 +9,9 @@ namespace PhysicsQuery.Editor
     {
         private readonly Dictionary<int, bool> _foldout = new();
 
-        protected override Result<RaycastHit> GetResult(GizmoMode preview)
+        protected override Result<RaycastHit> GetResult(GizmoMode gizmos)
         {
-            return preview.CastResult;
+            return gizmos.CastResult;
         }
         protected override void DrawElementInspectorGUI(RaycastHit element, int index)
         {

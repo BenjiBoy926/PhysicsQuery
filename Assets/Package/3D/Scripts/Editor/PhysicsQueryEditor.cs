@@ -12,27 +12,16 @@ namespace PhysicsQuery.Editor
             get => ValidatePreviewIndex(GetPreviewPrefValue());
             set => EditorPrefs.SetInt(GetPreviewPrefKey(), ValidatePreviewIndex(value));
         }
-        private GizmoMode CurrentPreview => _modes[CurrentPreviewIndex];
-        private ResultDisplay CurrentDisplay => _displays[CurrentPreviewIndex];
+        private Preview CurrentPreview => Preview.Get(CurrentPreviewIndex);
 
         private PhysicsQuery _query;
-        private readonly GizmoMode[] _modes = new GizmoMode[] 
-        {
-            new GizmoMode_Cast(),
-            new GizmoMode_Overlap()
-        };
-        private readonly ResultDisplay[] _displays = new ResultDisplay[]
-        {
-            new ResultDisplay_Cast(),
-            new ResultDisplay_Overlap()
-        };
         private string[] _previewLabels;
 
         private void OnEnable()
         {
             _query = (PhysicsQuery)target;
-            _previewLabels = _modes.Select(x => x.Label).ToArray();
-            SetPreview();
+            _previewLabels = Preview.Labels;
+            CurrentPreview.SetGizmoModeOn(_query);
         }
         public override void OnInspectorGUI()
         {
@@ -43,18 +32,14 @@ namespace PhysicsQuery.Editor
             {
                 EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
                 CurrentPreviewIndex = EditorGUILayout.Popup("Function", CurrentPreviewIndex, _previewLabels);
-                SetPreview();
-                CurrentDisplay.DrawInspectorGUI(CurrentPreview);
+                CurrentPreview.SetGizmoModeOn(_query);
+                CurrentPreview.DrawResultDisplayInspectorGUI();
             }
         }
 
-        private void SetPreview()
-        {
-            _query.SetGizmoMode(CurrentPreview);
-        }
         private int ValidatePreviewIndex(int index)
         {
-            return Mathf.Clamp(index, 0, _previewLabels.Length - 1);
+            return Mathf.Clamp(index, 0, Preview.Count - 1);
         }
         private int GetPreviewPrefValue()
         {
