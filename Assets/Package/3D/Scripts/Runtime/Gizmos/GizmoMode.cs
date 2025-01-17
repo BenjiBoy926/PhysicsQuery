@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PhysicsQuery
 {
-    public abstract class Preview
+    public abstract class GizmoMode
     {
         public Result<RaycastHit> CastResult { get; protected set; }
         public Result<Collider> OverlapResult { get; protected set; }
@@ -10,7 +10,7 @@ namespace PhysicsQuery
         public abstract string Label { get; }
         public abstract void DrawGizmos(GizmoShape shape);
     }
-    public class Preview_Cast : Preview
+    public class GizmoMode_Cast : GizmoMode
     {
         public override string Label => "Cast";
         public override void DrawGizmos(GizmoShape shape)
@@ -18,7 +18,7 @@ namespace PhysicsQuery
             CastResult = shape.DrawCastGizmos();
         }
     }
-    public class Preview_Overlap : Preview
+    public class GizmoMode_Overlap : GizmoMode
     {
         public override string Label => "Overlap";
         public override void DrawGizmos(GizmoShape shape)

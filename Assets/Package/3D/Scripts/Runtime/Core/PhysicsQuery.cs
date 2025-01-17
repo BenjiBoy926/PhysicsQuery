@@ -62,7 +62,7 @@ namespace PhysicsQuery
         private int _cacheCapacity = 8;
         private readonly Cache<RaycastHit> _hitCache = new();
         private readonly Cache<Collider> _colliderCache = new();
-        private Preview _preview;
+        private GizmoMode _gizmoMode;
         private GizmoShape _gizmoShape;
 
         public Result<RaycastHit> Cast(ResultSort sort)
@@ -107,9 +107,9 @@ namespace PhysicsQuery
             return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
         }
 
-        internal void SetPreview(Preview preview)
+        internal void SetGizmoMode(GizmoMode gizmoMode)
         {
-            _preview = preview;
+            _gizmoMode = gizmoMode;
         }
         
         private void OnValidate()
@@ -119,7 +119,7 @@ namespace PhysicsQuery
         }
         private void OnDrawGizmosSelected()
         {
-            _preview?.DrawGizmos(GizmoShape);
+            _gizmoMode?.DrawGizmos(GizmoShape);
         }
 
         protected abstract int PerformCast(Ray worldRay, RaycastHit[] cache);

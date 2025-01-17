@@ -4,11 +4,11 @@ namespace PhysicsQuery
 {
     public abstract class ResultDisplay
     {
-        public abstract void DrawInspectorGUI(Preview preview);
+        public abstract void DrawInspectorGUI(GizmoMode preview);
     }
     public abstract class ResultDisplay<TElement> : ResultDisplay
     {
-        public override void DrawInspectorGUI(Preview preview)
+        public override void DrawInspectorGUI(GizmoMode preview)
         {
             GUI.enabled = false;
             Result<TElement> result = GetResult(preview);
@@ -19,7 +19,7 @@ namespace PhysicsQuery
             GUI.enabled = true;
         }
 
-        protected abstract Result<TElement> GetResult(Preview preview);
+        protected abstract Result<TElement> GetResult(GizmoMode preview);
         protected abstract void DrawElementInspectorGUI(TElement element, int index);
     }
 }

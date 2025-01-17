@@ -12,14 +12,14 @@ namespace PhysicsQuery.Editor
             get => ValidatePreviewIndex(GetPreviewPrefValue());
             set => EditorPrefs.SetInt(GetPreviewPrefKey(), ValidatePreviewIndex(value));
         }
-        private Preview CurrentPreview => _previews[CurrentPreviewIndex];
+        private GizmoMode CurrentPreview => _modes[CurrentPreviewIndex];
         private ResultDisplay CurrentDisplay => _displays[CurrentPreviewIndex];
 
         private PhysicsQuery _query;
-        private readonly Preview[] _previews = new Preview[] 
+        private readonly GizmoMode[] _modes = new GizmoMode[] 
         {
-            new Preview_Cast(),
-            new Preview_Overlap()
+            new GizmoMode_Cast(),
+            new GizmoMode_Overlap()
         };
         private readonly ResultDisplay[] _displays = new ResultDisplay[]
         {
@@ -31,7 +31,7 @@ namespace PhysicsQuery.Editor
         private void OnEnable()
         {
             _query = (PhysicsQuery)target;
-            _previewLabels = _previews.Select(x => x.Label).ToArray();
+            _previewLabels = _modes.Select(x => x.Label).ToArray();
             SetPreview();
         }
         public override void OnInspectorGUI()
@@ -50,7 +50,7 @@ namespace PhysicsQuery.Editor
 
         private void SetPreview()
         {
-            _query.SetPreview(CurrentPreview);
+            _query.SetGizmoMode(CurrentPreview);
         }
         private int ValidatePreviewIndex(int index)
         {
