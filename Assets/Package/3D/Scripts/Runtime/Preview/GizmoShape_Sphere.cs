@@ -14,8 +14,8 @@ namespace PhysicsQuery
         }
         protected override void DrawShape(Vector3 center, Color color)
         {
-            UnityEngine.Gizmos.color = color;
-            UnityEngine.Gizmos.DrawWireSphere(center, Query.Radius);
+            Gizmos.color = color;
+            Gizmos.DrawWireSphere(center, Query.Radius);
         }
     }
 }

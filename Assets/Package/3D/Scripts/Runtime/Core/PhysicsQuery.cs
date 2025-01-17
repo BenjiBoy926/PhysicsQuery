@@ -62,7 +62,7 @@ namespace PhysicsQuery
         private int _cacheCapacity = 8;
         private readonly Cache<RaycastHit> _hitCache = new();
         private readonly Cache<Collider> _colliderCache = new();
-        private IPreview _preview;
+        private Preview _preview;
         private GizmoShape _gizmoShape;
 
         public Result<RaycastHit> Cast(ResultSort sort)
@@ -107,7 +107,7 @@ namespace PhysicsQuery
             return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
         }
 
-        internal void SetPreview(IPreview preview)
+        internal void SetPreview(Preview preview)
         {
             _preview = preview;
         }

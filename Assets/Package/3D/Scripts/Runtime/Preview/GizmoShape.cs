@@ -97,9 +97,9 @@ namespace PhysicsQuery
         private void DrawHitPoint(RaycastHit hit)
         {
             Ray normal = new(hit.point, hit.normal);
-            UnityEngine.Gizmos.color = Color.blue;
-            UnityEngine.Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
-            UnityEngine.Gizmos.DrawSphere(normal.origin, HitSphereRadius);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
+            Gizmos.DrawSphere(normal.origin, HitSphereRadius);
         }
         private void DrawCastLine(RaycastHit furthestHit)
         {
@@ -111,8 +111,8 @@ namespace PhysicsQuery
         }
         protected void DrawLine(Vector3 start, Vector3 end, Color color)
         {
-            UnityEngine.Gizmos.color = color;
-            UnityEngine.Gizmos.DrawLine(start, end);
+            Gizmos.color = color;
+            Gizmos.DrawLine(start, end);
         }
 
         protected Vector3 GetStartPosition()

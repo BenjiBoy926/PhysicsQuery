@@ -14,13 +14,13 @@ namespace PhysicsQuery.Editor
         }
 
         private PhysicsQuery _query;
-        private IPreview[] _previews;
+        private Preview[] _previews;
         private string[] _previewLabels;
 
         private void OnEnable()
         {
             _query = (PhysicsQuery)target;
-            _previews = new IPreview[]
+            _previews = new Preview[]
             {
                 new Preview_Cast(),
                 new Preview_Overlap()

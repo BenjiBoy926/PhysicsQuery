@@ -18,10 +18,10 @@ namespace PhysicsQuery
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
             center = rotationMatrix.inverse.MultiplyVector(center);
 
-            UnityEngine.Gizmos.matrix = rotationMatrix;
-            UnityEngine.Gizmos.color = color;
-            UnityEngine.Gizmos.DrawWireCube(center, Query.Size);
-            UnityEngine.Gizmos.matrix = Matrix4x4.identity;
+            Gizmos.matrix = rotationMatrix;
+            Gizmos.color = color;
+            Gizmos.DrawWireCube(center, Query.Size);
+            Gizmos.matrix = Matrix4x4.identity;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace PhysicsQuery
             Vector3 down = -up;
             Vector3 back = -forward;
 
-            UnityEngine.Gizmos.color = color;
+            Gizmos.color = color;
             DrawHemisphere(cap1, right, up, forward);
             DrawHemisphere(cap2, right, down, forward);
             DrawLine(center + forward + up, center + forward + down, color);
@@ -66,7 +66,7 @@ namespace PhysicsQuery
         {
             Vector3 position1 = GetPositionOnArc(center, xAxis, yAxis, radius, maxAngle, segment, segmentCount);
             Vector3 position2 = GetPositionOnArc(center, xAxis, yAxis, radius, maxAngle, segment + 1, segmentCount);
-            UnityEngine.Gizmos.DrawLine(position1, position2);
+            Gizmos.DrawLine(position1, position2);
         }
         private Vector3 GetPositionOnArc(Vector3 center, Vector3 xAxis, Vector3 yAxis, float radius, float maxAngle, int position, int segmentCount)
         {
