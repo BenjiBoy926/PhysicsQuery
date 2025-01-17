@@ -60,8 +60,8 @@ namespace PhysicsQuery
         private QueryTriggerInteraction _triggerInteraction = QueryTriggerInteraction.UseGlobal;
         [SerializeField] 
         private int _cacheCapacity = 8;
-        private RaycastHit[] _hitCache;
-        private Collider[] _colliderCache;
+        private readonly Cache<RaycastHit> _hitCache = new();
+        private readonly Cache<Collider> _colliderCache = new();
         private IPreview _preview;
         private GizmoShape _gizmoShape;
 
@@ -83,27 +83,11 @@ namespace PhysicsQuery
 
         protected RaycastHit[] GetHitCache()
         {
-            if (CacheNeedsRebuild(_hitCache))
-            {
-                RebuildCache(ref _hitCache);
-            }
-            return _hitCache;
+            return _hitCache.GetArray(_cacheCapacity);
         }
         private Collider[] GetColliderCache()
         {
-            if (CacheNeedsRebuild(_colliderCache))
-            {
-                RebuildCache(ref _colliderCache);
-            }
-            return _colliderCache;
-        }
-        private bool CacheNeedsRebuild<TElement>(TElement[] cache)
-        {
-            return cache == null || cache.Length != _cacheCapacity;
-        }
-        private void RebuildCache<TElement>(ref TElement[] cache)
-        {
-            cache = new TElement[_cacheCapacity];
+            return _colliderCache.GetArray(_cacheCapacity);
         }
 
         public Ray GetWorldRay()

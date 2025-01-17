@@ -28,7 +28,7 @@ namespace PhysicsQuery
         {
             if (!IsIndexValid(i))
             {
-                throw new IndexOutOfRangeException($"Index {i} must be in the range [0, {_count})");
+                throw new IndexOutOfRangeException($"Expected index to be in the range [0, {_count}), but the index is {i}");
             }
         }
         private readonly bool IsIndexValid(int i)
