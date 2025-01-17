@@ -15,14 +15,36 @@ namespace PhysicsQuery.Editor
         }
         protected override void DrawElementInspectorGUI(RaycastHit element, int index)
         {
-            bool value = _foldout.GetValueOrDefault(element.colliderInstanceID);
-            string label = $"Element {index}";
-            _foldout[element.colliderInstanceID] = EditorGUILayout.Foldout(value, label);
-            if (_foldout[element.colliderInstanceID])
+            EditorGUI.indentLevel++;
+            DrawFoldoutInspectorGUI(element, index);
+            if (GetFoldoutValue(element))
             {
+                EditorGUI.indentLevel++;
                 DrawEachPropertyInspectorGUI(element);
+                EditorGUI.indentLevel--;
             }
+            EditorGUI.indentLevel--;
         }
+        private void DrawFoldoutInspectorGUI(RaycastHit element, int index)
+        {
+            bool value = GetFoldoutValue(element);
+            string label = $"Element {index}";
+            value = EditorGUILayout.Foldout(value, label);
+            SetFoldoutValue(element, value);
+        }
+        private bool GetFoldoutValue(RaycastHit hit)
+        {
+            return _foldout.GetValueOrDefault(GetFoldoutID(hit));
+        }
+        private void SetFoldoutValue(RaycastHit hit, bool value)
+        {
+            _foldout[GetFoldoutID(hit)] = value;
+        }
+        private int GetFoldoutID(RaycastHit hit)
+        {
+            return hit.colliderInstanceID;
+        }
+
         private void DrawEachPropertyInspectorGUI(RaycastHit hit)
         {
             PropertyInfo[] properties = hit.GetType().GetProperties();
