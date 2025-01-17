@@ -12,19 +12,25 @@ namespace PhysicsQuery.Editor
             get => ValidatePreviewIndex(GetPreviewPrefValue());
             set => EditorPrefs.SetInt(GetPreviewPrefKey(), ValidatePreviewIndex(value));
         }
+        private Preview CurrentPreview => _previews[CurrentPreviewIndex];
+        private ResultDisplay CurrentDisplay => _displays[CurrentPreviewIndex];
 
         private PhysicsQuery _query;
-        private Preview[] _previews;
+        private readonly Preview[] _previews = new Preview[] 
+        {
+            new Preview_Cast(),
+            new Preview_Overlap()
+        };
+        private readonly ResultDisplay[] _displays = new ResultDisplay[]
+        {
+            new ResultDisplay_Cast(),
+            new ResultDisplay_Overlap()
+        };
         private string[] _previewLabels;
 
         private void OnEnable()
         {
             _query = (PhysicsQuery)target;
-            _previews = new Preview[]
-            {
-                new Preview_Cast(),
-                new Preview_Overlap()
-            };
             _previewLabels = _previews.Select(x => x.Label).ToArray();
             SetPreview();
         }
@@ -38,12 +44,13 @@ namespace PhysicsQuery.Editor
                 EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
                 CurrentPreviewIndex = EditorGUILayout.Popup("Function", CurrentPreviewIndex, _previewLabels);
                 SetPreview();
+                CurrentDisplay.DrawInspectorGUI(CurrentPreview);
             }
         }
 
         private void SetPreview()
         {
-            _query.SetPreview(_previews[CurrentPreviewIndex]);
+            _query.SetPreview(CurrentPreview);
         }
         private int ValidatePreviewIndex(int index)
         {
