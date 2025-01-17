@@ -7,7 +7,7 @@ namespace PhysicsQuery.Editor
 {
     public class ResultDisplay_Cast : ResultDisplay<RaycastHit>
     {
-        private readonly Dictionary<RaycastHit, bool> _foldout = new();
+        private readonly Dictionary<int, bool> _foldout = new();
 
         protected override Result<RaycastHit> GetResult(Preview preview)
         {
@@ -15,10 +15,10 @@ namespace PhysicsQuery.Editor
         }
         protected override void DrawElementInspectorGUI(RaycastHit element, int index)
         {
-            bool value = _foldout.GetValueOrDefault(element);
+            bool value = _foldout.GetValueOrDefault(element.colliderInstanceID);
             string label = $"Element {index}";
-            _foldout[element] = EditorGUILayout.Foldout(value, label);
-            if (_foldout[element])
+            _foldout[element.colliderInstanceID] = EditorGUILayout.Foldout(value, label);
+            if (_foldout[element.colliderInstanceID])
             {
                 DrawEachPropertyInspectorGUI(element);
             }
@@ -39,6 +39,10 @@ namespace PhysicsQuery.Editor
             if (property.PropertyType.IsSubclassOf(typeof(Object)))
             {
                 EditorGUILayout.ObjectField(label, value as Object, property.PropertyType, true);
+            }
+            else if (property.PropertyType == typeof(float))
+            {
+                EditorGUILayout.FloatField(label, (float)value);
             }
             else if (property.PropertyType == typeof(int))
             {
