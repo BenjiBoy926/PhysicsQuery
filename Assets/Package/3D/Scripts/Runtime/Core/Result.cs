@@ -4,7 +4,6 @@ namespace PhysicsQuery
 {
     public readonly struct Result<TElement>
     {
-        public static readonly Result<TElement> Empty = new(null, 0);
         public bool IsEmpty => _cache == null || _cache.Length == 0 || _count == 0;
         public int Count => _count;
         public TElement First => Get(0);
