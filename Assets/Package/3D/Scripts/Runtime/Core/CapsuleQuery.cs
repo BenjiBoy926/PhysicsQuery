@@ -4,7 +4,6 @@ namespace PhysicsQuery
 {
     public class CapsuleQuery : PhysicsQuery
     {
-        protected override PreviewShape Shape => new PreviewShape_Capsule(this);
         public Vector3 Axis
         {
             get => _axis;
@@ -44,8 +43,12 @@ namespace PhysicsQuery
             GetCapPositions(worldOrigin, out Vector3 cap1, out Vector3 cap2);
             return Physics.OverlapCapsuleNonAlloc(cap1, cap2, _radius, cache, LayerMask, TriggerInteraction);
         }
+        protected override GizmoShape CreateGizmoShape()
+        {
+            return new GizmoShape_Capsule(this);
+        }
 
-        private void GetCapPositions(Vector3 worldOrigin, out Vector3 cap1, out Vector3 cap2)
+        public void GetCapPositions(Vector3 worldOrigin, out Vector3 cap1, out Vector3 cap2)
         {
             Vector3 worldAxis = GetWorldAxis();
             cap1 = worldOrigin + worldAxis;

@@ -44,6 +44,7 @@ namespace PhysicsQuery
             set => _cacheCapacity = Mathf.Max(value, MinCacheCapacity);
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
+        private GizmoShape GizmoShape => _gizmoShape ??= CreateGizmoShape();
 
         [SerializeField] 
         private Space _space = Space.Self;
@@ -62,8 +63,9 @@ namespace PhysicsQuery
         private RaycastHit[] _hitCache;
         private Collider[] _colliderCache;
         private IPreview _preview;
+        private GizmoShape _gizmoShape;
 
-        public CastResult Cast(ResultSort sort)
+        public Result<RaycastHit> Cast(ResultSort sort)
         {
             Ray worldRay = GetWorldRay();
             RaycastHit[] hits = GetHitCache();
@@ -71,7 +73,7 @@ namespace PhysicsQuery
             sort.Sort(hits, count);
             return new(hits, count);
         }
-        public OverlapResult Overlap()
+        public Result<Collider> Overlap()
         {
             Vector3 origin = GetWorldOrigin();
             Collider[] overlaps = GetColliderCache();
@@ -79,7 +81,7 @@ namespace PhysicsQuery
             return new(overlaps, count);
         }
 
-        internal RaycastHit[] GetHitCache()
+        protected RaycastHit[] GetHitCache()
         {
             if (CacheNeedsRebuild(_hitCache))
             {
@@ -87,7 +89,7 @@ namespace PhysicsQuery
             }
             return _hitCache;
         }
-        internal Collider[] GetColliderCache()
+        private Collider[] GetColliderCache()
         {
             if (CacheNeedsRebuild(_colliderCache))
             {
@@ -129,11 +131,11 @@ namespace PhysicsQuery
         }
         private void OnDrawGizmosSelected()
         {
-            _preview?.DrawGizmos(Shape);
+            _preview?.DrawGizmos(GizmoShape);
         }
 
-        protected abstract PreviewShape Shape { get; }
         protected abstract int PerformCast(Ray worldRay, RaycastHit[] cache);
         protected abstract int PerformOverlap(Vector3 worldOrigin, Collider[] cache);
+        protected abstract GizmoShape CreateGizmoShape();
     }
 }

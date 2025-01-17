@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace PhysicsQuery
 {
-    public class PreviewShape_Sphere : PreviewShape<SphereQuery>
+    public class GizmoShape_Sphere : GizmoShape<SphereQuery>
     {
-        public PreviewShape_Sphere(SphereQuery query) : base(query)
+        public GizmoShape_Sphere(SphereQuery query) : base(query)
         {
         }
 
@@ -14,8 +14,8 @@ namespace PhysicsQuery
         }
         protected override void DrawShape(Vector3 center, Color color)
         {
-            Gizmos.color = color;
-            Gizmos.DrawWireSphere(center, Query.Radius);
+            UnityEngine.Gizmos.color = color;
+            UnityEngine.Gizmos.DrawWireSphere(center, Query.Radius);
         }
     }
 }

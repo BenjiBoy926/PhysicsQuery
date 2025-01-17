@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace PhysicsQuery
 {
-    public class PreviewShape_Box : PreviewShape<BoxQuery>
+    public class GizmoShape_Box : GizmoShape<BoxQuery>
     {
-        public PreviewShape_Box(BoxQuery query) : base(query)
+        public GizmoShape_Box(BoxQuery query) : base(query)
         {
         }
 
@@ -18,10 +18,10 @@ namespace PhysicsQuery
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
             center = rotationMatrix.inverse.MultiplyVector(center);
 
-            Gizmos.matrix = rotationMatrix;
-            Gizmos.color = color;
-            Gizmos.DrawWireCube(center, Query.Size);
-            Gizmos.matrix = Matrix4x4.identity;
+            UnityEngine.Gizmos.matrix = rotationMatrix;
+            UnityEngine.Gizmos.color = color;
+            UnityEngine.Gizmos.DrawWireCube(center, Query.Size);
+            UnityEngine.Gizmos.matrix = Matrix4x4.identity;
         }
     }
 }

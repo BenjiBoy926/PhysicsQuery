@@ -4,7 +4,6 @@ namespace PhysicsQuery
 {
     public class BoxQuery : PhysicsQuery
     {
-        protected override PreviewShape Shape => new PreviewShape_Box(this);
         public Vector3 Size
         {
             get => _size;
@@ -36,6 +35,10 @@ namespace PhysicsQuery
         {
             Quaternion worldOrientation = GetWorldOrientation();
             return Physics.OverlapBoxNonAlloc(worldOrigin, Extents, cache, worldOrientation, LayerMask, TriggerInteraction);
+        }
+        protected override GizmoShape CreateGizmoShape()
+        {
+            return new GizmoShape_Box(this);
         }
 
         public Quaternion GetWorldOrientation()

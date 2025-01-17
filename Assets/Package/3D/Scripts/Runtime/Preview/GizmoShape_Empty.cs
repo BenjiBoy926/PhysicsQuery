@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace PhysicsQuery
 {
-    public class PreviewShape_Empty : PreviewShape<EmptyQuery>
+    public class GizmoShape_Empty : GizmoShape<EmptyQuery>
     {
-        public PreviewShape_Empty(EmptyQuery query) : base(query)
+        public GizmoShape_Empty(EmptyQuery query) : base(query)
         {
         }
 

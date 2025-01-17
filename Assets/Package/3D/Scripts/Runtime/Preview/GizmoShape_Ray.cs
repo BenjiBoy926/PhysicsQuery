@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace PhysicsQuery
 {
-    public class PreviewShape_Ray : PreviewShape<RayQuery>
+    public class GizmoShape_Ray : GizmoShape<RayQuery>
     {
-        public PreviewShape_Ray(RayQuery query) : base(query)
+        public GizmoShape_Ray(RayQuery query) : base(query)
         {
         }
 

@@ -1,30 +1,28 @@
 using System;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace PhysicsQuery
 {
-    public readonly struct CastResult
+    public readonly struct Result<TElement>
     {
-        public static readonly CastResult Empty = new(null, 0);
-        public bool IsEmpty => _hitCache == null || _hitCache.Length == 0 || _count == 0;
+        public static readonly Result<TElement> Empty = new(null, 0);
+        public bool IsEmpty => _cache == null || _cache.Length == 0 || _count == 0;
         public int Count => _count;
-        public RaycastHit First => Get(0);
-        public RaycastHit Last => Get(_count - 1);
+        public TElement First => Get(0);
+        public TElement Last => Get(_count - 1);
 
-        private readonly RaycastHit[] _hitCache;
+        private readonly TElement[] _cache;
         private readonly int _count;
 
-        public CastResult(RaycastHit[] hitCache, int count)
+        public Result(TElement[] cache, int count)
         {
-            _hitCache = hitCache;
+            _cache = cache;
             _count = count;
         }
 
-        public readonly RaycastHit Get(int i)
+        public readonly TElement Get(int i)
         {
             ValidateIndex(i);
-            return _hitCache[i];
+            return _cache[i];
         }
         private void ValidateIndex(int i)
         {

@@ -10,7 +10,6 @@ namespace PhysicsQuery
             get => _radius;
             set => _radius = Mathf.Max(value, MinNonZeroFloat);
         }
-        protected override PreviewShape Shape => new PreviewShape_Sphere(this);
 
         [Space]
         [SerializeField]
@@ -23,6 +22,10 @@ namespace PhysicsQuery
         protected override int PerformOverlap(Vector3 worldOrigin, Collider[] cache)
         {
             return Physics.OverlapSphereNonAlloc(worldOrigin, _radius, cache, LayerMask, TriggerInteraction);
+        }
+        protected override GizmoShape CreateGizmoShape()
+        {
+            return new GizmoShape_Sphere(this);
         }
     }
 }

@@ -2,25 +2,25 @@ using UnityEngine;
 
 namespace PhysicsQuery
 {
-    public abstract class PreviewShape
+    public abstract class GizmoShape
     {
         protected const float MaxDistance = 1000;
         protected const float NormalLength = 0.3f;
         protected const float HitSphereRadius = NormalLength * 0.2f;
 
-        public CastResult CastResult
+        public Result<RaycastHit> CastResult
         {
             get => _castResult;
             protected set => _castResult = value;
         }
-        public OverlapResult OverlapResult
+        public Result<Collider> OverlapResult
         {
             get => _overlapResult;
             protected set => _overlapResult = value;
         }
 
-        private CastResult _castResult;
-        private OverlapResult _overlapResult;
+        private Result<RaycastHit> _castResult;
+        private Result<Collider> _overlapResult;
 
         public abstract void DrawCastGizmos();
         public abstract void DrawOverlapGizmos();
@@ -28,29 +28,29 @@ namespace PhysicsQuery
         protected abstract void DrawShape(Vector3 center, Color color);
         protected abstract void DrawOverlapShape(Color color);
     }
-    public abstract class PreviewShape<TQuery> : PreviewShape where TQuery : PhysicsQuery
+    public abstract class GizmoShape<TQuery> : GizmoShape where TQuery : PhysicsQuery
     {
         protected TQuery Query => _query;
 
         private readonly TQuery _query;
 
-        public PreviewShape(TQuery query)
+        public GizmoShape(TQuery query)
         {
             _query = query;
         }
 
         public override void DrawCastGizmos()
         {
-            CastResult = Query.Cast(ResultSort.Distance);
+            CastResult = _query.Cast(ResultSort.Distance);
             DrawCastResults(CastResult);
         }
         public override void DrawOverlapGizmos()
         {
-            OverlapResult = Query.Overlap();
+            OverlapResult = _query.Overlap();
             DrawOverlapResult(OverlapResult);
         }
 
-        private void DrawCastResults(CastResult result)
+        private void DrawCastResults(Result<RaycastHit> result)
         {
             if (result.IsEmpty)
             {
@@ -61,7 +61,7 @@ namespace PhysicsQuery
                 DrawNonEmptyCastResult(result);
             }
         }
-        private void DrawOverlapResult(OverlapResult result)
+        private void DrawOverlapResult(Result<Collider> result)
         {
             if (result.IsEmpty)
             {
@@ -81,7 +81,7 @@ namespace PhysicsQuery
             DrawShape(end, Color.gray);
             DrawLine(start, end, Color.gray);
         }
-        private void DrawNonEmptyCastResult(CastResult result)
+        private void DrawNonEmptyCastResult(Result<RaycastHit> result)
         {
             for (int i = 0; i < result.Count; i++)
             {
@@ -95,7 +95,7 @@ namespace PhysicsQuery
         {
             DrawOverlapShape(Color.gray);
         }
-        private void DrawNonEmptyOverlapResult(OverlapResult result)
+        private void DrawNonEmptyOverlapResult(Result<Collider> result)
         {
             DrawOverlapShape(Color.green);
             // TODO: highlight colliders
@@ -109,9 +109,9 @@ namespace PhysicsQuery
         private void DrawHitPoint(RaycastHit hit)
         {
             Ray normal = new(hit.point, hit.normal);
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
-            Gizmos.DrawSphere(normal.origin, HitSphereRadius);
+            UnityEngine.Gizmos.color = Color.blue;
+            UnityEngine.Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
+            UnityEngine.Gizmos.DrawSphere(normal.origin, HitSphereRadius);
         }
         private void DrawCastLine(RaycastHit furthestHit)
         {
@@ -123,8 +123,8 @@ namespace PhysicsQuery
         }
         protected void DrawLine(Vector3 start, Vector3 end, Color color)
         {
-            Gizmos.color = color;
-            Gizmos.DrawLine(start, end);
+            UnityEngine.Gizmos.color = color;
+            UnityEngine.Gizmos.DrawLine(start, end);
         }
 
         protected Vector3 GetStartPosition()
@@ -137,7 +137,7 @@ namespace PhysicsQuery
         }
         private float GetMaxDistance()
         {
-            return Mathf.Min(MaxDistance, Query.MaxDistance);
+            return Mathf.Min(MaxDistance, _query.MaxDistance);
         }
         private Vector3 GetShapeCenter(RaycastHit hit)
         {
@@ -146,7 +146,7 @@ namespace PhysicsQuery
 
         protected virtual Ray GetWorldRay()
         {
-            return Query.GetWorldRay();
+            return _query.GetWorldRay();
         }
     }
 }
