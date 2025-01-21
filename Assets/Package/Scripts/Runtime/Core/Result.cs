@@ -8,6 +8,7 @@ namespace PhysicsQuery
     {
         public bool IsEmpty => _cache == null || _cache.Length == 0 || _count == 0;
         public int Count => _count;
+        public int Capacity => _cache.Length;
         public TElement this[int index] => Get(index);
         public TElement First => Get(0);
         public TElement Last => Get(_count - 1);
@@ -33,7 +34,7 @@ namespace PhysicsQuery
                 throw new IndexOutOfRangeException($"Expected index to be in the range [0, {_count}), but the index is {i}");
             }
         }
-        private bool IsIndexValid(int i)
+        public bool IsIndexValid(int i)
         {
             return i >= 0 && i < _count;
         }

@@ -5,13 +5,25 @@ namespace PhysicsQuery.Editor
 {
     public abstract class ScenePreview
     {
-        private GUIStyle Style => _style ??= new(EditorStyles.miniButtonMid);
+        private GUIStyle Style => _style ??= new(GUI.skin.button)
+        {
+            alignment = TextAnchor.MiddleCenter
+        };
         private GUIStyle _style;
 
-        protected void DrawLabel(Rect position, int index)
+        protected void DrawNonEmptyButton(Rect position, int index)
+        {
+            DrawButton(position, CreateContentForIndex(index), Style);
+        }
+        protected void DrawEmptyButton()
+        {
+            DrawButton(Rect.zero, GUIContent.none, GUIStyle.none);
+        }
+
+        private void DrawButton(Rect position, GUIContent content, GUIStyle style)
         {
             Handles.BeginGUI();
-            GUI.Button(position, CreateContentForIndex(index), Style);
+            GUI.Button(position, content, style);
             Handles.EndGUI();
         }
         protected Vector2 GetLabelSize(int index)
@@ -31,15 +43,30 @@ namespace PhysicsQuery.Editor
         public override void DrawSceneGUI(GizmoPreview gizmo)
         {
             Result<TElement> result = GetResult(gizmo);
-            for (int i = 0; i < result.Count; i++)
+            for (int i = 0; i < result.Capacity; i++)
             {
-                Rect position = GetLabelPositionForElement(result[i], i);
-                DrawLabel(position, i);
+                DrawButton(result, i);
             }
+        }
+        private void DrawButton(Result<TElement> result, int index)
+        {
+            if (result.IsIndexValid(index))
+            {
+                DrawNonEmptyButton(result[index], index);
+            }
+            else
+            {
+                DrawEmptyButton();
+            }
+        }
+        private void DrawNonEmptyButton(TElement element, int i)
+        {
+            Rect position = GetButtonPositionForElement(element, i);
+            DrawNonEmptyButton(position, i);
         }
 
         protected abstract Result<TElement> GetResult(GizmoPreview gizmo);
-        protected abstract Rect GetLabelPositionForElement(TElement element, int index);
+        protected abstract Rect GetButtonPositionForElement(TElement element, int index);
     }
 
     public class ScenePreview_Cast : ScenePreview<RaycastHit>
@@ -50,7 +77,7 @@ namespace PhysicsQuery.Editor
         {
             return gizmo.CastResult;
         }
-        protected override Rect GetLabelPositionForElement(RaycastHit element, int index)
+        protected override Rect GetButtonPositionForElement(RaycastHit element, int index)
         {
             Vector3 center = element.point;
             Vector3 offset = 2 * GizmoShape.HitSphereRadius * Vector3.up;
@@ -70,7 +97,7 @@ namespace PhysicsQuery.Editor
         {
             return gizmo.OverlapResult;
         }
-        protected override Rect GetLabelPositionForElement(Collider element, int index)
+        protected override Rect GetButtonPositionForElement(Collider element, int index)
         {
             Vector2 size = GetLabelSize(index);
             Vector2 topLeftGUIPosition = HandleUtility.WorldToGUIPoint(element.transform.position);
