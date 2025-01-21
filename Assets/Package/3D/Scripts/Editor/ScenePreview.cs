@@ -5,17 +5,23 @@ namespace PhysicsQuery.Editor
 {
     public abstract class ScenePreview
     {
-        private readonly GUIStyle _style;
+        private GUIStyle Style => _style ??= new(EditorStyles.miniButtonMid);
+        private GUIStyle _style;
 
-        protected void DrawLabel(Vector3 position, int index)
+        protected void DrawLabel(Rect position, int index)
         {
-            GUIContent content = new(index.ToString());
-            GUIStyle style = _style ?? new(EditorStyles.miniButtonMid);
-            Rect guiPosition = HandleUtility.WorldPointToSizedRect(position, content, style);
-
             Handles.BeginGUI();
-            GUI.Button(guiPosition, content, style);
+            GUI.Button(position, CreateContentForIndex(index), Style);
             Handles.EndGUI();
+        }
+        protected Vector2 GetLabelSize(int index)
+        {
+            GUIContent content = CreateContentForIndex(index);
+            return Style.CalcSize(content);
+        }
+        protected GUIContent CreateContentForIndex(int index)
+        {
+            return new(index.ToString());
         }
 
         public abstract void DrawSceneGUI(GizmoPreview gizmo);
@@ -27,25 +33,35 @@ namespace PhysicsQuery.Editor
             Result<TElement> result = GetResult(gizmo);
             for (int i = 0; i < result.Count; i++)
             {
-                Vector3 position = GetLabelPositionForElement(result[i]);
+                Rect position = GetLabelPositionForElement(result[i], i);
                 DrawLabel(position, i);
             }
         }
 
         protected abstract Result<TElement> GetResult(GizmoPreview gizmo);
-        protected abstract Vector3 GetLabelPositionForElement(TElement element);
+        protected abstract Rect GetLabelPositionForElement(TElement element, int index);
     }
 
     public class ScenePreview_Cast : ScenePreview<RaycastHit>
     {
+        private const float ButtonHeight = 20;
+
         protected override Result<RaycastHit> GetResult(GizmoPreview gizmo)
         {
             return gizmo.CastResult;
         }
-        protected override Vector3 GetLabelPositionForElement(RaycastHit element)
+        protected override Rect GetLabelPositionForElement(RaycastHit element, int index)
         {
+            Vector3 center = element.point;
             Vector3 offset = 2 * GizmoShape.HitSphereRadius * Vector3.up;
-            return element.point + offset;
+            Vector3 bottomEdgeWorldPosition = center + offset;
+
+            Vector2 bottomLeftGUIPosition = HandleUtility.WorldToGUIPoint(bottomEdgeWorldPosition);
+            Vector2 topLeftGUIPosition = bottomLeftGUIPosition + Vector2.down * ButtonHeight;
+            Vector2 size = GetLabelSize(index);
+            Vector2 position = topLeftGUIPosition + 0.5f * size.x * Vector2.left;
+
+            return new(position, size);
         }
     }
     public class ScenePreview_Overlap : ScenePreview<Collider>
@@ -54,9 +70,12 @@ namespace PhysicsQuery.Editor
         {
             return gizmo.OverlapResult;
         }
-        protected override Vector3 GetLabelPositionForElement(Collider element)
+        protected override Rect GetLabelPositionForElement(Collider element, int index)
         {
-            return element.transform.position;
+            Vector2 size = GetLabelSize(index);
+            Vector2 topLeftGUIPosition = HandleUtility.WorldToGUIPoint(element.transform.position);
+            Vector2 position = topLeftGUIPosition - 0.5f * size;
+            return new(position, size);
         }
     }
 }

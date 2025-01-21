@@ -20,7 +20,7 @@ namespace PhysicsQuery.Editor
         {
             _query = (PhysicsQuery)target;
             _previewLabels = Preview.Labels;
-            CurrentPreview.SetGizmoModeOn(_query);
+            CurrentPreview.SetGizmoPreviewOn(_query);
         }
         public override void OnInspectorGUI()
         {
@@ -31,7 +31,7 @@ namespace PhysicsQuery.Editor
             {
                 EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
                 CurrentPreviewIndex = EditorGUILayout.Popup("Function", CurrentPreviewIndex, _previewLabels);
-                CurrentPreview.SetGizmoModeOn(_query);
+                CurrentPreview.SetGizmoPreviewOn(_query);
                 CurrentPreview.DrawInspectorGUI();
             }
         }

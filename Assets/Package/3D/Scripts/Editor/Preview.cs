@@ -8,8 +8,6 @@ namespace PhysicsQuery.Editor
         public static string[] Labels => _previews.Select(x => x.Label).ToArray();
         public static int Count => _previews.Length;
         public string Label => _label;
-        public Result<RaycastHit> CastResult => _gizmo.CastResult;
-        public Result<Collider> OverlapResult => _gizmo.OverlapResult;
 
         private static readonly Preview[] _previews = new Preview[]
         {
@@ -34,9 +32,9 @@ namespace PhysicsQuery.Editor
         {
             return _previews[i];
         }
-        public void SetGizmoModeOn(PhysicsQuery query)
+        public void SetGizmoPreviewOn(PhysicsQuery query)
         {
-            query.SetGizmoMode(_gizmo);
+            query.SetGizmoPreview(_gizmo);
         }
         public void DrawInspectorGUI()
         {
