@@ -14,5 +14,9 @@ namespace PhysicsQuery.Editor
         {
             return gizmos.OverlapResult;
         }
+        public override void HighlightElement(GizmoPreview gizmos, int index)
+        {
+            EditorGUIUtility.PingObject(gizmos.OverlapResult[index]);
+        }
     }
 }

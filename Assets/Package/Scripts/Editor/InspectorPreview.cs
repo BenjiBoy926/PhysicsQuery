@@ -5,6 +5,7 @@ namespace PhysicsQuery
     public abstract class InspectorPreview
     {
         public abstract void DrawInspectorGUI(GizmoPreview gizmos);
+        public abstract void HighlightElement(GizmoPreview gizmos, int index);
     }
     public abstract class InspectorPreview<TElement> : InspectorPreview
     {

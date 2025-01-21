@@ -21,6 +21,17 @@ namespace PhysicsQuery.Editor
             _query = (PhysicsQuery)target;
             _previewLabels = Preview.Labels;
             CurrentPreview.SetGizmoPreviewOn(_query);
+            for (int i = 0; i < Preview.Count; i++)
+            {
+                Preview.Get(i).ElementClicked += Repaint;
+            }
+        }
+        private void OnDisable()
+        {
+            for (int i = 0; i < Preview.Count; i++)
+            {
+                Preview.Get(i).ElementClicked -= Repaint;
+            }
         }
         public override void OnInspectorGUI()
         {

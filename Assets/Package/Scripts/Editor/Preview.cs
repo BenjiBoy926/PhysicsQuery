@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -5,6 +6,8 @@ namespace PhysicsQuery.Editor
 {
     public class Preview
     {
+        public event Action ElementClicked = delegate { };
+
         public static string[] Labels => _previews.Select(x => x.Label).ToArray();
         public static int Count => _previews.Length;
         public string Label => _label;
@@ -26,8 +29,15 @@ namespace PhysicsQuery.Editor
             _gizmo = mode;
             _inspector = display;
             _scene = scene;
+            scene.ElementClicked += OnElementClicked;
         }
-    
+
+        private void OnElementClicked(int index)
+        {
+            _inspector.HighlightElement(_gizmo, index);
+            ElementClicked();
+        }
+
         public static Preview Get(int i)
         {
             return _previews[i];

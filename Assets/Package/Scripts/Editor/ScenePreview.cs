@@ -1,5 +1,3 @@
-using System.Reflection;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,6 +5,13 @@ namespace PhysicsQuery.Editor
 {
     public abstract class ScenePreview
     {
+        public delegate void ElementClickedHandler(int index);
+        public event ElementClickedHandler ElementClicked = delegate { };
+        protected void NotifyElementClicked(int index)
+        {
+            ElementClicked(index);
+        }
+
         public abstract void DrawSceneGUI(GizmoPreview gizmo);
     }
     public abstract class ScenePreview<TElement> : ScenePreview
@@ -44,15 +49,18 @@ namespace PhysicsQuery.Editor
         }
         protected void DrawNonEmptyButton(Rect position, ElementInCollection<TElement> element)
         {
-            DrawButton(position, GetContentForElement(element), Style);
+            if (DrawButton(position, GetContentForElement(element), Style))
+            {
+                NotifyElementClicked(element.Index);
+            }
         }
         protected void DrawEmptyButton()
         {
             DrawButton(Rect.zero, GUIContent.none, GUIStyle.none);
         }
-        private void DrawButton(Rect position, GUIContent content, GUIStyle style)
+        private bool DrawButton(Rect position, GUIContent content, GUIStyle style)
         {
-            GUI.Button(position, content, style);
+            return GUI.Button(position, content, style);
         }
         protected Vector2 GetButtonSize(ElementInCollection<TElement> element)
         {

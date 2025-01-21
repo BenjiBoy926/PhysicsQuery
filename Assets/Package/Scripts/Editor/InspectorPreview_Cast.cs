@@ -25,12 +25,29 @@ namespace PhysicsQuery.Editor
             }
             EditorGUI.indentLevel--;
         }
+        public override void HighlightElement(GizmoPreview gizmos, int index)
+        {
+            RaycastHit highlight = gizmos.CastResult[index];
+            CollapseAllOtherFoldouts(highlight);
+            EditorGUIUtility.PingObject(highlight.collider);
+        }
+
         private void DrawFoldoutInspectorGUI(RaycastHit element, int index)
         {
             bool value = GetFoldoutValue(element);
             string label = $"Element {index}";
             value = EditorGUILayout.Foldout(value, label);
             SetFoldoutValue(element, value);
+        }
+        private void CollapseAllOtherFoldouts(RaycastHit hit)
+        {
+            List<int> keys = new(_foldout.Keys);
+            int foldedOut = GetFoldoutID(hit);
+            for (int i = 0; i < keys.Count; i++)
+            {
+                int key = keys[i];
+                _foldout[key] = key == foldedOut;
+            }
         }
         private bool GetFoldoutValue(RaycastHit hit)
         {
