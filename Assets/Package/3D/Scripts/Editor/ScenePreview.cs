@@ -5,9 +5,17 @@ namespace PhysicsQuery.Editor
 {
     public abstract class ScenePreview
     {
+        private readonly GUIStyle _style;
+
         protected void DrawLabel(Vector3 position, int index)
         {
-            Handles.Label(position, index.ToString());
+            GUIContent content = new(index.ToString());
+            GUIStyle style = _style ?? new(EditorStyles.miniButtonMid);
+            Rect guiPosition = HandleUtility.WorldPointToSizedRect(position, content, style);
+
+            Handles.BeginGUI();
+            GUI.Button(guiPosition, content, style);
+            Handles.EndGUI();
         }
 
         public abstract void DrawSceneGUI(GizmoPreview gizmo);
@@ -36,7 +44,8 @@ namespace PhysicsQuery.Editor
         }
         protected override Vector3 GetLabelPositionForElement(RaycastHit element)
         {
-            return element.point;
+            Vector3 offset = 2 * GizmoShape.HitSphereRadius * Vector3.up;
+            return element.point + offset;
         }
     }
     public class ScenePreview_Overlap : ScenePreview<Collider>
