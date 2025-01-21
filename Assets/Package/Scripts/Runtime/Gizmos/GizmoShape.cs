@@ -83,7 +83,11 @@ namespace PhysicsQuery
         private void DrawNonEmptyOverlapResult(Result<Collider> result)
         {
             DrawOverlapShape(Color.green);
-            // TODO: highlight colliders
+            Gizmos.color = Color.blue;
+            for (int i = 0; i < result.Count; i++)
+            {
+                ColliderGizmos.DrawGizmos(result[i]);
+            }
         }
 
         private void DrawShapeAtHit(RaycastHit hit)
