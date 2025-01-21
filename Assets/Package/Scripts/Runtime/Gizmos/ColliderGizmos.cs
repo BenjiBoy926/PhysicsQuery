@@ -10,7 +10,6 @@ namespace PhysicsQuery
             {
                 return;
             }
-            Gizmos.matrix = collider.transform.localToWorldMatrix;
             if (collider is BoxCollider box)
             {
                 DrawBoxColliderGizmo(box);
@@ -27,15 +26,20 @@ namespace PhysicsQuery
             {
                 DrawMeshColliderGizmo(meshCollider);
             }
-            Gizmos.matrix = Matrix4x4.identity;
         }
         private static void DrawBoxColliderGizmo(BoxCollider collider)
         {
+            Gizmos.matrix = collider.transform.localToWorldMatrix;
             Gizmos.DrawWireCube(collider.center, collider.size);
+            Gizmos.matrix = Matrix4x4.identity;
         }
         private static void DrawSphereColliderGizmo(SphereCollider collider)
         {
-            Gizmos.DrawWireSphere(collider.center, collider.radius);        
+            Vector3 center = collider.transform.position + collider.center;
+            Vector3 scale = collider.transform.lossyScale;
+            float maxScale = Mathf.Max(scale.x, scale.y, scale.z);
+            float radius = collider.radius * maxScale;
+            Gizmos.DrawWireSphere(center, radius);        
         }
         private static void DrawCapsuleColliderGizmo(CapsuleCollider collider)
         {
@@ -43,7 +47,9 @@ namespace PhysicsQuery
         }
         private static void DrawMeshColliderGizmo(MeshCollider collider)
         {
+            Gizmos.matrix = collider.transform.localToWorldMatrix;
             Gizmos.DrawWireMesh(collider.sharedMesh);
+            Gizmos.matrix = Matrix4x4.identity;
         }
     }
 }
