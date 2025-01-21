@@ -1,3 +1,5 @@
+using System.Reflection;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -88,7 +90,10 @@ namespace PhysicsQuery.Editor
         }
         protected override string GetTooltipForElement(RaycastHit element)
         {
-            return element.ToString();
+            return $"Collider: {element.collider.name}\n" +
+                $"Point: {element.point}\n" +
+                $"Normal: {element.normal}\n" +
+                $"Distance: {element.distance}";
         }
     }
     public class ScenePreview_Overlap : ScenePreview<Collider>
