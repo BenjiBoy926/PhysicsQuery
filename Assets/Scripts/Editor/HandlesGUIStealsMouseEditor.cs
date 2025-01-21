@@ -12,15 +12,17 @@ public class HandlesGUIStealsMouseEditor : Editor
     }
     private void OnSceneGUI()
     {
+        GUIContent content = new("You're too far to the left!");
+        GUIStyle style = GUI.skin.button;
+        Rect rect = HandleUtility.WorldPointToSizedRect(_target.transform.position, content, style);
         if (_target.transform.position.x > -1)
         {
-            return;
+            content = GUIContent.none;
+            style = GUIStyle.none;
+            rect = Rect.zero;
         }
         Handles.BeginGUI();
-        GUIContent content = new("You're too far to the left!");
-        GUIStyle style = GUI.skin.box;
-        Rect rect = HandleUtility.WorldPointToSizedRect(_target.transform.position, content, style);
-        GUI.Box(rect, content, style);
+        GUI.Button(rect, content, style);
         Handles.EndGUI();
     }
 }
