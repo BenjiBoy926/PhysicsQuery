@@ -8,7 +8,7 @@ namespace PhysicsQuery
     {
         public bool IsEmpty => _cache == null || _cache.Length == 0 || _count == 0;
         public int Count => _count;
-        public int Capacity => _cache.Length;
+        public int Capacity => _cache != null ? _cache.Length : 0;
         public TElement this[int index] => Get(index);
         public TElement First => Get(0);
         public TElement Last => Get(_count - 1);
