@@ -31,7 +31,7 @@ namespace PhysicsQuery.Editor
         }
         protected override bool IsElementValid(RaycastHit element)
         {
-            return element.collider != null;
+            return element.collider != null && IsPositionOnScreen(element.point);
         }
     }
 }

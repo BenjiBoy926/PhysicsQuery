@@ -22,7 +22,7 @@ namespace PhysicsQuery.Editor
         }
         protected override bool IsElementValid(Collider element)
         {
-            return element != null;
+            return element != null && IsPositionOnScreen(element.transform.position);
         }
     }
 }

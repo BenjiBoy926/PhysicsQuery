@@ -13,6 +13,22 @@ namespace PhysicsQuery.Editor
         }
 
         public abstract void DrawSceneGUI(GizmoPreview gizmo);
+
+        protected bool IsPositionOnScreen(Vector3 worldPosition)
+        {
+            SceneView scene = SceneView.currentDrawingSceneView;
+            if (scene == null)
+            {
+                return false;
+            }
+            Camera camera = scene.camera;
+            if (camera == null)
+            {
+                return false;
+            }
+            Vector3 viewportPosition = camera.WorldToViewportPoint(worldPosition);
+            return viewportPosition.x >= 0 && viewportPosition.x <= 1 && viewportPosition.y >= 0 && viewportPosition.y <= 1 && viewportPosition.z > 0;
+        }
     }
     public abstract class ScenePreview<TElement> : ScenePreview
     {
