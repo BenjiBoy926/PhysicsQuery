@@ -31,17 +31,18 @@ namespace PhysicsQuery.Editor
         {
             if (result.IsIndexValid(index))
             {
-                Rect position = GetButtonPositionForElement(result[index], index);
-                DrawNonEmptyButton(position, result[index], index);
+                ElementInCollection<TElement> element = new(result[index], index);
+                Rect position = GetButtonPositionForElement(element);
+                DrawNonEmptyButton(position, element);
             }
             else
             {
                 DrawEmptyButton();
             }
         }
-        protected void DrawNonEmptyButton(Rect position, TElement element, int index)
+        protected void DrawNonEmptyButton(Rect position, ElementInCollection<TElement> element)
         {
-            DrawButton(position, GetContentForElement(element, index), Style);
+            DrawButton(position, GetContentForElement(element), Style);
         }
         protected void DrawEmptyButton()
         {
@@ -51,18 +52,18 @@ namespace PhysicsQuery.Editor
         {
             GUI.Button(position, content, style);
         }
-        protected Vector2 GetButtonSize(TElement element, int index)
+        protected Vector2 GetButtonSize(ElementInCollection<TElement> element)
         {
-            GUIContent content = GetContentForElement(element, index);
+            GUIContent content = GetContentForElement(element);
             return Style.CalcSize(content) + _additionalSpace;
         }
-        protected GUIContent GetContentForElement(TElement element, int index)
+        protected GUIContent GetContentForElement(ElementInCollection<TElement> element)
         {
-            return new(index.ToString(), GetTooltipForElement(element));
+            return new(element.Index.ToString(), GetTooltipForElement(element.Value));
         }
 
         protected abstract Result<TElement> GetResult(GizmoPreview gizmo);
-        protected abstract Rect GetButtonPositionForElement(TElement element, int index);
+        protected abstract Rect GetButtonPositionForElement(ElementInCollection<TElement> element);
         protected abstract string GetTooltipForElement(TElement element);
     }
 
@@ -72,13 +73,13 @@ namespace PhysicsQuery.Editor
         {
             return gizmo.CastResult;
         }
-        protected override Rect GetButtonPositionForElement(RaycastHit element, int index)
+        protected override Rect GetButtonPositionForElement(ElementInCollection<RaycastHit> element)
         {
-            Vector3 center = element.point;
+            Vector3 center = element.Value.point;
             Vector3 offset = 2 * GizmoShape.HitSphereRadius * Vector3.up;
             Vector3 bottomEdgeWorldPosition = center + offset;
 
-            Vector2 size = GetButtonSize(element, index);
+            Vector2 size = GetButtonSize(element);
             Vector2 bottomLeftGUIPosition = HandleUtility.WorldToGUIPoint(bottomEdgeWorldPosition);
             Vector2 topLeftGUIPosition = bottomLeftGUIPosition + Vector2.down * size.y;
             Vector2 position = topLeftGUIPosition + 0.5f * size.x * Vector2.left;
@@ -96,10 +97,10 @@ namespace PhysicsQuery.Editor
         {
             return gizmo.OverlapResult;
         }
-        protected override Rect GetButtonPositionForElement(Collider element, int index)
+        protected override Rect GetButtonPositionForElement(ElementInCollection<Collider> element)
         {
-            Vector2 size = GetButtonSize(element, index);
-            Vector2 topLeftGUIPosition = HandleUtility.WorldToGUIPoint(element.transform.position);
+            Vector2 size = GetButtonSize(element);
+            Vector2 topLeftGUIPosition = HandleUtility.WorldToGUIPoint(element.Value.transform.position);
             Vector2 position = topLeftGUIPosition - 0.5f * size;
             return new(position, size);
         }
