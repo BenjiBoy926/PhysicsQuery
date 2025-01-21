@@ -27,7 +27,7 @@ namespace PhysicsQuery
                 return a.distance.CompareTo(b.distance);
             }
         }
-        private static readonly DistanceComparer Comparer = new DistanceComparer();
+        private static readonly DistanceComparer Comparer = new();
 
         public override void Sort(RaycastHit[] cache, int count)
         {

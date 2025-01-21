@@ -1,4 +1,5 @@
 using System.Linq;
+using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
@@ -6,21 +7,27 @@ namespace PhysicsQuery.Editor
     {
         public static string[] Labels => _previews.Select(x => x.Label).ToArray();
         public static int Count => _previews.Length;
-        public string Label { get; private set; }
-        private GizmoMode Mode { get; set; }
-        private ResultDisplay Display { get; set; }
+        public string Label => _label;
+        public Result<RaycastHit> CastResult => _gizmo.CastResult;
+        public Result<Collider> OverlapResult => _gizmo.OverlapResult;
 
         private static readonly Preview[] _previews = new Preview[]
         {
-            new("Cast", new GizmoMode_Cast(), new ResultDisplay_Cast()),
-            new("Overlap", new GizmoMode_Overlap(), new ResultDisplay_Overlap()),
+            new("Cast", new GizmoPreview_Cast(), new InspectorPreview_Cast(), new ScenePreview_Cast()),
+            new("Overlap", new GizmoPreview_Overlap(), new InspectorPreview_Overlap(), new ScenePreview_Overlap()),
         };
 
-        private Preview(string label, GizmoMode mode, ResultDisplay display)
+        private readonly string _label;
+        private readonly GizmoPreview _gizmo;
+        private readonly InspectorPreview _inspector;
+        private readonly ScenePreview _scene;
+
+        private Preview(string label, GizmoPreview mode, InspectorPreview display, ScenePreview scene)
         {
-            Label = label;
-            Mode = mode;
-            Display = display;
+            _label = label;
+            _gizmo = mode;
+            _inspector = display;
+            _scene = scene;
         }
     
         public static Preview Get(int i)
@@ -29,11 +36,15 @@ namespace PhysicsQuery.Editor
         }
         public void SetGizmoModeOn(PhysicsQuery query)
         {
-            query.SetGizmoMode(Mode);
+            query.SetGizmoMode(_gizmo);
         }
-        public void DrawResultDisplayInspectorGUI()
+        public void DrawInspectorGUI()
         {
-            Display.DrawInspectorGUI(Mode);
+            _inspector.DrawInspectorGUI(_gizmo);
+        }
+        public void DrawSceneGUI()
+        {
+            _scene.DrawSceneGUI(_gizmo);
         }
     }
 }

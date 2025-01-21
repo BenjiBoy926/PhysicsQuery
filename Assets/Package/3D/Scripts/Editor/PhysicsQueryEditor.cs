@@ -1,5 +1,4 @@
 using UnityEditor;
-using System.Linq;
 using UnityEngine;
 
 namespace PhysicsQuery.Editor
@@ -33,8 +32,12 @@ namespace PhysicsQuery.Editor
                 EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
                 CurrentPreviewIndex = EditorGUILayout.Popup("Function", CurrentPreviewIndex, _previewLabels);
                 CurrentPreview.SetGizmoModeOn(_query);
-                CurrentPreview.DrawResultDisplayInspectorGUI();
+                CurrentPreview.DrawInspectorGUI();
             }
+        }
+        private void OnSceneGUI()
+        {
+            CurrentPreview.DrawSceneGUI();
         }
 
         private int ValidatePreviewIndex(int index)

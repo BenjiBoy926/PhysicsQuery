@@ -6,13 +6,10 @@ namespace PhysicsQuery
     {
         protected const float MaxDistance = 1000;
         protected const float NormalLength = 0.3f;
-        protected const float HitSphereRadius = NormalLength * 0.2f;
+        public const float HitSphereRadius = NormalLength * 0.2f;
 
         public abstract Result<RaycastHit> DrawCastGizmos();
         public abstract Result<Collider> DrawOverlapGizmos();
-
-        protected abstract void DrawShape(Vector3 center, Color color);
-        protected abstract void DrawOverlapShape(Color color);
     }
     public abstract class GizmoShape<TQuery> : GizmoShape where TQuery : PhysicsQuery
     {
@@ -73,8 +70,8 @@ namespace PhysicsQuery
         {
             for (int i = 0; i < result.Count; i++)
             {
-                DrawHitPoint(result.Get(i));
-                DrawShapeAtHit(result.Get(i));
+                DrawHitPoint(result[i]);
+                DrawShapeAtHit(result[i]);
             }
             DrawCastLine(result.Last);
             DrawShape(GetEndPosition(), Color.gray);
@@ -136,5 +133,8 @@ namespace PhysicsQuery
         {
             return _query.GetWorldRay();
         }
+
+        protected abstract void DrawShape(Vector3 center, Color color);
+        protected abstract void DrawOverlapShape(Color color);
     }
 }

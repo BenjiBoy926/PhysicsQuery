@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
-    public class ResultDisplay_Cast : ResultDisplay<RaycastHit>
+    public class InspectorPreview_Cast : InspectorPreview<RaycastHit>
     {
         private readonly Dictionary<int, bool> _foldout = new();
 
-        protected override Result<RaycastHit> GetResult(GizmoMode gizmos)
+        protected override Result<RaycastHit> GetResult(GizmoPreview gizmos)
         {
             return gizmos.CastResult;
         }

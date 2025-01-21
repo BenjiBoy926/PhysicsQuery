@@ -1,11 +1,14 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace PhysicsQuery
 {
-    public readonly struct Result<TElement>
+    public readonly struct Result<TElement> : IReadOnlyList<TElement>
     {
         public bool IsEmpty => _cache == null || _cache.Length == 0 || _count == 0;
         public int Count => _count;
+        public TElement this[int index] => Get(index);
         public TElement First => Get(0);
         public TElement Last => Get(_count - 1);
 
@@ -18,7 +21,7 @@ namespace PhysicsQuery
             _count = count;
         }
 
-        public TElement Get(int i)
+        private TElement Get(int i)
         {
             ValidateIndex(i);
             return _cache[i];
@@ -33,6 +36,18 @@ namespace PhysicsQuery
         private bool IsIndexValid(int i)
         {
             return i >= 0 && i < _count;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+        public IEnumerator<TElement> GetEnumerator()
+        {
+            for (int i = 0; i < _count; i++)
+            {
+                yield return Get(i);
+            }
         }
     }
 }

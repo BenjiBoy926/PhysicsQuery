@@ -60,9 +60,9 @@ namespace PhysicsQuery
         private QueryTriggerInteraction _triggerInteraction = QueryTriggerInteraction.UseGlobal;
         [SerializeField] 
         private int _cacheCapacity = 8;
-        private readonly Cache<RaycastHit> _hitCache = new();
-        private readonly Cache<Collider> _colliderCache = new();
-        private GizmoMode _gizmoMode;
+        private readonly CachedArray<RaycastHit> _hitCache = new();
+        private readonly CachedArray<Collider> _colliderCache = new();
+        private GizmoPreview _gizmoMode;
         private GizmoShape _gizmoShape;
 
         public Result<RaycastHit> Cast(ResultSort sort)
@@ -107,7 +107,7 @@ namespace PhysicsQuery
             return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
         }
 
-        internal void SetGizmoMode(GizmoMode gizmoMode)
+        internal void SetGizmoMode(GizmoPreview gizmoMode)
         {
             _gizmoMode = gizmoMode;
         }
