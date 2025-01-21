@@ -38,23 +38,29 @@ namespace PhysicsQuery.Editor
         {
             if (result.IsIndexValid(index))
             {
-                ElementInCollection<TElement> element = new(result[index], index);
-                Rect position = GetButtonPositionForElement(element);
-                DrawNonEmptyButton(position, element);
+                DrawButtonForElement(new(result, index));
             }
             else
             {
                 DrawEmptyButton();
             }
         }
-        protected void DrawNonEmptyButton(Rect position, ElementInCollection<TElement> element)
+        private void DrawButtonForElement(ElementInCollection<TElement> element)
+        {
+            if (IsElementValid(element.Value))
+            {
+                Rect position = GetButtonPositionForElement(element);
+                DrawNonEmptyButton(position, element);
+            }
+        }
+        private void DrawNonEmptyButton(Rect position, ElementInCollection<TElement> element)
         {
             if (DrawButton(position, GetContentForElement(element), Style))
             {
                 NotifyElementClicked(element.Index);
             }
         }
-        protected void DrawEmptyButton()
+        private void DrawEmptyButton()
         {
             DrawButton(Rect.zero, GUIContent.none, GUIStyle.none);
         }
@@ -75,5 +81,6 @@ namespace PhysicsQuery.Editor
         protected abstract Result<TElement> GetResult(GizmoPreview gizmo);
         protected abstract Rect GetButtonPositionForElement(ElementInCollection<TElement> element);
         protected abstract string GetTooltipForElement(TElement element);
+        protected abstract bool IsElementValid(TElement element);
     }
 }

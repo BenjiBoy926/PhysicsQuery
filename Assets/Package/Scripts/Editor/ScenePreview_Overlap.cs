@@ -20,5 +20,9 @@ namespace PhysicsQuery.Editor
         {
             return element.name;
         }
+        protected override bool IsElementValid(Collider element)
+        {
+            return element != null;
+        }
     }
 }

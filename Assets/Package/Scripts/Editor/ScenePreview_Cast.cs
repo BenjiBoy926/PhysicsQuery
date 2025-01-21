@@ -29,5 +29,9 @@ namespace PhysicsQuery.Editor
                 $"Normal: {element.normal}\n" +
                 $"Distance: {element.distance}";
         }
+        protected override bool IsElementValid(RaycastHit element)
+        {
+            return element.collider != null;
+        }
     }
 }

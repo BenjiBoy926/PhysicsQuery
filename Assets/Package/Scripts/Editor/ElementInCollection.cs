@@ -5,10 +5,10 @@ namespace PhysicsQuery.Editor
         public readonly TElement Value;
         public readonly int Index;
 
-        public ElementInCollection(TElement element, int index)
+        public ElementInCollection(Result<TElement> result, int index)
         {
-            Value = element; 
-            Index = index; 
+            Value = result[index];
+            Index = index;
         }
     }
 }
