@@ -5,6 +5,11 @@ namespace PhysicsQuery.Editor
 {
     public abstract class ScenePreview
     {
+        protected void DrawLabel(Vector3 position, int index)
+        {
+            Handles.Label(position, index.ToString());
+        }
+
         public abstract void DrawSceneGUI(GizmoPreview gizmo);
     }
     public abstract class ScenePreview<TElement> : ScenePreview
@@ -14,12 +19,13 @@ namespace PhysicsQuery.Editor
             Result<TElement> result = GetResult(gizmo);
             for (int i = 0; i < result.Count; i++)
             {
-                DrawSceneGUIForElement(result[i], i);
+                Vector3 position = GetLabelPositionForElement(result[i]);
+                DrawLabel(position, i);
             }
         }
 
         protected abstract Result<TElement> GetResult(GizmoPreview gizmo);
-        protected abstract void DrawSceneGUIForElement(TElement element, int index);
+        protected abstract Vector3 GetLabelPositionForElement(TElement element);
     }
 
     public class ScenePreview_Cast : ScenePreview<RaycastHit>
@@ -28,9 +34,9 @@ namespace PhysicsQuery.Editor
         {
             return gizmo.CastResult;
         }
-        protected override void DrawSceneGUIForElement(RaycastHit element, int index)
+        protected override Vector3 GetLabelPositionForElement(RaycastHit element)
         {
-            Handles.Label(element.point, index.ToString());
+            return element.point;
         }
     }
     public class ScenePreview_Overlap : ScenePreview<Collider>
@@ -39,9 +45,9 @@ namespace PhysicsQuery.Editor
         {
             return gizmo.OverlapResult;
         }
-        protected override void DrawSceneGUIForElement(Collider element, int index)
+        protected override Vector3 GetLabelPositionForElement(Collider element)
         {
-            Handles.Label(element.transform.position, index.ToString());
+            return element.transform.position;
         }
     }
 }
