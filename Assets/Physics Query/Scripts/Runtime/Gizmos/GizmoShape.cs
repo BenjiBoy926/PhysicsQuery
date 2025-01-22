@@ -37,9 +37,9 @@ namespace PhysicsQuery
 
         private void DrawCastResults(Result<RaycastHit> result)
         {
-            Color hitShapeColor = result.IsFull ? Color.red : Color.green;
+            Color hitShapeColor = result.IsFull ? Preferences.CacheFullColor : Preferences.HitColor;
 
-            Gizmos.color = GetColor(result);
+            Gizmos.color = Preferences.GetColorForResult(result);
             DrawShape(GetStartPosition());
             for (int i = 0; i < result.Count; i++)
             {
@@ -48,7 +48,7 @@ namespace PhysicsQuery
                 Gizmos.color = hitShapeColor;
                 DrawShapeAtHit(hit);
 
-                Gizmos.color = Color.blue;
+                Gizmos.color = Preferences.ResultItemColor;
                 DrawHitPoint(hit);
                 ColliderGizmos.DrawGizmos(hit.collider);
             }
@@ -56,20 +56,20 @@ namespace PhysicsQuery
 
             if (result.IsFull)
             {
-                Gizmos.color = Color.red;
+                Gizmos.color = Preferences.CacheFullColor;
             }
             else
             {
-                Gizmos.color = Color.gray;
+                Gizmos.color = Preferences.MissColor;
             }
             DrawShape(GetEndPosition());
         }
         private void DrawOverlapResult(Result<Collider> result)
         {
-            Gizmos.color = GetColor(result);
+            Gizmos.color = Preferences.GetColorForResult(result);
             DrawOverlapShape();
 
-            Gizmos.color = Color.blue;
+            Gizmos.color = Preferences.ResultItemColor;
             for (int i = 0; i < result.Count; i++)
             {
                 ColliderGizmos.DrawGizmos(result[i]);
@@ -94,20 +94,20 @@ namespace PhysicsQuery
                 
             if (result.IsFull)
             {
-                Gizmos.color = Color.red;
+                Gizmos.color = Preferences.CacheFullColor;
                 Gizmos.DrawLine(start, end);
             }
             else if (result.IsEmpty)
             {
-                Gizmos.color = Color.gray;
+                Gizmos.color = Preferences.MissColor;
                 Gizmos.DrawLine(start, end);
             }
             else
             {
                 Vector3 midpoint = GetWorldRay().GetPoint(result.Last.distance);
-                Gizmos.color = Color.green;
+                Gizmos.color = Preferences.HitColor;
                 Gizmos.DrawLine(start, midpoint);
-                Gizmos.color = Color.gray;
+                Gizmos.color = Preferences.MissColor;
                 Gizmos.DrawLine(midpoint, end);
             }
         }
@@ -128,19 +128,6 @@ namespace PhysicsQuery
         {
             return GetWorldRay().GetPoint(hit.distance);
         }
-        private Color GetColor<TElement>(Result<TElement> result)
-        {
-            if (result.IsFull)
-            {
-                return Color.red;
-            }
-            else if (result.IsEmpty)
-            {
-                return Color.gray;
-            }
-            return Color.green;
-        }
-
         protected virtual Ray GetWorldRay()
         {
             return _query.GetWorldRay();
