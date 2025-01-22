@@ -53,7 +53,7 @@ namespace PhysicsQuery
         [SerializeField] 
         private Vector3 _direction = Vector3.forward;
         [SerializeField] 
-        private float _maxDistance = Mathf.Infinity;
+        private float _maxDistance = 10;
         [SerializeField] 
         private LayerMask _layerMask = Physics.DefaultRaycastLayers;
         [SerializeField] 

@@ -46,7 +46,14 @@ namespace PhysicsQuery
             Vector3 center = collider.transform.TransformPoint(collider.center);
             Vector3 axis = GetWorldAxis(collider);
             float radius = GetWorldRadius(collider);
-            CapsuleGizmo.Draw(center, axis, radius);
+            if (axis.sqrMagnitude < 1E-6f)
+            {
+                Gizmos.DrawWireSphere(center, radius);
+            }
+            else
+            {
+                CapsuleGizmo.Draw(center, axis, radius);
+            }
         }
         private static void DrawMeshColliderGizmo(MeshCollider collider)
         {
@@ -62,7 +69,7 @@ namespace PhysicsQuery
             float worldExtent = 0.5f * collider.height * scale;
             float worldRadius = GetWorldRadius(collider);
             float axisLength = worldExtent - worldRadius;
-            return axisLength * direction;
+            return Mathf.Max(axisLength, 0) * direction;
         }
         private static Vector3 GetWorldDirection(CapsuleCollider collider)
         {
