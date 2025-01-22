@@ -35,16 +35,16 @@ namespace PhysicsQuery.Editor
             SerializedProperty iterator = _serializedSettings.GetIterator();
             iterator.NextVisible(true);
 
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUIUtility.labelWidth = 200;
-            EditorGUI.indentLevel++;
             do
             {
                 GUI.enabled = iterator.name != "m_Script";
                 EditorGUILayout.PropertyField(iterator, true);
             } 
             while (iterator.NextVisible(false));
-            EditorGUI.indentLevel--;
             GUI.enabled = true;
+            EditorGUILayout.EndVertical();
 
             _serializedSettings.ApplyModifiedPropertiesWithoutUndo();
         }

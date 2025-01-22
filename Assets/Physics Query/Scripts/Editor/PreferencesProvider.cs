@@ -34,12 +34,14 @@ namespace PhysicsQuery.Editor
         private void DrawColorFieldForEachProperty()
         {
             PropertyInfo[] properties = typeof(Preferences).GetProperties();
-            EditorGUI.indentLevel++;
+
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            EditorGUIUtility.labelWidth = 200;
             for (int i = 0; i < properties.Length; i++)
             {
                 DrawColorFieldForProperty(properties[i]);
             }
-            EditorGUI.indentLevel--;
+            EditorGUILayout.EndVertical();
         }
         private void DrawColorFieldForProperty(PropertyInfo property)
         {
