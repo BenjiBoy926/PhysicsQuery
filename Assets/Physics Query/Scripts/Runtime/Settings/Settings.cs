@@ -6,17 +6,17 @@ using UnityEditor;
 
 namespace PhysicsQuery
 {
-    [CreateAssetMenu(fileName = FileName, menuName = MenuName)]
+    [CreateAssetMenu(fileName = PackageQualifiedName, menuName = MenuName)]
     public class Settings : ScriptableObject
     {
         private const string ProjectFolder = "Assets";
-        private const string PackageFolderName = "Physics Query";
+        public const string PackageFolderName = "Physics Query";
         private const string ResourceFolderName = "Resources";
         private const string PackageFolderPath = ProjectFolder + "/" + PackageFolderName;
         private const string ResourceFolderPath = PackageFolderPath + "/" + ResourceFolderName;
-        private const string InstancePath = ResourceFolderPath + "/" + FileName + ".asset";
-        private const string Name = nameof(Settings);
-        private const string FileName = PackageFolderName + " " + Name;
+        private const string InstancePath = ResourceFolderPath + "/" + PackageQualifiedName + ".asset";
+        public const string Name = nameof(Settings);
+        public const string PackageQualifiedName = PackageFolderName + " " + Name;
         private const string MenuName = PackageFolderName + "/" + Name;
 
         public static Space DefaultQuerySpace => GetInstance()._defaultQuerySpace;
@@ -37,7 +37,7 @@ namespace PhysicsQuery
         private int _defaultCacheCapacity = 8;
         private static Settings _instance;
 
-        private static Settings GetInstance()
+        internal static Settings GetInstance()
         {
             if (_instance == null)
             {
@@ -51,7 +51,7 @@ namespace PhysicsQuery
         }
         private static Settings LoadInstance()
         {
-            return Resources.Load<Settings>(FileName);
+            return Resources.Load<Settings>(PackageQualifiedName);
         }
         private static Settings CreateInstance()
         {
