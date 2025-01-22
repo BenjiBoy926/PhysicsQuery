@@ -70,8 +70,10 @@ namespace PhysicsQuery
         {
             for (int i = 0; i < result.Count; i++)
             {
-                DrawHitPoint(result[i]);
-                DrawShapeAtHit(result[i]);
+                RaycastHit hit = result[i];
+                DrawShapeAtHit(hit);
+                DrawHitPoint(hit);
+                ColliderGizmos.DrawGizmos(hit.collider);
             }
             DrawCastLine(result.Last);
             DrawShape(GetEndPosition(), Color.gray);
