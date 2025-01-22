@@ -16,12 +16,13 @@ namespace PhysicsQuery.Editor
     }
     public abstract class ScenePreview<TElement> : ScenePreview
     {
-        private GUIStyle Style => _style ??= new(GUI.skin.button)
+        private GUIStyle ButtonStyle => _buttonStyle ??= new(GUI.skin.button)
         {
             alignment = TextAnchor.MiddleCenter
         };
-        private GUIStyle _style;
+
         private static readonly Vector2 _additionalSpace = new(30, 10);
+        private GUIStyle _buttonStyle;
 
         public override void DrawSceneGUI(GizmoPreview gizmo)
         {
@@ -38,24 +39,29 @@ namespace PhysicsQuery.Editor
         {
             if (result.IsIndexValid(index))
             {
-                DrawButtonForElement(new(result, index));
+                DrawButton(new(result, index));
             }
             else
             {
                 DrawEmptyButton();
             }
         }
-        private void DrawButtonForElement(ElementIndex<TElement> element)
+
+        private void DrawButton(ElementIndex<TElement> element)
         {
             if (IsElementValid(element.Value))
             {
                 Rect position = GetButtonPositionForElement(element);
-                DrawNonEmptyButton(position, element);
+                DrawButton(position, element);
+            }
+            else
+            {
+                DrawEmptyButton();
             }
         }
-        private void DrawNonEmptyButton(Rect position, ElementIndex<TElement> element)
+        private void DrawButton(Rect position, ElementIndex<TElement> element)
         {
-            if (DrawButton(position, GetContentForElement(element), Style))
+            if (DrawButton(position, GetContentForElement(element), ButtonStyle))
             {
                 NotifyElementClicked(element.Index);
             }
@@ -71,7 +77,7 @@ namespace PhysicsQuery.Editor
         protected Vector2 GetButtonSize(ElementIndex<TElement> element)
         {
             GUIContent content = GetContentForElement(element);
-            return Style.CalcSize(content) + _additionalSpace;
+            return ButtonStyle.CalcSize(content) + _additionalSpace;
         }
         protected GUIContent GetContentForElement(ElementIndex<TElement> element)
         {

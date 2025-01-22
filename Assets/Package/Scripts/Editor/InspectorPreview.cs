@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 namespace PhysicsQuery
@@ -9,10 +10,25 @@ namespace PhysicsQuery
     }
     public abstract class InspectorPreview<TElement> : InspectorPreview
     {
+        private static readonly string CacheFullMessage = "Cache capacity reached. " +
+            "Reduce the number of colliders in the scene, " +
+            "reduce the query's size, " +
+            "or increase the query's cache capacity " +
+            "to ensure correct results";
+
         public override void DrawInspectorGUI(GizmoPreview gizmos)
         {
-            GUI.enabled = false;
             Result<TElement> result = GetResult(gizmos);
+            DrawEachElementInspectorGUI(result);
+            if (result.IsFull)
+            {
+                EditorGUILayout.HelpBox(CacheFullMessage, MessageType.Error);
+            }
+        }
+
+        private void DrawEachElementInspectorGUI(Result<TElement> result)
+        {
+            GUI.enabled = false;
             for (int i = 0; i < result.Count; i++)
             {
                 DrawElementInspectorGUI(result[i], i);
