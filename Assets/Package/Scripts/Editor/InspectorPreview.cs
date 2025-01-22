@@ -11,8 +11,7 @@ namespace PhysicsQuery
     public abstract class InspectorPreview<TElement> : InspectorPreview
     {
         private static readonly string CacheFullMessage = "Cache capacity reached. " +
-            "Reduce the number of colliders in the scene, " +
-            "reduce the query's size, " +
+            "Reduce the number of colliders in the scene " +
             "or increase the query's cache capacity " +
             "to ensure correct results";
 
