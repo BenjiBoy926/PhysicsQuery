@@ -34,6 +34,8 @@ namespace PhysicsQuery.Editor
 
             SerializedProperty iterator = _serializedSettings.GetIterator();
             iterator.NextVisible(true);
+
+            EditorGUIUtility.labelWidth = 200;
             EditorGUI.indentLevel++;
             do
             {
