@@ -62,29 +62,40 @@ namespace PhysicsQuery
         {
             Vector3 start = GetStartPosition();
             Vector3 end = GetEndPosition();
-            DrawShape(start, Color.gray);
-            DrawShape(end, Color.gray);
-            DrawLine(start, end, Color.gray);
+
+            Gizmos.color = Color.gray;
+            DrawShape(start);
+            DrawShape(end);
+            Gizmos.DrawLine(start, end);
         }
         private void DrawNonEmptyCastResult(Result<RaycastHit> result)
         {
             for (int i = 0; i < result.Count; i++)
             {
                 RaycastHit hit = result[i];
+
+                Gizmos.color = Color.green;
                 DrawShapeAtHit(hit);
+
+                Gizmos.color = Color.blue;
                 DrawHitPoint(hit);
                 ColliderGizmos.DrawGizmos(hit.collider);
             }
             DrawCastLine(result.Last);
-            DrawShape(GetEndPosition(), Color.gray);
+
+            Gizmos.color = Color.gray;
+            DrawShape(GetEndPosition());
         }
         private void DrawEmptyOverlapResult()
         {
-            DrawOverlapShape(Color.gray);
+            Gizmos.color = Color.gray;
+            DrawOverlapShape();
         }
         private void DrawNonEmptyOverlapResult(Result<Collider> result)
         {
-            DrawOverlapShape(Color.green);
+            Gizmos.color = Color.green;
+            DrawOverlapShape();
+
             Gizmos.color = Color.blue;
             for (int i = 0; i < result.Count; i++)
             {
@@ -95,12 +106,11 @@ namespace PhysicsQuery
         private void DrawShapeAtHit(RaycastHit hit)
         {
             Vector3 center = GetShapeCenter(hit);
-            DrawShape(center, Color.green);
+            DrawShape(center);
         }
         private void DrawHitPoint(RaycastHit hit)
         {
             Ray normal = new(hit.point, hit.normal);
-            Gizmos.color = Color.blue;
             Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
             Gizmos.DrawSphere(normal.origin, HitSphereRadius);
         }
@@ -109,13 +119,11 @@ namespace PhysicsQuery
             Vector3 start = GetStartPosition();
             Vector3 midpoint = GetWorldRay().GetPoint(furthestHit.distance);
             Vector3 end = GetEndPosition();
-            DrawLine(start, midpoint, Color.green);
-            DrawLine(midpoint, end, Color.gray);
-        }
-        protected void DrawLine(Vector3 start, Vector3 end, Color color)
-        {
-            Gizmos.color = color;
-            Gizmos.DrawLine(start, end);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(start, midpoint);
+            Gizmos.color = Color.gray;
+            Gizmos.DrawLine(midpoint, end);
         }
 
         protected Vector3 GetStartPosition()
@@ -140,7 +148,7 @@ namespace PhysicsQuery
             return _query.GetWorldRay();
         }
 
-        protected abstract void DrawShape(Vector3 center, Color color);
-        protected abstract void DrawOverlapShape(Color color);
+        protected abstract void DrawShape(Vector3 center);
+        protected abstract void DrawOverlapShape();
     }
 }

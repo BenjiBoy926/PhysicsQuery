@@ -8,13 +8,12 @@ namespace PhysicsQuery
         {
         }
 
-        protected override void DrawOverlapShape(Color color)
+        protected override void DrawOverlapShape()
         {
-            DrawShape(GetStartPosition(), color);
+            DrawShape(GetStartPosition());
         }
-        protected override void DrawShape(Vector3 center, Color color)
+        protected override void DrawShape(Vector3 center)
         {
-            Gizmos.color = color;
             Gizmos.DrawWireSphere(center, Query.Radius);
         }
     }

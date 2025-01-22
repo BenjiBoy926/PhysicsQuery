@@ -8,18 +8,17 @@ namespace PhysicsQuery
         {
         }
 
-        protected override void DrawOverlapShape(Color color)
+        protected override void DrawOverlapShape()
         {
-            DrawShape(GetStartPosition(), color);
+            DrawShape(GetStartPosition());
         }
-        protected override void DrawShape(Vector3 center, Color color)
+        protected override void DrawShape(Vector3 center)
         {
             Quaternion worldOrientation = Query.GetWorldOrientation();
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
             center = rotationMatrix.inverse.MultiplyVector(center);
 
             Gizmos.matrix = rotationMatrix;
-            Gizmos.color = color;
             Gizmos.DrawWireCube(center, Query.Size);
             Gizmos.matrix = Matrix4x4.identity;
         }

@@ -8,11 +8,11 @@ namespace PhysicsQuery
         {
         }
 
-        protected override void DrawOverlapShape(Color color)
+        protected override void DrawOverlapShape()
         {
 
         }
-        protected override void DrawShape(Vector3 center, Color color)
+        protected override void DrawShape(Vector3 center)
         {
 
         }

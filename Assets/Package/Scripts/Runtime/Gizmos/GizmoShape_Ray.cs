@@ -8,11 +8,11 @@ namespace PhysicsQuery
         {
         }
 
-        protected override void DrawOverlapShape(Color color)
+        protected override void DrawOverlapShape()
         {
-            DrawLine(GetStartPosition(), GetEndPosition(), color);
+            Gizmos.DrawLine(GetStartPosition(), GetEndPosition());
         }
-        protected override void DrawShape(Vector3 center, Color color)
+        protected override void DrawShape(Vector3 center)
         {
             // No shapes to draw for raycasting
         }
