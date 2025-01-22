@@ -43,7 +43,10 @@ namespace PhysicsQuery
         }
         private static void DrawCapsuleColliderGizmo(CapsuleCollider collider)
         {
-            
+            Vector3 center = collider.transform.TransformPoint(collider.center);
+            Vector3 axis = GetWorldAxis(collider);
+            float radius = GetWorldRadius(collider);
+            CapsuleGizmo.Draw(center, axis, radius);
         }
         private static void DrawMeshColliderGizmo(MeshCollider collider)
         {
@@ -51,5 +54,36 @@ namespace PhysicsQuery
             Gizmos.DrawWireMesh(collider.sharedMesh);
             Gizmos.matrix = Matrix4x4.identity;
         }
+
+        private static Vector3 GetWorldAxis(CapsuleCollider collider)
+        {
+            Vector3 direction = GetWorldDirection(collider);
+            float scale = collider.transform.lossyScale[collider.direction];
+            float worldExtent = 0.5f * collider.height * scale;
+            float worldRadius = GetWorldRadius(collider);
+            float axisLength = worldExtent - worldRadius;
+            return axisLength * direction;
+        }
+        private static Vector3 GetWorldDirection(CapsuleCollider collider)
+        {
+            return collider.direction switch
+            {
+                0 => collider.transform.right,
+                1 => collider.transform.up,
+                2 => collider.transform.forward,
+                _ => Vector3.zero,
+            };
+        }
+        private static float GetWorldRadius(CapsuleCollider collider)
+        {
+            int xDirection = (collider.direction + 1) % 3;
+            int zDirection = (collider.direction + 2) % 3;
+
+            Vector3 scale = collider.transform.lossyScale;
+            float xScale = scale[xDirection];
+            float zScale = scale[zDirection];
+            return Mathf.Max(xScale, zScale) * collider.radius;
+        }
+        
     }
 }

@@ -4,25 +4,27 @@ namespace PhysicsQuery
 {
     public static class CapsuleGizmo
     {
-        public static void Draw(Vector3 center, Vector3 up, float radius)
+        public static void Draw(Vector3 center, Vector3 axis, float radius)
         {
-            Vector3 topCapCenter = center + up;
-            Vector3 bottomCapCenter = center - up;
+            Vector3 topCapCenter = center + axis;
+            Vector3 bottomCapCenter = center - axis;
 
-            GetBasisVectors(up, out Vector3 right, out Vector3 forward);
+            GetBasisVectors(axis, out Vector3 right, out Vector3 forward);
             right = right.normalized * radius;
             forward = forward.normalized * radius;
 
             Vector3 left = -right;
-            Vector3 down = -up;
+            Vector3 down = -axis;
             Vector3 back = -forward;
+            Vector3 hemisphereUp = axis.normalized * radius;
+            Vector3 hemisphereDown = -hemisphereUp;
 
-            DrawHemisphere(topCapCenter, right, up, forward);
-            DrawHemisphere(bottomCapCenter, right, down, forward);
-            Gizmos.DrawLine(center + forward + up, center + forward + down);
-            Gizmos.DrawLine(center + back + up, center + back + down);
-            Gizmos.DrawLine(center + right + up, center + right + down);
-            Gizmos.DrawLine(center + left + up, center + left + down);
+            DrawHemisphere(topCapCenter, right, hemisphereUp, forward);
+            DrawHemisphere(bottomCapCenter, right, hemisphereDown, forward);
+            Gizmos.DrawLine(center + forward + axis, center + forward + down);
+            Gizmos.DrawLine(center + back + axis, center + back + down);
+            Gizmos.DrawLine(center + right + axis, center + right + down);
+            Gizmos.DrawLine(center + left + axis, center + left + down);
         }
         private static void DrawHemisphere(Vector3 center, Vector3 right, Vector3 up, Vector3 forward)
         {
