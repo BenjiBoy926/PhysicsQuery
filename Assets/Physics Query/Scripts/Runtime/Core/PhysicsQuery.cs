@@ -47,19 +47,19 @@ namespace PhysicsQuery
         private GizmoShape GizmoShape => _gizmoShape ??= CreateGizmoShape();
 
         [SerializeField] 
-        private Space _space = Space.Self;
+        private Space _space;
         [SerializeField] 
         private Vector3 _origin = Vector3.zero;
         [SerializeField] 
         private Vector3 _direction = Vector3.forward;
         [SerializeField] 
-        private float _maxDistance = 10;
+        private float _maxDistance;
         [SerializeField] 
-        private LayerMask _layerMask = Physics.DefaultRaycastLayers;
+        private LayerMask _layerMask;
         [SerializeField] 
-        private QueryTriggerInteraction _triggerInteraction = QueryTriggerInteraction.UseGlobal;
+        private QueryTriggerInteraction _triggerInteraction;
         [SerializeField] 
-        private int _cacheCapacity = 8;
+        private int _cacheCapacity;
         private readonly CachedArray<RaycastHit> _hitCache = new();
         private readonly CachedArray<Collider> _colliderCache = new();
         private GizmoPreview _gizmoPreview;
@@ -111,8 +111,16 @@ namespace PhysicsQuery
         {
             _gizmoPreview = gizmoPreview;
         }
-        
-        private void OnValidate()
+
+        protected virtual void Reset()
+        {
+            _space = Settings.DefaultQuerySpace;
+            _maxDistance = Settings.DefaultMaxDistance;
+            _layerMask = Settings.DefaultLayerMask;
+            _triggerInteraction = Settings.DefaultTriggerInteraction;
+            _cacheCapacity = Settings.DefaultCacheCapacity;
+        }
+        protected virtual void OnValidate()
         {
             _maxDistance = Mathf.Max(0, _maxDistance);
             _cacheCapacity = Mathf.Max(0, _cacheCapacity);

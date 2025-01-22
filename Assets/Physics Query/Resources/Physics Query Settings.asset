@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 074c37f3be9c154459d47e204572e2dc, type: 3}
+  m_Name: Physics Query Settings
+  m_EditorClassIdentifier: 
+  _defaultQuerySpace: 1
+  _defaultMaxDistance: 10
+  _defaultLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967291
+  _defaultTriggerInteraction: 0
+  _defaultCacheCapacity: 8
