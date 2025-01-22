@@ -9,7 +9,7 @@ namespace PhysicsQuery.Editor
         {
             return gizmo.CastResult;
         }
-        protected override Rect GetButtonPositionForElement(ElementInCollection<RaycastHit> element)
+        protected override Rect GetButtonPositionForElement(ElementIndex<RaycastHit> element)
         {
             Vector3 center = element.Value.point;
             Vector3 offset = 2 * GizmoShape.HitSphereRadius * Vector3.up;

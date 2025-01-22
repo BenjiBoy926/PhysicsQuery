@@ -1,11 +1,11 @@
 namespace PhysicsQuery.Editor
 {
-    public readonly struct ElementInCollection<TElement>
+    public readonly struct ElementIndex<TElement>
     {
         public readonly TElement Value;
         public readonly int Index;
 
-        public ElementInCollection(Result<TElement> result, int index)
+        public ElementIndex(Result<TElement> result, int index)
         {
             Value = result[index];
             Index = index;

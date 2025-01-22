@@ -9,7 +9,7 @@ namespace PhysicsQuery.Editor
         {
             return gizmo.OverlapResult;
         }
-        protected override Rect GetButtonPositionForElement(ElementInCollection<Collider> element)
+        protected override Rect GetButtonPositionForElement(ElementIndex<Collider> element)
         {
             Vector2 size = GetButtonSize(element);
             Vector2 topLeftGUIPosition = HandleUtility.WorldToGUIPoint(element.Value.transform.position);

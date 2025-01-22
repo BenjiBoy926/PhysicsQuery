@@ -13,22 +13,6 @@ namespace PhysicsQuery.Editor
         }
 
         public abstract void DrawSceneGUI(GizmoPreview gizmo);
-
-        protected bool IsPositionOnScreen(Vector3 worldPosition)
-        {
-            SceneView scene = SceneView.currentDrawingSceneView;
-            if (scene == null)
-            {
-                return false;
-            }
-            Camera camera = scene.camera;
-            if (camera == null)
-            {
-                return false;
-            }
-            Vector3 viewportPosition = camera.WorldToViewportPoint(worldPosition);
-            return viewportPosition.x >= 0 && viewportPosition.x <= 1 && viewportPosition.y >= 0 && viewportPosition.y <= 1 && viewportPosition.z > 0;
-        }
     }
     public abstract class ScenePreview<TElement> : ScenePreview
     {
@@ -37,7 +21,7 @@ namespace PhysicsQuery.Editor
             alignment = TextAnchor.MiddleCenter
         };
         private GUIStyle _style;
-        private static readonly Vector2 _additionalSpace = new(30, 0);
+        private static readonly Vector2 _additionalSpace = new(30, 10);
 
         public override void DrawSceneGUI(GizmoPreview gizmo)
         {
@@ -61,7 +45,7 @@ namespace PhysicsQuery.Editor
                 DrawEmptyButton();
             }
         }
-        private void DrawButtonForElement(ElementInCollection<TElement> element)
+        private void DrawButtonForElement(ElementIndex<TElement> element)
         {
             if (IsElementValid(element.Value))
             {
@@ -69,7 +53,7 @@ namespace PhysicsQuery.Editor
                 DrawNonEmptyButton(position, element);
             }
         }
-        private void DrawNonEmptyButton(Rect position, ElementInCollection<TElement> element)
+        private void DrawNonEmptyButton(Rect position, ElementIndex<TElement> element)
         {
             if (DrawButton(position, GetContentForElement(element), Style))
             {
@@ -84,18 +68,34 @@ namespace PhysicsQuery.Editor
         {
             return GUI.Button(position, content, style);
         }
-        protected Vector2 GetButtonSize(ElementInCollection<TElement> element)
+        protected Vector2 GetButtonSize(ElementIndex<TElement> element)
         {
             GUIContent content = GetContentForElement(element);
             return Style.CalcSize(content) + _additionalSpace;
         }
-        protected GUIContent GetContentForElement(ElementInCollection<TElement> element)
+        protected GUIContent GetContentForElement(ElementIndex<TElement> element)
         {
             return new(element.Index.ToString(), GetTooltipForElement(element.Value));
         }
 
+        protected bool IsPositionOnScreen(Vector3 worldPosition)
+        {
+            SceneView scene = SceneView.currentDrawingSceneView;
+            if (scene == null)
+            {
+                return false;
+            }
+            Camera camera = scene.camera;
+            if (camera == null)
+            {
+                return false;
+            }
+            Vector3 viewportPosition = camera.WorldToViewportPoint(worldPosition);
+            return viewportPosition.x >= 0 && viewportPosition.x <= 1 && viewportPosition.y >= 0 && viewportPosition.y <= 1 && viewportPosition.z > 0;
+        }
+
         protected abstract Result<TElement> GetResult(GizmoPreview gizmo);
-        protected abstract Rect GetButtonPositionForElement(ElementInCollection<TElement> element);
+        protected abstract Rect GetButtonPositionForElement(ElementIndex<TElement> element);
         protected abstract string GetTooltipForElement(TElement element);
         protected abstract bool IsElementValid(TElement element);
     }
