@@ -16,6 +16,6 @@ MonoBehaviour:
   _defaultMaxDistance: 10
   _defaultLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967291
+    m_Bits: 51
   _defaultTriggerInteraction: 0
   _defaultCacheCapacity: 8
