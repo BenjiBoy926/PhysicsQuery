@@ -37,45 +37,15 @@ namespace PhysicsQuery
 
         private void DrawCastResults(Result<RaycastHit> result)
         {
-            if (result.IsEmpty)
-            {
-                DrawEmptyCastResult();
-            }
-            else
-            {
-                DrawNonEmptyCastResult(result);
-            }
-        }
-        private void DrawOverlapResult(Result<Collider> result)
-        {
-            if (result.IsEmpty)
-            {
-                DrawEmptyOverlapResult();
-            }
-            else
-            {
-                DrawNonEmptyOverlapResult(result);
-            }
-        }
+            Color hitShapeColor = result.IsFull ? Color.red : Color.green;
 
-        private void DrawEmptyCastResult()
-        {
-            Vector3 start = GetStartPosition();
-            Vector3 end = GetEndPosition();
-
-            Gizmos.color = Color.gray;
-            DrawShape(start);
-            DrawShape(end);
-            Gizmos.DrawLine(start, end);
-        }
-        private void DrawNonEmptyCastResult(Result<RaycastHit> result)
-        {
-            Color shapeColor = result.IsFull ? Color.red : Color.green;
+            Gizmos.color = GetColor(result);
+            DrawShape(GetStartPosition());
             for (int i = 0; i < result.Count; i++)
             {
                 RaycastHit hit = result[i];
 
-                Gizmos.color = shapeColor;
+                Gizmos.color = hitShapeColor;
                 DrawShapeAtHit(hit);
 
                 Gizmos.color = Color.blue;
@@ -94,14 +64,9 @@ namespace PhysicsQuery
             }
             DrawShape(GetEndPosition());
         }
-        private void DrawEmptyOverlapResult()
+        private void DrawOverlapResult(Result<Collider> result)
         {
-            Gizmos.color = Color.gray;
-            DrawOverlapShape();
-        }
-        private void DrawNonEmptyOverlapResult(Result<Collider> result)
-        {
-            Gizmos.color = Color.green;
+            Gizmos.color = GetColor(result);
             DrawOverlapShape();
 
             Gizmos.color = Color.blue;
@@ -125,7 +90,6 @@ namespace PhysicsQuery
         private void DrawCastLine(Result<RaycastHit> result)
         {
             Vector3 start = GetStartPosition();
-            Vector3 midpoint = GetWorldRay().GetPoint(result.Last.distance);
             Vector3 end = GetEndPosition();
                 
             if (result.IsFull)
@@ -133,8 +97,14 @@ namespace PhysicsQuery
                 Gizmos.color = Color.red;
                 Gizmos.DrawLine(start, end);
             }
+            else if (result.IsEmpty)
+            {
+                Gizmos.color = Color.gray;
+                Gizmos.DrawLine(start, end);
+            }
             else
             {
+                Vector3 midpoint = GetWorldRay().GetPoint(result.Last.distance);
                 Gizmos.color = Color.green;
                 Gizmos.DrawLine(start, midpoint);
                 Gizmos.color = Color.gray;
@@ -157,6 +127,18 @@ namespace PhysicsQuery
         private Vector3 GetShapeCenter(RaycastHit hit)
         {
             return GetWorldRay().GetPoint(hit.distance);
+        }
+        private Color GetColor<TElement>(Result<TElement> result)
+        {
+            if (result.IsFull)
+            {
+                return Color.red;
+            }
+            else if (result.IsEmpty)
+            {
+                return Color.gray;
+            }
+            return Color.green;
         }
 
         protected virtual Ray GetWorldRay()
