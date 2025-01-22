@@ -7,6 +7,7 @@ namespace PhysicsQuery
     public readonly struct Result<TElement> : IReadOnlyList<TElement>
     {
         public bool IsEmpty => _cache == null || _cache.Length == 0 || _count == 0;
+        public bool IsFull => _cache != null && _cache.Length <= _count;
         public int Count => _count;
         public int Capacity => _cache != null ? _cache.Length : 0;
         public TElement this[int index] => Get(index);
