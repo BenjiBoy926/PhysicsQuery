@@ -70,11 +70,12 @@ namespace PhysicsQuery
         }
         private void DrawNonEmptyCastResult(Result<RaycastHit> result)
         {
+            Color shapeColor = result.IsFull ? Color.red : Color.green;
             for (int i = 0; i < result.Count; i++)
             {
                 RaycastHit hit = result[i];
 
-                Gizmos.color = Color.green;
+                Gizmos.color = shapeColor;
                 DrawShapeAtHit(hit);
 
                 Gizmos.color = Color.blue;
@@ -126,18 +127,19 @@ namespace PhysicsQuery
             Vector3 start = GetStartPosition();
             Vector3 midpoint = GetWorldRay().GetPoint(result.Last.distance);
             Vector3 end = GetEndPosition();
-
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(start, midpoint);
+                
             if (result.IsFull)
             {
                 Gizmos.color = Color.red;
+                Gizmos.DrawLine(start, end);
             }
             else
             {
-                Gizmos.color= Color.gray;
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(start, midpoint);
+                Gizmos.color = Color.gray;
+                Gizmos.DrawLine(midpoint, end);
             }
-            Gizmos.DrawLine(midpoint, end);
         }
 
         protected Vector3 GetStartPosition()
