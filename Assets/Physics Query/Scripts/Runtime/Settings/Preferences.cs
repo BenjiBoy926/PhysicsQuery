@@ -52,7 +52,7 @@ namespace PhysicsQuery
             string current = EditorPrefs.GetString(key, serializedDefaultColor);
             return Deserialize(current);
 #else
-            return default;
+            return defaultColor;
 #endif
         }
         private static void SetColor(string propertyName, Color color)
