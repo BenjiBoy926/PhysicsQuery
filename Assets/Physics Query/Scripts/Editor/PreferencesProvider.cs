@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
@@ -39,16 +40,41 @@ namespace PhysicsQuery.Editor
             EditorGUIUtility.labelWidth = 200;
             for (int i = 0; i < properties.Length; i++)
             {
-                DrawColorFieldForProperty(properties[i]);
+                DrawFieldForProperty(properties[i]);
             }
             EditorGUILayout.EndVertical();
         }
-        private void DrawColorFieldForProperty(PropertyInfo property)
+        private void DrawFieldForProperty(PropertyInfo property)
+        {
+            if (property.PropertyType == typeof(Color))
+            {
+                DrawFieldForProperty<Color>(property, ColorField);
+            }
+            else if (property.PropertyType == typeof(float))
+            {
+                DrawFieldForProperty<float>(property, FloatField);
+            }
+            else
+            {
+                EditorGUILayout.HelpBox($"Unable to edit property '{property.Name}' " +
+                    $"because the control for type '{property.PropertyType.Name}' has not been implemented", 
+                    MessageType.Error);
+            }
+        }
+        private void DrawFieldForProperty<TValue>(PropertyInfo property, Func<string, TValue, TValue> drawField)
         {
             string label = ObjectNames.NicifyVariableName(property.Name);
-            Color current = (Color)property.GetValue(null);
-            current = EditorGUILayout.ColorField(label, current);
+            TValue current = (TValue)property.GetValue(null);
+            current = drawField(label, current);
             property.SetValue(null, current);
+        }
+        private Color ColorField(string label, Color current)
+        {
+            return EditorGUILayout.ColorField(label, current);
+        }
+        private float FloatField(string label, float current)
+        {
+            return EditorGUILayout.FloatField(label, current);
         }
     }
 }

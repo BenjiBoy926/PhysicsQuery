@@ -5,8 +5,8 @@ namespace PhysicsQuery
     public abstract class GizmoShape
     {
         protected const float MaxDistance = 1000;
-        protected const float NormalLength = 0.3f;
-        public const float HitSphereRadius = NormalLength * 0.2f;
+        protected const float HitNormalLength = 0.3f;
+        public const float HitSphereRadius = HitNormalLength * 0.2f;
 
         public abstract Result<RaycastHit> DrawCastGizmos();
         public abstract Result<Collider> DrawOverlapGizmos();
@@ -84,7 +84,7 @@ namespace PhysicsQuery
         private void DrawHitPoint(RaycastHit hit)
         {
             Ray normal = new(hit.point, hit.normal);
-            Gizmos.DrawLine(normal.origin, normal.GetPoint(NormalLength));
+            Gizmos.DrawLine(normal.origin, normal.GetPoint(HitNormalLength));
             Gizmos.DrawSphere(normal.origin, HitSphereRadius);
         }
         private void DrawCastLine(Result<RaycastHit> result)

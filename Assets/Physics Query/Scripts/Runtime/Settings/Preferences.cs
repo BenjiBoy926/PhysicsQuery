@@ -30,6 +30,16 @@ namespace PhysicsQuery
             get => GetColor(nameof(ResultItemColor), Color.blue); 
             set => SetColor(nameof(ResultItemColor), value);
         }
+        public static float HitNormalLength
+        {
+            get => GetFloat(nameof(HitNormalLength), 0.3f);
+            set => SetFloat(nameof(HitNormalLength), value);
+        }
+        public static float HitSphereRadiusProportion
+        {
+            get => GetFloat(nameof(HitSphereRadiusProportion), 0.2f);
+            set => SetFloat(nameof(HitSphereRadiusProportion), value);
+        }
 
         public static Color GetColorForResult<TElement>(Result<TElement> result)
         {
@@ -46,23 +56,28 @@ namespace PhysicsQuery
 
         private static Color GetColor(string propertyName, Color defaultColor)
         {
-#if UNITY_EDITOR
             string serializedDefaultColor = Serialize(defaultColor);
             string key = GetPrefKey(propertyName);
-            string current = EditorPrefs.GetString(key, serializedDefaultColor);
+            string current = GetStringImpl(key, serializedDefaultColor);
             return Deserialize(current);
-#else
-            return defaultColor;
-#endif
         }
         private static void SetColor(string propertyName, Color color)
         {
-#if UNITY_EDITOR
             string serializedColor = Serialize(color);
             string key = GetPrefKey(propertyName);
-            EditorPrefs.SetString(key, serializedColor);
-#endif
+            SetStringImpl(key, serializedColor);
         }
+        private static float GetFloat(string propertyName, float defaultValue)
+        {
+            string key = GetPrefKey(propertyName);
+            return GetFloatImpl(key, defaultValue);
+        }
+        private static void SetFloat(string propertyName, float value)
+        {
+            string key = GetPrefKey(propertyName);
+            SetFloatImpl(key, value);
+        }
+
         private static string GetPrefKey(string propertyName)
         {
             return $"{EditorPrefKeyPrefix}{propertyName}";
@@ -74,6 +89,35 @@ namespace PhysicsQuery
         private static Color Deserialize(string serializedColor)
         {
             return JsonUtility.FromJson<Color>(serializedColor);
+        }
+
+        private static float GetFloatImpl(string key, float defaultValue)
+        {
+#if UNITY_EDITOR
+            return EditorPrefs.GetFloat(key, defaultValue);
+#else
+            return defaultValue;
+#endif
+        }
+        private static void SetFloatImpl(string key, float value)
+        {
+#if UNITY_EDITOR
+            EditorPrefs.SetFloat(key, value);
+#endif
+        }
+        private static string GetStringImpl(string key, string defaultValue)
+        {
+#if UNITY_EDITOR
+            return EditorPrefs.GetString(key, defaultValue);
+#else
+            return defaultValue;
+#endif
+        }
+        private static void SetStringImpl(string key, string value)
+        {
+#if UNITY_EDITOR
+            EditorPrefs.SetString(key, value);
+#endif
         }
     }
 }
