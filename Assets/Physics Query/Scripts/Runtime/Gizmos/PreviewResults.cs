@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PhysicsQuery.Editor
+namespace PhysicsQuery
 {
     public readonly struct PreviewResults
     {
@@ -14,6 +14,14 @@ namespace PhysicsQuery.Editor
         {
             _castResult = castResult;
             _overlapResult = overlapResult;
+        }
+        public static PreviewResults Cast(Result<RaycastHit> castResult)
+        {
+            return new(castResult, new());
+        }
+        public static PreviewResults Overlap(Result<Collider> overlapResult)
+        {
+            return new(new(), overlapResult);
         }
     }
 }

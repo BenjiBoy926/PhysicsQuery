@@ -6,8 +6,8 @@ namespace PhysicsQuery
     {
         protected const float MaxDistance = 1000;
 
-        public abstract void DrawCastGizmos(Result<RaycastHit> result);
-        public abstract void DrawOverlapGizmos(Result<Collider> result);
+        public abstract Result<RaycastHit> DrawCastGizmos();
+        public abstract Result<Collider> DrawOverlapGizmos();
     }
     public abstract class GizmoShape<TQuery> : GizmoShape where TQuery : PhysicsQuery
     {
@@ -20,8 +20,9 @@ namespace PhysicsQuery
             _query = query;
         }
 
-        public override void DrawCastGizmos(Result<RaycastHit> result)
+        public override Result<RaycastHit> DrawCastGizmos()
         {
+            Result<RaycastHit> result = _query.Cast(ResultSort.Distance);
             Color hitShapeColor = result.IsFull ? Preferences.CacheFullColor.Value : Preferences.HitColor.Value;
 
             Gizmos.color = Preferences.GetColorForResult(result);
@@ -48,9 +49,11 @@ namespace PhysicsQuery
                 Gizmos.color = Preferences.MissColor.Value;
             }
             DrawShape(GetEndPosition());
+            return result;
         }
-        public override void DrawOverlapGizmos(Result<Collider> result)
+        public override Result<Collider> DrawOverlapGizmos()
         {
+            Result<Collider> result = _query.Overlap();
             Gizmos.color = Preferences.GetColorForResult(result);
             DrawOverlapShape();
 
@@ -59,6 +62,7 @@ namespace PhysicsQuery
             {
                 ColliderGizmos.DrawGizmos(result[i]);
             }
+            return result;
         }
 
         private void DrawShapeAtHit(RaycastHit hit)
