@@ -52,6 +52,10 @@ namespace PhysicsQuery.Editor
             {
                 DrawFieldForProperty<float>(property, FloatSlider01);
             }
+            else if (property.PropertyType == typeof(bool))
+            {
+                DrawFieldForProperty<bool>(property, BoolField);
+            }
             else if (property.PropertyType == typeof(Color))
             {
                 DrawFieldForProperty<Color>(property, ColorField);
@@ -71,6 +75,10 @@ namespace PhysicsQuery.Editor
         {
             string label = ObjectNames.NicifyVariableName(property.Name);
             property.ObjectValue = drawField(label, (TValue)property.ObjectValue);
+        }
+        private bool BoolField(string label, bool current)
+        {
+            return EditorGUILayout.Toggle(label, current);
         }
         private Color ColorField(string label, Color current)
         {
