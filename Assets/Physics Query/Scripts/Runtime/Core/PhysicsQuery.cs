@@ -46,9 +46,8 @@ namespace PhysicsQuery
             set => _cacheCapacity = Mathf.Max(value, MinCacheCapacity);
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
-        public GizmoShape GizmoShape => _gizmoShape ??= CreateGizmoShape();
-        public GizmoPreview GizmoPreview => _gizmoPreview ??= GizmoPreview.Get(this);
-        public PreviewResults PreviewResults => _gizmoPreview.Results;
+        public GizmoShape Shape => _shape ??= CreateGizmoShape();
+        public GizmoPreview Preview => _preview ??= GizmoPreview.Get(this);
 
         [SerializeField] 
         private Space _space;
@@ -66,8 +65,8 @@ namespace PhysicsQuery
         private int _cacheCapacity;
         private readonly CachedArray<RaycastHit> _hitCache = new();
         private readonly CachedArray<Collider> _colliderCache = new();
-        private GizmoShape _gizmoShape;
-        private GizmoPreview _gizmoPreview;
+        private GizmoShape _shape;
+        private GizmoPreview _preview;
 
         public Result<RaycastHit> Cast(ResultSort sort)
         {
@@ -111,9 +110,9 @@ namespace PhysicsQuery
             return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
         }
 
-        internal void SetGizmoPreview(GizmoPreview preview)
+        internal void SetPreview(GizmoPreview preview)
         {
-            _gizmoPreview = preview;
+            _preview = preview;
         }
 
         protected virtual void Reset()
@@ -129,9 +128,19 @@ namespace PhysicsQuery
             _maxDistance = Mathf.Max(0, _maxDistance);
             _cacheCapacity = Mathf.Max(0, _cacheCapacity);
         }
+        private void OnDrawGizmos()
+        {
+            if (Preferences.AlwaysDrawGizmos.Value)
+            {
+                Preview.DrawGizmos(Shape);
+            }
+        }
         private void OnDrawGizmosSelected()
         {
-            _gizmoPreview.DrawGizmos(GizmoShape);
+            if (!Preferences.AlwaysDrawGizmos.Value)
+            {
+                Preview.DrawGizmos(Shape);
+            }
         }
 
         protected abstract int PerformCast(Ray worldRay, RaycastHit[] cache);

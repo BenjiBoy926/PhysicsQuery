@@ -28,7 +28,7 @@ namespace PhysicsQuery.Editor
             {
                 _availablePreviews[i].ElementClicked += Repaint;
             }
-            _query.SetGizmoPreview(CurrentPreview.Gizmo);
+            _query.SetPreview(CurrentPreview.Gizmo);
         }
         private void OnDisable()
         {
@@ -48,7 +48,7 @@ namespace PhysicsQuery.Editor
             CurrentPreview.DrawInspectorGUI();
             EditorGUILayout.EndVertical();
 
-            _query.SetGizmoPreview(CurrentPreview.Gizmo);
+            _query.SetPreview(CurrentPreview.Gizmo);
         }
         private void OnSceneGUI()
         {

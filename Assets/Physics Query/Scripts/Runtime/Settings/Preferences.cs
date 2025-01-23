@@ -15,9 +15,10 @@ namespace PhysicsQuery
         public static readonly PreferenceProperty<Color> ResultItemColor = new(nameof(ResultItemColor), Color.blue);
         public static readonly PreferenceProperty<float> HitNormalLength = new(nameof(HitNormalLength), 0.3f);
         public static readonly PreferenceProperty<float> HitSphereRadiusProportion = new(nameof(HitSphereRadiusProportion), 0.2f);
+        public static readonly PreferenceProperty<bool> AlwaysDrawGizmos = new(nameof(AlwaysDrawGizmos), false);
         public static readonly PreferenceProperty[] Properties = new PreferenceProperty[]
         {
-            HitColor, CacheFullColor, MissColor, ResultItemColor, HitNormalLength, HitSphereRadiusProportion
+            HitColor, CacheFullColor, MissColor, ResultItemColor, HitNormalLength, HitSphereRadiusProportion, AlwaysDrawGizmos
         };
 
         private static readonly Dictionary<PhysicsQuery, PreferenceProperty<int>> _currentPreviewIndex = new();
