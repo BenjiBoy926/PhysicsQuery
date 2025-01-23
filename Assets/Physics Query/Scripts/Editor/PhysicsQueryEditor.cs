@@ -29,7 +29,20 @@ namespace PhysicsQuery.Editor
             _queryID = query.GetInstanceID();
             _availablePreviews = Preview.CreatePreviews();
             _previewLabels = _availablePreviews.Select(x => x.Label).ToArray();
-            query.DrawGizmos += OnDrawGizmos;
+            
+            _query.DrawGizmos += OnDrawGizmos;
+            for (int i = 0; i < _availablePreviews.Length; i++)
+            {
+                _availablePreviews[i].ElementClicked += Repaint;
+            }
+        }
+        private void OnDisable()
+        {
+            _query.DrawGizmos -= OnDrawGizmos;
+            for (int i = 0; i < _availablePreviews.Length; i++)
+            {
+                _availablePreviews[i].ElementClicked -= Repaint;
+            }
         }
 
         private void OnDrawGizmos()

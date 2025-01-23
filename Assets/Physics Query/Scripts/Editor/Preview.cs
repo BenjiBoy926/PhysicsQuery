@@ -7,15 +7,7 @@ namespace PhysicsQuery.Editor
     {
         public event Action ElementClicked = delegate { };
 
-        public static string[] Labels => _previews.Select(x => x.Label).ToArray();
-        public static int Count => _previews.Length;
         public string Label => _label;
-
-        private static readonly Preview[] _previews = new Preview[]
-        {
-            new Preview_Cast(),
-            new Preview_Overlap()
-        };
 
         private readonly string _label;
         private readonly GizmoPreview _gizmo;
@@ -41,10 +33,6 @@ namespace PhysicsQuery.Editor
         public static Preview[] CreatePreviews()
         {
             return new Preview[] { new Preview_Cast(), new Preview_Overlap() };
-        }
-        public static Preview Get(int i)
-        {
-            return _previews[i];
         }
         public void Update(PhysicsQuery query)
         {
