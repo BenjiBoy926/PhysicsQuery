@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Reflection;
 
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -62,35 +61,36 @@ namespace PhysicsQuery
             PropertyInfo[] properties = typeof(Preferences).GetProperties();
             for (int i = 0; i < properties.Length; i++)
             {
-                string key = GetPrefKey(properties[i].Name);
+                string key = GetKey(properties[i].Name);
                 DeleteKeyImpl(key);
             }
         }
+
         private static Color GetColor(string propertyName, Color defaultColor)
         {
             string serializedDefaultColor = Serialize(defaultColor);
-            string key = GetPrefKey(propertyName);
+            string key = GetKey(propertyName);
             string current = GetStringImpl(key, serializedDefaultColor);
             return Deserialize(current);
         }
         private static void SetColor(string propertyName, Color color)
         {
             string serializedColor = Serialize(color);
-            string key = GetPrefKey(propertyName);
+            string key = GetKey(propertyName);
             SetStringImpl(key, serializedColor);
         }
         private static float GetFloat(string propertyName, float defaultValue)
         {
-            string key = GetPrefKey(propertyName);
+            string key = GetKey(propertyName);
             return GetFloatImpl(key, defaultValue);
         }
         private static void SetFloat(string propertyName, float value)
         {
-            string key = GetPrefKey(propertyName);
+            string key = GetKey(propertyName);
             SetFloatImpl(key, value);
         }
 
-        private static string GetPrefKey(string propertyName)
+        private static string GetKey(string propertyName)
         {
             return $"{EditorPrefKeyPrefix}{propertyName}";
         }

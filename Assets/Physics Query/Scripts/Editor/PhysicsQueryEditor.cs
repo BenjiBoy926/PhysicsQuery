@@ -7,18 +7,15 @@ namespace PhysicsQuery.Editor
     [CustomEditor(typeof(PhysicsQuery), true)]
     public class PhysicsQueryEditor : UnityEditor.Editor
     {
-        private const string PrefKeyPrefix = "PreviewFunction:";
-
-        private string PrefKey => $"{PrefKeyPrefix}{_queryID}";
         private int PreviewIndex
         {
-            get => GetPreviewIndex();
-            set => SetPreviewIndex(value);
+            get => ClampPreviewIndex(_previewIndex.Value);
+            set => _previewIndex.Value = ClampPreviewIndex(value);
         }
         private Preview CurrentPreview => _availablePreviews[PreviewIndex];
 
         private PhysicsQuery _query;
-        private int _queryID;
+        private PreferenceProperty<int> _previewIndex;
         private Preview[] _availablePreviews;
         private string[] _previewLabels;
 
@@ -26,7 +23,7 @@ namespace PhysicsQuery.Editor
         {
             PhysicsQuery query = (PhysicsQuery)target;
             _query = query;
-            _queryID = query.GetInstanceID();
+            _previewIndex = new PreferenceProperty<int>($"PreviewFunction{query.GetInstanceID()}", 0);
             _availablePreviews = Preview.CreatePreviews();
             _previewLabels = _availablePreviews.Select(x => x.Label).ToArray();
             
@@ -65,16 +62,6 @@ namespace PhysicsQuery.Editor
             CurrentPreview.DrawSceneGUI();
         }
 
-        private int GetPreviewIndex()
-        {
-            int storedValue = EditorPrefs.GetInt(PrefKeyPrefix, 0);
-            return ClampPreviewIndex(storedValue);
-        }
-        private void SetPreviewIndex(int index)
-        {
-            index = ClampPreviewIndex(index);
-            EditorPrefs.SetInt(PrefKey, index);
-        }
         private int ClampPreviewIndex(int index)
         {
             return Mathf.Clamp(index, 0, _availablePreviews.Length);
