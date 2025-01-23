@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 
 namespace PhysicsQuery.Editor
 {
@@ -44,6 +45,21 @@ namespace PhysicsQuery.Editor
         public void DrawSceneGUI()
         {
             _scene.DrawSceneGUI(_gizmo.Results);
+        }
+
+        // Note: somewhat of a hack. We want "CreatePreviews" to be the source of truth on the number and order of previews,
+        // but we need the order and number of gizmo previews to be accessible from non-editor code. So we set a public variable
+        // from this initialize on load method
+        [InitializeOnLoadMethod]
+        private static void SetupGizmoPreviews()
+        {
+            Preview[] previews = CreatePreviews();
+            GizmoPreview[] gizmos = new GizmoPreview[previews.Length];
+            for (int i = 0; i < gizmos.Length; i++)
+            {
+                gizmos[i] = previews[i].Gizmo;
+            }
+            GizmoPreview.Template = gizmos;
         }
     }
 }

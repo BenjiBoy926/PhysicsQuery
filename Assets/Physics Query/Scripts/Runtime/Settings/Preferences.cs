@@ -45,12 +45,13 @@ namespace PhysicsQuery
         public static int GetPreviewIndex(PhysicsQuery query)
         {
             AddToDictionary(query);
-            return _currentPreviewIndex[query].Value;
+            int value = _currentPreviewIndex[query].Value;
+            return ClampPreviewIndex(value);
         }
         public static void SetPreviewIndex(PhysicsQuery query, int index)
         {
             AddToDictionary(query);
-            _currentPreviewIndex[query].Value = index;
+            _currentPreviewIndex[query].Value = ClampPreviewIndex(index);
         }
         private static void AddToDictionary(PhysicsQuery query)
         {
@@ -64,6 +65,10 @@ namespace PhysicsQuery
         private static string GetPreviewIndexPropertyName(PhysicsQuery query)
         {
             return $"{PreviewIndexPropertyNamePrefix}{query.GetInstanceID()}";
+        }
+        private static int ClampPreviewIndex(int index)
+        {
+            return Mathf.Clamp(index, 0, GizmoPreview.Count - 1);
         }
     }
 }

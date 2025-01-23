@@ -47,6 +47,7 @@ namespace PhysicsQuery
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
         public GizmoShape GizmoShape => _gizmoShape ??= CreateGizmoShape();
+        public GizmoPreview GizmoPreview => _gizmoPreview ??= GizmoPreview.Get(this);
         public PreviewResults PreviewResults => _gizmoPreview.Results;
 
         [SerializeField] 
@@ -66,7 +67,7 @@ namespace PhysicsQuery
         private readonly CachedArray<RaycastHit> _hitCache = new();
         private readonly CachedArray<Collider> _colliderCache = new();
         private GizmoShape _gizmoShape;
-        private GizmoPreview _gizmoPreview = new GizmoPreview_Cast();
+        private GizmoPreview _gizmoPreview;
 
         public Result<RaycastHit> Cast(ResultSort sort)
         {

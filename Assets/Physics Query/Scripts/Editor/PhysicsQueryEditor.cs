@@ -1,6 +1,5 @@
 using System.Linq;
 using UnityEditor;
-using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
@@ -9,8 +8,8 @@ namespace PhysicsQuery.Editor
     {
         private int PreviewIndex
         {
-            get => ClampPreviewIndex(Preferences.GetPreviewIndex(_query));
-            set => Preferences.SetPreviewIndex(_query, ClampPreviewIndex(value));
+            get => Preferences.GetPreviewIndex(_query);
+            set => Preferences.SetPreviewIndex(_query, value);
         }
         private Preview CurrentPreview => _availablePreviews[PreviewIndex];
 
@@ -54,11 +53,6 @@ namespace PhysicsQuery.Editor
         private void OnSceneGUI()
         {
             CurrentPreview.DrawSceneGUI();
-        }
-
-        private int ClampPreviewIndex(int index)
-        {
-            return Mathf.Clamp(index, 0, _availablePreviews.Length);
         }
     }
 }

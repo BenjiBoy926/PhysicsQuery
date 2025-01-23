@@ -4,10 +4,17 @@ namespace PhysicsQuery
 {
     public abstract class GizmoPreview
     {
+        public static GizmoPreview[] Template;
+        public static int Count => Template.Length;
         public PreviewResults Results { get; protected set; }
 
         public abstract string Label { get; }
         public abstract void DrawGizmos(GizmoShape shape);
+
+        public GizmoPreview Get(PhysicsQuery query)
+        {
+            return Template[Preferences.GetPreviewIndex(query)];
+        }
     }
     public class GizmoPreview_Cast : GizmoPreview
     {
