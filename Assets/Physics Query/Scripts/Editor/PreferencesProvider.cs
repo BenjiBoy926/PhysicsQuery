@@ -46,7 +46,15 @@ namespace PhysicsQuery.Editor
         }
         private void DrawFieldForProperty(PropertyInfo property)
         {
-            if (property.PropertyType == typeof(Color))
+            if (property.SetMethod == null)
+            {
+                return;
+            }
+            if (property.Name == nameof(Preferences.HitSphereRadiusProportion))
+            {
+                DrawFieldForProperty<float>(property, FloatSlider01);
+            }
+            else if (property.PropertyType == typeof(Color))
             {
                 DrawFieldForProperty<Color>(property, ColorField);
             }
@@ -75,6 +83,10 @@ namespace PhysicsQuery.Editor
         private float FloatField(string label, float current)
         {
             return EditorGUILayout.FloatField(label, current);
+        }
+        private float FloatSlider01(string label, float current)
+        {
+            return EditorGUILayout.Slider(label, current, 0, 1);
         }
     }
 }

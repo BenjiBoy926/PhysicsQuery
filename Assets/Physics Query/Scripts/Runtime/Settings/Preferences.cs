@@ -40,6 +40,7 @@ namespace PhysicsQuery
             get => GetFloat(nameof(HitSphereRadiusProportion), 0.2f);
             set => SetFloat(nameof(HitSphereRadiusProportion), value);
         }
+        public static float HitSphereRadius => HitNormalLength * HitSphereRadiusProportion;
 
         public static Color GetColorForResult<TElement>(Result<TElement> result)
         {
