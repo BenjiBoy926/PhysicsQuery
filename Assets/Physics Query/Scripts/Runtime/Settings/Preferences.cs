@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PhysicsQuery
 {
     public static class Preferences
     {
+        private const string PreviewIndexPropertyNamePrefix = "PreviewIndex";
+
         public static float HitSphereRadius => HitNormalLength.Value * HitSphereRadiusProportion.Value;
         
         public static readonly PreferenceProperty<Color> HitColor = new(nameof(HitColor), Color.green);
@@ -17,6 +20,8 @@ namespace PhysicsQuery
             HitColor, CacheFullColor, MissColor, ResultItemColor, HitNormalLength, HitSphereRadiusProportion
         };
 
+        private static readonly Dictionary<PhysicsQuery, PreferenceProperty<int>> _currentPreviewIndex = new();
+
         public static Color GetColorForResult<TElement>(Result<TElement> result)
         {
             if (result.IsFull)
@@ -29,13 +34,36 @@ namespace PhysicsQuery
             }
             return Color.green;
         }
-
         public static void Clear()
         {
             for (int i = 0; i < Properties.Length; i++)
             {
                 Properties[i].Reset();
             }
+        }
+
+        public static int GetPreviewIndex(PhysicsQuery query)
+        {
+            AddToDictionary(query);
+            return _currentPreviewIndex[query].Value;
+        }
+        public static void SetPreviewIndex(PhysicsQuery query, int index)
+        {
+            AddToDictionary(query);
+            _currentPreviewIndex[query].Value = index;
+        }
+        private static void AddToDictionary(PhysicsQuery query)
+        {
+            if (_currentPreviewIndex.ContainsKey(query))
+            {
+                return;
+            }
+            PreferenceProperty<int> newProperty = new(GetPreviewIndexPropertyName(query), 0);
+            _currentPreviewIndex.Add(query, newProperty);
+        }
+        private static string GetPreviewIndexPropertyName(PhysicsQuery query)
+        {
+            return $"{PreviewIndexPropertyNamePrefix}{query.GetInstanceID()}";
         }
     }
 }

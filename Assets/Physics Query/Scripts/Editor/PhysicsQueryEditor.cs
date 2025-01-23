@@ -9,13 +9,12 @@ namespace PhysicsQuery.Editor
     {
         private int PreviewIndex
         {
-            get => ClampPreviewIndex(_previewIndex.Value);
-            set => _previewIndex.Value = ClampPreviewIndex(value);
+            get => ClampPreviewIndex(Preferences.GetPreviewIndex(_query));
+            set => Preferences.SetPreviewIndex(_query, ClampPreviewIndex(value));
         }
         private Preview CurrentPreview => _availablePreviews[PreviewIndex];
 
         private PhysicsQuery _query;
-        private PreferenceProperty<int> _previewIndex;
         private Preview[] _availablePreviews;
         private string[] _previewLabels;
 
@@ -23,7 +22,6 @@ namespace PhysicsQuery.Editor
         {
             PhysicsQuery query = (PhysicsQuery)target;
             _query = query;
-            _previewIndex = new PreferenceProperty<int>($"PreviewFunction{query.GetInstanceID()}", 0);
             _availablePreviews = Preview.CreatePreviews();
             _previewLabels = _availablePreviews.Select(x => x.Label).ToArray();
             
