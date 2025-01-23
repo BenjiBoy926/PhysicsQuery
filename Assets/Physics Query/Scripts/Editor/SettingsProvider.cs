@@ -9,7 +9,6 @@ namespace PhysicsQuery.Editor
     {
         private const string Path = "Project/" + Settings.PackageQualifiedName;
 
-        private Settings _settings;
         private SerializedObject _serializedSettings;
 
         public SettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
@@ -19,7 +18,7 @@ namespace PhysicsQuery.Editor
         [SettingsProvider]
         public static UnityEditor.SettingsProvider CreateSettingsProvider()
         {
-            SerializedObject serializedSettings = new SerializedObject(Settings.GetInstance());
+            SerializedObject serializedSettings = GetSerializedSettings();
             IEnumerable<string> keywords = GetSearchKeywordsFromSerializedObject(serializedSettings);
             return new SettingsProvider(Path, SettingsScope.Project, keywords);
         }
@@ -27,36 +26,19 @@ namespace PhysicsQuery.Editor
         public override void OnActivate(string searchContext, VisualElement rootElement)
         {
             base.OnActivate(searchContext, rootElement);
-            _settings = Settings.GetInstance();
-            _serializedSettings = new SerializedObject(_settings);
+            _serializedSettings = GetSerializedSettings();
         }
         public override void OnGUI(string searchContext)
         {
             base.OnGUI(searchContext);
-
-            SerializedProperty iterator = _serializedSettings.GetIterator();
-            iterator.NextVisible(true);
-            iterator.NextVisible(false);
-
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUIUtility.labelWidth = 200;
-            do
-            {
-                GUI.enabled = iterator.name != "m_Script";
-                EditorGUILayout.PropertyField(iterator, true);
-            } 
-            while (iterator.NextVisible(false));
-            GUI.enabled = true;
-
-            if (GUILayout.Button("Restore Defaults"))
-            {
-                _settings.Reset();
-                _serializedSettings.Update();
-            }
-
-            EditorGUILayout.EndVertical();
-
+            SettingsEditor.DrawGUI(_serializedSettings);
             _serializedSettings.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static SerializedObject GetSerializedSettings()
+        {
+            return new SerializedObject(Settings.GetInstance());
         }
     }
 }
