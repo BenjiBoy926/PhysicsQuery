@@ -26,15 +26,15 @@ namespace PhysicsQuery
         public static int DefaultCacheCapacity => GetInstance()._defaultCacheCapacity;
 
         [SerializeField]
-        private Space _defaultQuerySpace = Space.Self;
+        private Space _defaultQuerySpace;
         [SerializeField]
-        private float _defaultMaxDistance = 10;
+        private float _defaultMaxDistance;
         [SerializeField]
-        private LayerMask _defaultLayerMask = Physics.DefaultRaycastLayers;
+        private LayerMask _defaultLayerMask;
         [SerializeField]
-        private QueryTriggerInteraction _defaultTriggerInteraction = QueryTriggerInteraction.UseGlobal;
+        private QueryTriggerInteraction _defaultTriggerInteraction;
         [SerializeField]
-        private int _defaultCacheCapacity = 8;
+        private int _defaultCacheCapacity;
         private static Settings _instance;
 
         internal static Settings GetInstance()
@@ -75,6 +75,15 @@ namespace PhysicsQuery
             AssetDatabase.CreateAsset(instance, InstancePath);
             AssetDatabase.SaveAssets();
 #endif
+        }
+
+        public void Reset()
+        {
+            _defaultQuerySpace = Space.Self;
+            _defaultMaxDistance = 10;
+            _defaultLayerMask = Physics.DefaultRaycastLayers;
+            _defaultTriggerInteraction = QueryTriggerInteraction.UseGlobal;
+            _defaultCacheCapacity = 8;
         }
     }
 }

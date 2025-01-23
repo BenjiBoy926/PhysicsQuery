@@ -9,6 +9,7 @@ namespace PhysicsQuery.Editor
     {
         private const string Path = "Project/" + Settings.PackageQualifiedName;
 
+        private Settings _settings;
         private SerializedObject _serializedSettings;
 
         public SettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
@@ -18,7 +19,7 @@ namespace PhysicsQuery.Editor
         [SettingsProvider]
         public static UnityEditor.SettingsProvider CreateSettingsProvider()
         {
-            SerializedObject serializedSettings = CreateSerializedSettings();
+            SerializedObject serializedSettings = new SerializedObject(Settings.GetInstance());
             IEnumerable<string> keywords = GetSearchKeywordsFromSerializedObject(serializedSettings);
             return new SettingsProvider(Path, SettingsScope.Project, keywords);
         }
@@ -26,7 +27,8 @@ namespace PhysicsQuery.Editor
         public override void OnActivate(string searchContext, VisualElement rootElement)
         {
             base.OnActivate(searchContext, rootElement);
-            _serializedSettings = CreateSerializedSettings();
+            _settings = Settings.GetInstance();
+            _serializedSettings = new SerializedObject(_settings);
         }
         public override void OnGUI(string searchContext)
         {
@@ -45,14 +47,16 @@ namespace PhysicsQuery.Editor
             } 
             while (iterator.NextVisible(false));
             GUI.enabled = true;
+
+            if (GUILayout.Button("Restore Defaults"))
+            {
+                _settings.Reset();
+                _serializedSettings.Update();
+            }
+
             EditorGUILayout.EndVertical();
 
             _serializedSettings.ApplyModifiedPropertiesWithoutUndo();
-        }
-
-        private static SerializedObject CreateSerializedSettings()
-        {
-            return new(Settings.GetInstance());
         }
     }
 }
