@@ -31,7 +31,11 @@ namespace PhysicsQuery.Editor
 
         public static Preview[] CreatePreviews()
         {
-            return new Preview[] { new Preview_Cast(), new Preview_Overlap() };
+            return new Preview[] 
+            { 
+                new("Cast", new GizmoPreview_Cast(), new InspectorPreview_Cast(), new ScenePreview_Cast()), 
+                new("Overlap", new GizmoPreview_Overlap(), new InspectorPreview_Overlap(), new ScenePreview_Overlap()),
+            };
         }
         public void DrawInspectorGUI()
         {
