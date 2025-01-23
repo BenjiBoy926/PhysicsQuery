@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace PhysicsQuery.Editor
 {
-    public class Preview
+    public abstract class Preview
     {
         public event Action ElementClicked = delegate { };
 
@@ -13,8 +13,8 @@ namespace PhysicsQuery.Editor
 
         private static readonly Preview[] _previews = new Preview[]
         {
-            new("Cast", new GizmoPreview_Cast(), new InspectorPreview_Cast(), new ScenePreview_Cast()),
-            new("Overlap", new GizmoPreview_Overlap(), new InspectorPreview_Overlap(), new ScenePreview_Overlap()),
+            new Preview_Cast(),
+            new Preview_Overlap()
         };
 
         private readonly string _label;
@@ -23,11 +23,11 @@ namespace PhysicsQuery.Editor
         private readonly ScenePreview _scene;
         private PreviewResults _results;
 
-        private Preview(string label, GizmoPreview mode, InspectorPreview display, ScenePreview scene)
+        protected Preview(string label, GizmoPreview gizmo, InspectorPreview inspector, ScenePreview scene)
         {
             _label = label;
-            _gizmo = mode;
-            _inspector = display;
+            _gizmo = gizmo;
+            _inspector = inspector;
             _scene = scene;
             scene.ElementClicked += OnElementClicked;
         }
@@ -44,7 +44,7 @@ namespace PhysicsQuery.Editor
         }
         public void Update(PhysicsQuery query)
         {
-            _results = new(query.Cast(ResultSort.Distance), query.Overlap());
+            _results = GetResults(query);
         }
         public void DrawInspectorGUI()
         {
@@ -58,5 +58,7 @@ namespace PhysicsQuery.Editor
         {
             _gizmo.DrawGizmos(query.GizmoShape, _results);
         }
+
+        protected abstract PreviewResults GetResults(PhysicsQuery query);
     }
 }
