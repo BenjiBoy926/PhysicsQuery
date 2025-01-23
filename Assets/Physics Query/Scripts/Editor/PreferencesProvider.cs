@@ -42,6 +42,10 @@ namespace PhysicsQuery.Editor
             {
                 DrawFieldForProperty(properties[i]);
             }
+            if (GUILayout.Button("Restore Defaults"))
+            {
+                Preferences.Clear();
+            }
             EditorGUILayout.EndVertical();
         }
         private void DrawFieldForProperty(PropertyInfo property)

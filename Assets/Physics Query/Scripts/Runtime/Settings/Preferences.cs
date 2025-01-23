@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Reflection;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -55,6 +57,15 @@ namespace PhysicsQuery
             return Color.green;
         }
 
+        public static void Clear()
+        {
+            PropertyInfo[] properties = typeof(Preferences).GetProperties();
+            for (int i = 0; i < properties.Length; i++)
+            {
+                string key = GetPrefKey(properties[i].Name);
+                DeleteKeyImpl(key);
+            }
+        }
         private static Color GetColor(string propertyName, Color defaultColor)
         {
             string serializedDefaultColor = Serialize(defaultColor);
@@ -118,6 +129,12 @@ namespace PhysicsQuery
         {
 #if UNITY_EDITOR
             EditorPrefs.SetString(key, value);
+#endif
+        }
+        private static void DeleteKeyImpl(string key)
+        {
+#if UNITY_EDITOR
+            EditorPrefs.DeleteKey(key);
 #endif
         }
     }
