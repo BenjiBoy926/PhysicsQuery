@@ -20,11 +20,11 @@ namespace PhysicsQuery.Editor
         {
             _query = (PhysicsQuery)target;
             _previewLabels = Preview.Labels;
-            CurrentPreview.SetGizmoPreviewOn(_query);
             for (int i = 0; i < Preview.Count; i++)
             {
                 Preview.Get(i).ElementClicked += Repaint;
             }
+            _query.DrawGizmos += OnDrawGizmos;
         }
         private void OnDisable()
         {
@@ -42,13 +42,16 @@ namespace PhysicsQuery.Editor
             {
                 EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
                 CurrentPreviewIndex = EditorGUILayout.Popup("Function", CurrentPreviewIndex, _previewLabels);
-                CurrentPreview.SetGizmoPreviewOn(_query);
                 CurrentPreview.DrawInspectorGUI();
             }
         }
         private void OnSceneGUI()
         {
             CurrentPreview.DrawSceneGUI();
+        }
+        private void OnDrawGizmos()
+        {
+            CurrentPreview.DrawGizmos(_query);
         }
 
         private int ValidatePreviewIndex(int index)

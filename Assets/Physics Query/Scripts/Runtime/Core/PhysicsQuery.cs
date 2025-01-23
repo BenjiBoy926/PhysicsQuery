@@ -8,6 +8,8 @@ namespace PhysicsQuery
         protected const float MinNonZeroFloat = 1E-5f;
         private const int MinCacheCapacity = 1;
 
+        public event Action DrawGizmos = delegate { };
+
         public Space Space
         {
             get => _space;
@@ -44,7 +46,7 @@ namespace PhysicsQuery
             set => _cacheCapacity = Mathf.Max(value, MinCacheCapacity);
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
-        private GizmoShape GizmoShape => _gizmoShape ??= CreateGizmoShape();
+        public GizmoShape GizmoShape => _gizmoShape ??= CreateGizmoShape();
 
         [SerializeField] 
         private Space _space;
@@ -62,7 +64,6 @@ namespace PhysicsQuery
         private int _cacheCapacity;
         private readonly CachedArray<RaycastHit> _hitCache = new();
         private readonly CachedArray<Collider> _colliderCache = new();
-        private GizmoPreview _gizmoPreview;
         private GizmoShape _gizmoShape;
 
         public Result<RaycastHit> Cast(ResultSort sort)
@@ -107,11 +108,6 @@ namespace PhysicsQuery
             return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
         }
 
-        internal void SetGizmoPreview(GizmoPreview gizmoPreview)
-        {
-            _gizmoPreview = gizmoPreview;
-        }
-
         protected virtual void Reset()
         {
             _space = Settings.DefaultQuerySpace;
@@ -127,7 +123,7 @@ namespace PhysicsQuery
         }
         private void OnDrawGizmosSelected()
         {
-            _gizmoPreview?.DrawGizmos(GizmoShape);
+            DrawGizmos();
         }
 
         protected abstract int PerformCast(Ray worldRay, RaycastHit[] cache);

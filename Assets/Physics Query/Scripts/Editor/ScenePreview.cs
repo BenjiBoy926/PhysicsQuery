@@ -21,7 +21,7 @@ namespace PhysicsQuery.Editor
             alignment = TextAnchor.MiddleCenter
         };
 
-        private static readonly Vector2 _additionalSpace = new(30, 10);
+        private static readonly Vector2 _additionalButtonSize = new(30, 10);
         private GUIStyle _buttonStyle;
 
         public override void DrawSceneGUI(GizmoPreview gizmo)
@@ -77,7 +77,7 @@ namespace PhysicsQuery.Editor
         protected Vector2 GetButtonSize(ElementIndex<TElement> element)
         {
             GUIContent content = GetContentForElement(element);
-            return ButtonStyle.CalcSize(content) + _additionalSpace;
+            return ButtonStyle.CalcSize(content) + _additionalButtonSize;
         }
         protected GUIContent GetContentForElement(ElementIndex<TElement> element)
         {

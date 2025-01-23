@@ -42,10 +42,6 @@ namespace PhysicsQuery.Editor
         {
             return _previews[i];
         }
-        public void SetGizmoPreviewOn(PhysicsQuery query)
-        {
-            query.SetGizmoPreview(_gizmo);
-        }
         public void DrawInspectorGUI()
         {
             _inspector.DrawInspectorGUI(_gizmo);
@@ -53,6 +49,10 @@ namespace PhysicsQuery.Editor
         public void DrawSceneGUI()
         {
             _scene.DrawSceneGUI(_gizmo);
+        }
+        public void DrawGizmos(PhysicsQuery query)
+        {
+            _gizmo.DrawGizmos(query.GizmoShape);
         }
     }
 }
