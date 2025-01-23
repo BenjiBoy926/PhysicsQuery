@@ -9,9 +9,9 @@ namespace PhysicsQuery.Editor
     {
         private readonly Dictionary<int, bool> _foldout = new();
 
-        protected override Result<RaycastHit> GetResult(GizmoPreview gizmos)
+        protected override Result<RaycastHit> GetResult(PreviewResults info)
         {
-            return gizmos.CastResult;
+            return info.CastResult;
         }
         protected override void DrawElementInspectorGUI(RaycastHit element, int index)
         {
@@ -25,9 +25,9 @@ namespace PhysicsQuery.Editor
             }
             EditorGUI.indentLevel--;
         }
-        public override void HighlightElement(GizmoPreview gizmos, int index)
+        public override void HighlightElement(PreviewResults results, int index)
         {
-            RaycastHit highlight = gizmos.CastResult[index];
+            RaycastHit highlight = results.CastResult[index];
             CollapseAllOtherFoldouts(highlight);
             EditorGUIUtility.PingObject(highlight.collider);
         }

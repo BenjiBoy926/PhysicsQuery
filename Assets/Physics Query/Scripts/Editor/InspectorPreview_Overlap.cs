@@ -10,13 +10,13 @@ namespace PhysicsQuery.Editor
             string label = $"Element {index}";
             EditorGUILayout.ObjectField(label, element, element.GetType(), true);
         }
-        protected override Result<Collider> GetResult(GizmoPreview gizmos)
+        protected override Result<Collider> GetResult(PreviewResults results)
         {
-            return gizmos.OverlapResult;
+            return results.OverlapResult;
         }
-        public override void HighlightElement(GizmoPreview gizmos, int index)
+        public override void HighlightElement(PreviewResults results, int index)
         {
-            EditorGUIUtility.PingObject(gizmos.OverlapResult[index]);
+            EditorGUIUtility.PingObject(results.OverlapResult[index]);
         }
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
@@ -22,6 +21,7 @@ namespace PhysicsQuery.Editor
         private readonly GizmoPreview _gizmo;
         private readonly InspectorPreview _inspector;
         private readonly ScenePreview _scene;
+        private PreviewResults _results;
 
         private Preview(string label, GizmoPreview mode, InspectorPreview display, ScenePreview scene)
         {
@@ -34,7 +34,7 @@ namespace PhysicsQuery.Editor
 
         private void OnElementClicked(int index)
         {
-            _inspector.HighlightElement(_gizmo, index);
+            _inspector.HighlightElement(_results, index);
             ElementClicked();
         }
 
@@ -42,17 +42,21 @@ namespace PhysicsQuery.Editor
         {
             return _previews[i];
         }
+        public void Update(PhysicsQuery query)
+        {
+            _results = new(query.Cast(ResultSort.Distance), query.Overlap());
+        }
         public void DrawInspectorGUI()
         {
-            _inspector.DrawInspectorGUI(_gizmo);
+            _inspector.DrawInspectorGUI(_results);
         }
         public void DrawSceneGUI()
         {
-            _scene.DrawSceneGUI(_gizmo);
+            _scene.DrawSceneGUI(_results);
         }
         public void DrawGizmos(PhysicsQuery query)
         {
-            _gizmo.DrawGizmos(query.GizmoShape);
+            _gizmo.DrawGizmos(query.GizmoShape, _results);
         }
     }
 }

@@ -5,9 +5,9 @@ namespace PhysicsQuery.Editor
 {
     public class ScenePreview_Cast : ScenePreview<RaycastHit>
     {
-        protected override Result<RaycastHit> GetResult(GizmoPreview gizmo)
+        protected override Result<RaycastHit> GetResult(PreviewResults results)
         {
-            return gizmo.CastResult;
+            return results.CastResult;
         }
         protected override Rect GetButtonPositionForElement(ElementIndex<RaycastHit> element)
         {

@@ -49,9 +49,10 @@ namespace PhysicsQuery.Editor
         {
             CurrentPreview.DrawSceneGUI();
         }
-        private void OnDrawGizmos()
+        private void OnDrawGizmos(PhysicsQuery query)
         {
-            CurrentPreview.DrawGizmos(_query);
+            CurrentPreview.Update(query);
+            CurrentPreview.DrawGizmos(query);
         }
 
         private int ValidatePreviewIndex(int index)

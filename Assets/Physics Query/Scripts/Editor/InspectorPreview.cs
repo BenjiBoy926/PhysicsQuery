@@ -1,3 +1,4 @@
+using PhysicsQuery.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -5,8 +6,8 @@ namespace PhysicsQuery
 {
     public abstract class InspectorPreview
     {
-        public abstract void DrawInspectorGUI(GizmoPreview gizmos);
-        public abstract void HighlightElement(GizmoPreview gizmos, int index);
+        public abstract void DrawInspectorGUI(PreviewResults results);
+        public abstract void HighlightElement(PreviewResults results, int index);
     }
     public abstract class InspectorPreview<TElement> : InspectorPreview
     {
@@ -15,9 +16,9 @@ namespace PhysicsQuery
             "or increase the query's cache capacity " +
             "to ensure correct results";
 
-        public override void DrawInspectorGUI(GizmoPreview gizmos)
+        public override void DrawInspectorGUI(PreviewResults results)
         {
-            Result<TElement> result = GetResult(gizmos);
+            Result<TElement> result = GetResult(results);
             DrawEachElementInspectorGUI(result);
             if (result.IsFull)
             {
@@ -35,7 +36,7 @@ namespace PhysicsQuery
             GUI.enabled = true;
         }
 
-        protected abstract Result<TElement> GetResult(GizmoPreview gizmos);
+        protected abstract Result<TElement> GetResult(PreviewResults results);
         protected abstract void DrawElementInspectorGUI(TElement element, int index);
     }
 }
