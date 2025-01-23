@@ -7,10 +7,13 @@ using UnityEditor;
 
 namespace PhysicsQuery
 {
-    public class PreferenceProperty
+    public abstract class PreferenceProperty
     {
         private const string KeyPrefix = nameof(PhysicsQuery) + nameof(Preferences) + ".";
         private string Key => $"{KeyPrefix}{_name}";
+        public string Name => _name;
+        public abstract Type PropertyType { get; }
+        public abstract object ObjectValue { get; set; }
 
         private readonly string _name;
 
@@ -116,6 +119,12 @@ namespace PhysicsQuery
 
     public class PreferenceProperty<TValue> : PreferenceProperty
     {
+        public override Type PropertyType => typeof(TValue);
+        public override object ObjectValue
+        {
+            get => Value;
+            set => Value = (TValue)value;
+        }
         public TValue Value
         {
             get => GetValue();

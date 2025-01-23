@@ -22,7 +22,7 @@ namespace PhysicsQuery
 
         public override void DrawCastGizmos(Result<RaycastHit> result)
         {
-            Color hitShapeColor = result.IsFull ? Preferences.CacheFullColor : Preferences.HitColor;
+            Color hitShapeColor = result.IsFull ? Preferences.CacheFullColor.Value : Preferences.HitColor.Value;
 
             Gizmos.color = Preferences.GetColorForResult(result);
             DrawShape(GetStartPosition());
@@ -33,7 +33,7 @@ namespace PhysicsQuery
                 Gizmos.color = hitShapeColor;
                 DrawShapeAtHit(hit);
 
-                Gizmos.color = Preferences.ResultItemColor;
+                Gizmos.color = Preferences.ResultItemColor.Value;
                 DrawHitPoint(hit);
                 ColliderGizmos.DrawGizmos(hit.collider);
             }
@@ -41,11 +41,11 @@ namespace PhysicsQuery
 
             if (result.IsFull)
             {
-                Gizmos.color = Preferences.CacheFullColor;
+                Gizmos.color = Preferences.CacheFullColor.Value;
             }
             else
             {
-                Gizmos.color = Preferences.MissColor;
+                Gizmos.color = Preferences.MissColor.Value;
             }
             DrawShape(GetEndPosition());
         }
@@ -54,7 +54,7 @@ namespace PhysicsQuery
             Gizmos.color = Preferences.GetColorForResult(result);
             DrawOverlapShape();
 
-            Gizmos.color = Preferences.ResultItemColor;
+            Gizmos.color = Preferences.ResultItemColor.Value;
             for (int i = 0; i < result.Count; i++)
             {
                 ColliderGizmos.DrawGizmos(result[i]);
@@ -69,7 +69,7 @@ namespace PhysicsQuery
         private void DrawHitPoint(RaycastHit hit)
         {
             Ray normal = new(hit.point, hit.normal);
-            Gizmos.DrawLine(normal.origin, normal.GetPoint(Preferences.HitNormalLength));
+            Gizmos.DrawLine(normal.origin, normal.GetPoint(Preferences.HitNormalLength.Value));
             Gizmos.DrawSphere(normal.origin, Preferences.HitSphereRadius);
         }
         private void DrawCastLine(Result<RaycastHit> result)
@@ -79,20 +79,20 @@ namespace PhysicsQuery
                 
             if (result.IsFull)
             {
-                Gizmos.color = Preferences.CacheFullColor;
+                Gizmos.color = Preferences.CacheFullColor.Value;
                 Gizmos.DrawLine(start, end);
             }
             else if (result.IsEmpty)
             {
-                Gizmos.color = Preferences.MissColor;
+                Gizmos.color = Preferences.MissColor.Value;
                 Gizmos.DrawLine(start, end);
             }
             else
             {
                 Vector3 midpoint = GetWorldRay().GetPoint(result.Last.distance);
-                Gizmos.color = Preferences.HitColor;
+                Gizmos.color = Preferences.HitColor.Value;
                 Gizmos.DrawLine(start, midpoint);
-                Gizmos.color = Preferences.MissColor;
+                Gizmos.color = Preferences.MissColor.Value;
                 Gizmos.DrawLine(midpoint, end);
             }
         }

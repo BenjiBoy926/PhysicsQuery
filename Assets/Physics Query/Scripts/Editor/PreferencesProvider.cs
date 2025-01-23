@@ -34,13 +34,11 @@ namespace PhysicsQuery.Editor
         }
         private void DrawColorFieldForEachProperty()
         {
-            PropertyInfo[] properties = typeof(Preferences).GetProperties();
-
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUIUtility.labelWidth = 200;
-            for (int i = 0; i < properties.Length; i++)
+            for (int i = 0; i < Preferences.Properties.Length; i++)
             {
-                DrawFieldForProperty(properties[i]);
+                DrawFieldForProperty(Preferences.Properties[i]);
             }
             if (GUILayout.Button("Restore Defaults"))
             {
@@ -48,12 +46,8 @@ namespace PhysicsQuery.Editor
             }
             EditorGUILayout.EndVertical();
         }
-        private void DrawFieldForProperty(PropertyInfo property)
+        private void DrawFieldForProperty(PreferenceProperty property)
         {
-            if (property.SetMethod == null)
-            {
-                return;
-            }
             if (property.Name == nameof(Preferences.HitSphereRadiusProportion))
             {
                 DrawFieldForProperty<float>(property, FloatSlider01);
@@ -73,12 +67,10 @@ namespace PhysicsQuery.Editor
                     MessageType.Error);
             }
         }
-        private void DrawFieldForProperty<TValue>(PropertyInfo property, Func<string, TValue, TValue> drawField)
+        private void DrawFieldForProperty<TValue>(PreferenceProperty property, Func<string, TValue, TValue> drawField)
         {
             string label = ObjectNames.NicifyVariableName(property.Name);
-            TValue current = (TValue)property.GetValue(null);
-            current = drawField(label, current);
-            property.SetValue(null, current);
+            property.ObjectValue = drawField(label, (TValue)property.ObjectValue);
         }
         private Color ColorField(string label, Color current)
         {
