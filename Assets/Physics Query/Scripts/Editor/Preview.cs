@@ -38,6 +38,10 @@ namespace PhysicsQuery.Editor
             ElementClicked();
         }
 
+        public static Preview[] CreatePreviews()
+        {
+            return new Preview[] { new Preview_Cast(), new Preview_Overlap() };
+        }
         public static Preview Get(int i)
         {
             return _previews[i];

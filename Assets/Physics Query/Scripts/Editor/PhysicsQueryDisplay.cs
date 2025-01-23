@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
-    [CustomEditor(typeof(PhysicsQuery), true)]
-    public class PhysicsQueryEditor : UnityEditor.Editor
+    public class PhysicsQueryDisplay
     {
         private const string PrefKeyPrefix = "PreviewFunction:";
 
@@ -17,29 +16,27 @@ namespace PhysicsQuery.Editor
         }
         private Preview CurrentPreview => _availablePreviews[PreviewIndex];
 
-        private PhysicsQuery _query;
-        private int _queryID;
-        private Preview[] _availablePreviews;
-        private string[] _previewLabels;
+        private readonly PhysicsQuery _query;
+        private readonly int _queryID;
+        private readonly Preview[] _availablePreviews;
+        private readonly string[] _previewLabels;
 
-        private void OnEnable()
+        public PhysicsQueryDisplay(PhysicsQuery query)
         {
-            PhysicsQuery query = (PhysicsQuery)target;
             _query = query;
             _queryID = query.GetInstanceID();
             _availablePreviews = Preview.CreatePreviews();
             _previewLabels = _availablePreviews.Select(x => x.Label).ToArray();
             query.DrawGizmos += OnDrawGizmos;
         }
-
+        
         private void OnDrawGizmos()
         {
             CurrentPreview.Update(_query);
             CurrentPreview.DrawGizmos(_query);
         }
-        public override void OnInspectorGUI()
+        public void DrawInspectorGUI()
         {
-            base.OnInspectorGUI();
             EditorGUILayout.Space();
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
@@ -47,7 +44,7 @@ namespace PhysicsQuery.Editor
             CurrentPreview.DrawInspectorGUI();
             EditorGUILayout.EndVertical();
         }
-        private void OnSceneGUI()
+        public void DrawSceneGUI()
         {
             CurrentPreview.DrawSceneGUI();
         }

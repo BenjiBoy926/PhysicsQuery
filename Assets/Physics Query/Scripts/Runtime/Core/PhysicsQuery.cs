@@ -8,7 +8,7 @@ namespace PhysicsQuery
         protected const float MinNonZeroFloat = 1E-5f;
         private const int MinCacheCapacity = 1;
 
-        public event Action<PhysicsQuery> DrawGizmos = delegate { };
+        public event Action DrawGizmos = delegate { };
 
         public Space Space
         {
@@ -123,7 +123,7 @@ namespace PhysicsQuery
         }
         private void OnDrawGizmosSelected()
         {
-            DrawGizmos(this);
+            DrawGizmos();
         }
 
         protected abstract int PerformCast(Ray worldRay, RaycastHit[] cache);
