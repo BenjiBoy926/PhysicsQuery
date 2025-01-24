@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace PhysicsQuery
+namespace PhysicsQuery.Editor
 {
     public abstract class PreferenceProperty
     {

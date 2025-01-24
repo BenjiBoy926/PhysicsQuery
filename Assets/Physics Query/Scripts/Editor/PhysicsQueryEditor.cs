@@ -49,5 +49,26 @@ namespace PhysicsQuery.Editor
         {
             CurrentPreview.DrawSceneGUI(_query);
         }
+
+        [InitializeOnLoadMethod]
+        private static void ListenForGizmoDraw()
+        {
+            PhysicsQuery.DrawGizmos += OnDrawGizmos;
+            PhysicsQuery.DrawGizmosSelected += OnDrawGizmosSelected;
+        }
+        private static void OnDrawGizmos(PhysicsQuery obj)
+        {
+            if (Preferences.AlwaysDrawGizmos.Value)
+            {
+                Preview.DrawGizmos(obj);
+            }
+        }
+        private static void OnDrawGizmosSelected(PhysicsQuery obj)
+        {
+            if (!Preferences.AlwaysDrawGizmos.Value)
+            {
+                Preview.DrawGizmos(obj);
+            }
+        }
     }
 }

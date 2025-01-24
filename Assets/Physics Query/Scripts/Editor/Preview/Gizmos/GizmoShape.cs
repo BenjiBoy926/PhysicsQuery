@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PhysicsQuery
+namespace PhysicsQuery.Editor
 {
     public abstract class GizmoShape
     {

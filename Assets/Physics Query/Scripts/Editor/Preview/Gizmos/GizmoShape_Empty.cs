@@ -1,7 +1,7 @@
 using UnityEngine;
 
-namespace PhysicsQuery
-{
+namespace PhysicsQuery.Editor
+{   
     public class GizmoShape_Empty : GizmoShape<EmptyQuery>
     {
         protected override void DrawOverlapShape()

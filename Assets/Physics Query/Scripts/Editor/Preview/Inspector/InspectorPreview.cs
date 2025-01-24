@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace PhysicsQuery
+namespace PhysicsQuery.Editor
 {
     public abstract class InspectorPreview
     {

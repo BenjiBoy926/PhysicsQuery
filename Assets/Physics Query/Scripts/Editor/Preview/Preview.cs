@@ -37,11 +37,23 @@ namespace PhysicsQuery.Editor
             ElementClicked();
         }
 
+        public static void DrawGizmos(PhysicsQuery query)
+        {
+            int previewIndex = Preferences.GetPreviewIndex(query);
+            Preview preview = Get(previewIndex);
+            preview.DrawGizmosInternal(query);
+        }
+        public static Preview Get(PhysicsQuery query)
+        {
+            int index = Preferences.GetPreviewIndex(query);
+            return Get(index);
+        }
         public static Preview Get(int index)
         {
             return _previews[index];
         }
-        public void DrawGizmos(PhysicsQuery query)
+
+        private void DrawGizmosInternal(PhysicsQuery query)
         {
             _gizmo.DrawGizmos(query);
         }

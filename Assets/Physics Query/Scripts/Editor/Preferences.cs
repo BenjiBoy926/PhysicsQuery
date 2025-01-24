@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PhysicsQuery
+namespace PhysicsQuery.Editor
 {
     public static class Preferences
     {
@@ -69,8 +69,7 @@ namespace PhysicsQuery
         }
         private static int ClampPreviewIndex(int index)
         {
-            // TEMP
-            return Mathf.Clamp(index, 0, 3);
+            return Mathf.Clamp(index, 0, Preview.Count - 1);
         }
     }
 }
