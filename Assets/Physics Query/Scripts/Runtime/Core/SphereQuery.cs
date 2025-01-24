@@ -23,9 +23,5 @@ namespace PhysicsQuery
         {
             return Physics.OverlapSphereNonAlloc(worldOrigin, _radius, cache, LayerMask, TriggerInteraction);
         }
-        protected override GizmoShape CreateGizmoShape()
-        {
-            return new GizmoShape_Sphere(this);
-        }
     }
 }

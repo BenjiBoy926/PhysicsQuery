@@ -12,9 +12,5 @@ namespace PhysicsQuery
         {
             return 0;
         }
-        protected override GizmoShape CreateGizmoShape()
-        {
-            return new GizmoShape_Empty(this);
-        }
     }
 }

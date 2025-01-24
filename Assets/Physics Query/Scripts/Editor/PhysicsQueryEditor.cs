@@ -28,7 +28,6 @@ namespace PhysicsQuery.Editor
             {
                 _availablePreviews[i].ElementClicked += Repaint;
             }
-            _query.SetPreview(CurrentPreview.Gizmo);
         }
         private void OnDisable()
         {
@@ -47,8 +46,6 @@ namespace PhysicsQuery.Editor
             PreviewIndex = EditorGUILayout.Popup("Function", PreviewIndex, _previewLabels);
             CurrentPreview.DrawInspectorGUI();
             EditorGUILayout.EndVertical();
-
-            _query.SetPreview(CurrentPreview.Gizmo);
         }
         private void OnSceneGUI()
         {

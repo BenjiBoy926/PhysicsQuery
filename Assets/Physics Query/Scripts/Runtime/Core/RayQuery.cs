@@ -21,9 +21,5 @@ namespace PhysicsQuery
             }
             return count;
         }
-        protected override GizmoShape CreateGizmoShape()
-        {
-            return new GizmoShape_Ray(this);
-        }
     }
 }

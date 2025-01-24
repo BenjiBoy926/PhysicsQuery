@@ -43,10 +43,6 @@ namespace PhysicsQuery
             GetCapPositions(worldOrigin, out Vector3 cap1, out Vector3 cap2);
             return Physics.OverlapCapsuleNonAlloc(cap1, cap2, _radius, cache, LayerMask, TriggerInteraction);
         }
-        protected override GizmoShape CreateGizmoShape()
-        {
-            return new GizmoShape_Capsule(this);
-        }
 
         public void GetCapPositions(Vector3 worldOrigin, out Vector3 cap1, out Vector3 cap2)
         {

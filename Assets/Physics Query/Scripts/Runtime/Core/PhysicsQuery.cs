@@ -8,7 +8,8 @@ namespace PhysicsQuery
         protected const float MinNonZeroFloat = 1E-5f;
         private const int MinCacheCapacity = 1;
 
-        public event Action DrawGizmos = delegate { };
+        public static event Action<PhysicsQuery> DrawGizmos = delegate { };
+        public static event Action<PhysicsQuery> DrawGizmosSelected = delegate { };
 
         public Space Space
         {
@@ -46,8 +47,6 @@ namespace PhysicsQuery
             set => _cacheCapacity = Mathf.Max(value, MinCacheCapacity);
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
-        public GizmoShape Shape => _shape ??= CreateGizmoShape();
-        public GizmoPreview Preview => _preview ??= GizmoPreview.Get(this);
 
         [SerializeField] 
         private Space _space;
@@ -65,8 +64,6 @@ namespace PhysicsQuery
         private int _cacheCapacity;
         private readonly CachedArray<RaycastHit> _hitCache = new();
         private readonly CachedArray<Collider> _colliderCache = new();
-        private GizmoShape _shape;
-        private GizmoPreview _preview;
 
         public Result<RaycastHit> Cast(ResultSort sort)
         {
@@ -110,11 +107,6 @@ namespace PhysicsQuery
             return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
         }
 
-        internal void SetPreview(GizmoPreview preview)
-        {
-            _preview = preview;
-        }
-
         protected virtual void Reset()
         {
             _space = Settings.DefaultQuerySpace;
@@ -130,21 +122,14 @@ namespace PhysicsQuery
         }
         private void OnDrawGizmos()
         {
-            if (Preferences.AlwaysDrawGizmos.Value)
-            {
-                Preview.DrawGizmos(Shape);
-            }
+            DrawGizmos(this);
         }
         private void OnDrawGizmosSelected()
         {
-            if (!Preferences.AlwaysDrawGizmos.Value)
-            {
-                Preview.DrawGizmos(Shape);
-            }
+            DrawGizmosSelected(this);
         }
 
         protected abstract int PerformCast(Ray worldRay, RaycastHit[] cache);
         protected abstract int PerformOverlap(Vector3 worldOrigin, Collider[] cache);
-        protected abstract GizmoShape CreateGizmoShape();
     }
 }

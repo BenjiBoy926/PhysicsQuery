@@ -36,10 +36,6 @@ namespace PhysicsQuery
             Quaternion worldOrientation = GetWorldOrientation();
             return Physics.OverlapBoxNonAlloc(worldOrigin, Extents, cache, worldOrientation, LayerMask, TriggerInteraction);
         }
-        protected override GizmoShape CreateGizmoShape()
-        {
-            return new GizmoShape_Box(this);
-        }
 
         public Quaternion GetWorldOrientation()
         {
