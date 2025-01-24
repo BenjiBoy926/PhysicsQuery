@@ -5,14 +5,14 @@ namespace PhysicsQuery.Editor
 {
     public abstract class ScenePreview
     {
-        public delegate void ElementClickedHandler(int index);
+        public delegate void ElementClickedHandler(object element);
         public event ElementClickedHandler ElementClicked = delegate { };
-        protected void NotifyElementClicked(int index)
+        protected void NotifyElementClicked(object element)
         {
-            ElementClicked(index);
+            ElementClicked(element);
         }
 
-        public abstract void DrawSceneGUI(PreviewResults results);
+        public abstract void DrawSceneGUI(PhysicsQuery query);
     }
     public abstract class ScenePreview<TElement> : ScenePreview
     {
@@ -24,9 +24,9 @@ namespace PhysicsQuery.Editor
         private static readonly Vector2 _additionalButtonSize = new(30, 10);
         private GUIStyle _buttonStyle;
 
-        public override void DrawSceneGUI(PreviewResults results)
+        public override void DrawSceneGUI(PhysicsQuery query)
         {
-            Result<TElement> result = GetResult(results);
+            Result<TElement> result = GetResult(query);
             Handles.BeginGUI();
             for (int i = 0; i < result.Capacity; i++)
             {
@@ -63,7 +63,7 @@ namespace PhysicsQuery.Editor
         {
             if (DrawButton(position, GetContentForElement(element), ButtonStyle))
             {
-                NotifyElementClicked(element.Index);
+                NotifyElementClicked(element.Value);
             }
         }
         private void DrawEmptyButton()
@@ -100,7 +100,7 @@ namespace PhysicsQuery.Editor
             return viewportPosition.x >= 0 && viewportPosition.x <= 1 && viewportPosition.y >= 0 && viewportPosition.y <= 1 && viewportPosition.z > 0;
         }
 
-        protected abstract Result<TElement> GetResult(PreviewResults results);
+        protected abstract Result<TElement> GetResult(PhysicsQuery query);
         protected abstract Rect GetButtonPositionForElement(ElementIndex<TElement> element);
         protected abstract string GetTooltipForElement(TElement element);
         protected abstract bool IsElementValid(TElement element);

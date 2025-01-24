@@ -5,8 +5,8 @@ namespace PhysicsQuery
 {
     public abstract class InspectorPreview
     {
-        public abstract void DrawInspectorGUI(PreviewResults results);
-        public abstract void HighlightElement(PreviewResults results, int index);
+        public abstract void DrawInspectorGUI(PhysicsQuery query);
+        public abstract void HighlightElement(object element);
     }
     public abstract class InspectorPreview<TElement> : InspectorPreview
     {
@@ -15,9 +15,9 @@ namespace PhysicsQuery
             "or increase the query's cache capacity " +
             "to ensure correct results";
 
-        public override void DrawInspectorGUI(PreviewResults results)
+        public override void DrawInspectorGUI(PhysicsQuery query)
         {
-            Result<TElement> result = GetResult(results);
+            Result<TElement> result = GetResult(query);
             DrawEachElementInspectorGUI(result);
             if (result.IsFull)
             {
@@ -35,7 +35,7 @@ namespace PhysicsQuery
             GUI.enabled = true;
         }
 
-        protected abstract Result<TElement> GetResult(PreviewResults results);
+        protected abstract Result<TElement> GetResult(PhysicsQuery query);
         protected abstract void DrawElementInspectorGUI(TElement element, int index);
     }
 }

@@ -69,7 +69,8 @@ namespace PhysicsQuery
         }
         private static int ClampPreviewIndex(int index)
         {
-            return Mathf.Clamp(index, 0, GizmoPreview.Count - 1);
+            // TEMP
+            return Mathf.Clamp(index, 0, 3);
         }
     }
 }

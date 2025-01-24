@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace PhysicsQuery.Editor
 {
@@ -9,9 +11,9 @@ namespace PhysicsQuery.Editor
     {
         private readonly Dictionary<int, bool> _foldout = new();
 
-        protected override Result<RaycastHit> GetResult(PreviewResults info)
+        protected override Result<RaycastHit> GetResult(PhysicsQuery query)
         {
-            return info.CastResult;
+            return query.Cast(ResultSort.Distance);
         }
         protected override void DrawElementInspectorGUI(RaycastHit element, int index)
         {
@@ -25,11 +27,18 @@ namespace PhysicsQuery.Editor
             }
             EditorGUI.indentLevel--;
         }
-        public override void HighlightElement(PreviewResults results, int index)
+        public override void HighlightElement(object element)
         {
-            RaycastHit highlight = results.CastResult[index];
-            CollapseAllOtherFoldouts(highlight);
-            EditorGUIUtility.PingObject(highlight.collider);
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element));
+            }
+            if (element is not RaycastHit hit)
+            {
+                throw new ArgumentException($"Expected {element} to have the type {typeof(RaycastHit)}, but it has the type {element.GetType().Name}");
+            }
+            CollapseAllOtherFoldouts(hit);
+            EditorGUIUtility.PingObject(hit.collider);
         }
 
         private void DrawFoldoutInspectorGUI(RaycastHit element, int index)

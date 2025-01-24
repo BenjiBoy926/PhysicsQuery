@@ -5,9 +5,9 @@ namespace PhysicsQuery.Editor
 {
     public class ScenePreview_Overlap : ScenePreview<Collider>
     {
-        protected override Result<Collider> GetResult(PreviewResults results)
+        protected override Result<Collider> GetResult(PhysicsQuery query)
         {
-            return results.OverlapResult;
+            return query.Overlap();
         }
         protected override Rect GetButtonPositionForElement(ElementIndex<Collider> element)
         {

@@ -5,9 +5,9 @@ namespace PhysicsQuery.Editor
 {
     public class ScenePreview_Cast : ScenePreview<RaycastHit>
     {
-        protected override Result<RaycastHit> GetResult(PreviewResults results)
+        protected override Result<RaycastHit> GetResult(PhysicsQuery query)
         {
-            return results.CastResult;
+            return query.Cast(ResultSort.Distance);
         }
         protected override Rect GetButtonPositionForElement(ElementIndex<RaycastHit> element)
         {

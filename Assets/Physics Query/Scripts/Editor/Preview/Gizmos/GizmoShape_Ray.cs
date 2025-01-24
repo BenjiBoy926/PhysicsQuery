@@ -4,10 +4,6 @@ namespace PhysicsQuery
 {
     public class GizmoShape_Ray : GizmoShape<RayQuery>
     {
-        public GizmoShape_Ray(RayQuery query) : base(query)
-        {
-        }
-
         protected override void DrawOverlapShape()
         {
             Gizmos.DrawLine(GetStartPosition(), GetEndPosition());

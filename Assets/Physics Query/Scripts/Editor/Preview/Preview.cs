@@ -24,9 +24,9 @@ namespace PhysicsQuery.Editor
             scene.ElementClicked += OnElementClicked;
         }
 
-        private void OnElementClicked(int index)
+        private void OnElementClicked(object element)
         {
-            _inspector.HighlightElement(_gizmo.Results, index);
+            _inspector.HighlightElement(element);
             ElementClicked();
         }
 
@@ -38,28 +38,17 @@ namespace PhysicsQuery.Editor
                 new("Overlap", new GizmoPreview_Overlap(), new InspectorPreview_Overlap(), new ScenePreview_Overlap()),
             };
         }
-        public void DrawInspectorGUI()
+        public void DrawGizmos(PhysicsQuery query)
         {
-            _inspector.DrawInspectorGUI(_gizmo.Results);
+            _gizmo.DrawGizmos(query);
         }
-        public void DrawSceneGUI()
+        public void DrawInspectorGUI(PhysicsQuery query)
         {
-            _scene.DrawSceneGUI(_gizmo.Results);
+            _inspector.DrawInspectorGUI(query);
         }
-
-        // Note: somewhat of a hack. We want "CreatePreviews" to be the source of truth on the number and order of previews,
-        // but we need the order and number of gizmo previews to be accessible from non-editor code. So we set a public variable
-        // from this initialize on load method
-        [InitializeOnLoadMethod]
-        private static void SetupGizmoPreviews()
+        public void DrawSceneGUI(PhysicsQuery query)
         {
-            Preview[] previews = CreatePreviews();
-            GizmoPreview[] gizmos = new GizmoPreview[previews.Length];
-            for (int i = 0; i < gizmos.Length; i++)
-            {
-                gizmos[i] = previews[i].Gizmo;
-            }
-            GizmoPreview.Template = gizmos;
+            _scene.DrawSceneGUI(query);
         }
     }
 }

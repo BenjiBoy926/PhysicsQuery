@@ -44,12 +44,12 @@ namespace PhysicsQuery.Editor
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
             PreviewIndex = EditorGUILayout.Popup("Function", PreviewIndex, _previewLabels);
-            CurrentPreview.DrawInspectorGUI();
+            CurrentPreview.DrawInspectorGUI(_query);
             EditorGUILayout.EndVertical();
         }
         private void OnSceneGUI()
         {
-            CurrentPreview.DrawSceneGUI();
+            CurrentPreview.DrawSceneGUI(_query);
         }
     }
 }

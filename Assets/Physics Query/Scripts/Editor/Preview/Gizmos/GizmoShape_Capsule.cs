@@ -4,10 +4,6 @@ namespace PhysicsQuery
 {
     public class GizmoShape_Capsule : GizmoShape<CapsuleQuery>
     {
-        public GizmoShape_Capsule(CapsuleQuery query) : base(query)
-        {
-        }
-
         protected override void DrawOverlapShape()
         {
             DrawShape(GetStartPosition());

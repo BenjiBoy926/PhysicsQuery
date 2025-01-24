@@ -4,10 +4,6 @@ namespace PhysicsQuery
 {
     public class GizmoShape_Empty : GizmoShape<EmptyQuery>
     {
-        public GizmoShape_Empty(EmptyQuery query) : base(query)
-        {
-        }
-
         protected override void DrawOverlapShape()
         {
 

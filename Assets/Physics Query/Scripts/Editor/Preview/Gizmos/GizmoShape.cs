@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PhysicsQuery
@@ -6,23 +8,52 @@ namespace PhysicsQuery
     {
         protected const float MaxDistance = 1000;
 
-        public abstract Result<RaycastHit> DrawCastGizmos();
-        public abstract Result<Collider> DrawOverlapGizmos();
+        private static readonly Dictionary<Type, GizmoShape> _queryTypeToGizmoShape = new()
+        {
+            { typeof(BoxQuery), new GizmoShape_Box() },
+            { typeof(CapsuleQuery), new GizmoShape_Capsule() },
+            { typeof(EmptyQuery), new GizmoShape_Empty() },
+            { typeof(RayQuery), new GizmoShape_Ray() },
+            { typeof(SphereQuery), new GizmoShape_Sphere() }
+        };
+
+        public static GizmoShape Get(PhysicsQuery query)
+        {
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+            Type queryType = query.GetType();
+            if (!_queryTypeToGizmoShape.ContainsKey(queryType))
+            {
+                throw new NotImplementedException($"Query type '{queryType}' has no gizmo shape defined");
+            }
+            return _queryTypeToGizmoShape[queryType];
+        }
+
+        public abstract void DrawCastGizmos(PhysicsQuery query);
+        public abstract void DrawOverlapGizmos(PhysicsQuery query);
     }
     public abstract class GizmoShape<TQuery> : GizmoShape where TQuery : PhysicsQuery
     {
         protected TQuery Query => _query;
+        private TQuery _query;
 
-        private readonly TQuery _query;
-
-        public GizmoShape(TQuery query)
+        public override void DrawCastGizmos(PhysicsQuery query)
         {
-            _query = query;
+            _query = (TQuery)query;
+            var result = query.Cast(ResultSort.Distance);
+            DrawResult(result);
+        }
+        public override void DrawOverlapGizmos(PhysicsQuery query)
+        {
+            _query = (TQuery)query;
+            var result = query.Overlap();
+            DrawResult(result);
         }
 
-        public override Result<RaycastHit> DrawCastGizmos()
+        private void DrawResult(Result<RaycastHit> result)
         {
-            Result<RaycastHit> result = _query.Cast(ResultSort.Distance);
             Color hitShapeColor = result.IsFull ? Preferences.CacheFullColor.Value : Preferences.HitColor.Value;
 
             Gizmos.color = Preferences.GetColorForResult(result);
@@ -49,11 +80,9 @@ namespace PhysicsQuery
                 Gizmos.color = Preferences.MissColor.Value;
             }
             DrawShape(GetEndPosition());
-            return result;
         }
-        public override Result<Collider> DrawOverlapGizmos()
+        private void DrawResult(Result<Collider> result)
         {
-            Result<Collider> result = _query.Overlap();
             Gizmos.color = Preferences.GetColorForResult(result);
             DrawOverlapShape();
 
@@ -62,9 +91,7 @@ namespace PhysicsQuery
             {
                 ColliderGizmos.DrawGizmos(result[i]);
             }
-            return result;
         }
-
         private void DrawShapeAtHit(RaycastHit hit)
         {
             Vector3 center = GetShapeCenter(hit);
