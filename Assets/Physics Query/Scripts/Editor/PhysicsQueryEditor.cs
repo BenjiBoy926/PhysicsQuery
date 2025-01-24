@@ -11,29 +11,27 @@ namespace PhysicsQuery.Editor
             get => Preferences.GetPreviewIndex(_query);
             set => Preferences.SetPreviewIndex(_query, value);
         }
-        private Preview CurrentPreview => _availablePreviews[PreviewIndex];
+        private Preview CurrentPreview => Preview.Get(PreviewIndex);
 
         private PhysicsQuery _query;
-        private Preview[] _availablePreviews;
         private string[] _previewLabels;
 
         private void OnEnable()
         {
             PhysicsQuery query = (PhysicsQuery)target;
             _query = query;
-            _availablePreviews = Preview.CreatePreviews();
-            _previewLabels = _availablePreviews.Select(x => x.Label).ToArray();
+            _previewLabels = Preview.Labels;
             
-            for (int i = 0; i < _availablePreviews.Length; i++)
+            for (int i = 0; i < Preview.Count; i++)
             {
-                _availablePreviews[i].ElementClicked += Repaint;
+                Preview.Get(i).ElementClicked += Repaint;
             }
         }
         private void OnDisable()
         {
-            for (int i = 0; i < _availablePreviews.Length; i++)
+            for (int i = 0; i < Preview.Count; i++)
             {
-                _availablePreviews[i].ElementClicked -= Repaint;
+                Preview.Get(i).ElementClicked -= Repaint;
             }
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEditor;
 
 namespace PhysicsQuery.Editor
@@ -7,9 +8,15 @@ namespace PhysicsQuery.Editor
     {
         public event Action ElementClicked = delegate { };
 
+        public static string[] Labels => _previews.Select(x => x.Label).ToArray();
+        public static int Count => _previews.Length;
         public string Label => _label;
-        public GizmoPreview Gizmo => _gizmo;
 
+        private static readonly Preview[] _previews = new Preview[]
+        {
+            new("Cast", new GizmoPreview_Cast(), new InspectorPreview_Cast(), new ScenePreview_Cast()),
+            new("Overlap", new GizmoPreview_Overlap(), new InspectorPreview_Overlap(), new ScenePreview_Overlap()),
+        };
         private readonly string _label;
         private readonly GizmoPreview _gizmo;
         private readonly InspectorPreview _inspector;
@@ -30,13 +37,9 @@ namespace PhysicsQuery.Editor
             ElementClicked();
         }
 
-        public static Preview[] CreatePreviews()
+        public static Preview Get(int index)
         {
-            return new Preview[] 
-            { 
-                new("Cast", new GizmoPreview_Cast(), new InspectorPreview_Cast(), new ScenePreview_Cast()), 
-                new("Overlap", new GizmoPreview_Overlap(), new InspectorPreview_Overlap(), new ScenePreview_Overlap()),
-            };
+            return _previews[index];
         }
         public void DrawGizmos(PhysicsQuery query)
         {
