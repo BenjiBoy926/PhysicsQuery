@@ -100,8 +100,8 @@ namespace PhysicsQuery.Editor
         private void DrawHitPoint(RaycastHit hit)
         {
             Ray normal = new(hit.point, hit.normal);
-            Gizmos.DrawLine(normal.origin, normal.GetPoint(Preferences.HitNormalLength.Value));
-            Gizmos.DrawSphere(normal.origin, Preferences.HitSphereRadius);
+            Gizmos.DrawLine(normal.origin, normal.GetPoint(Preferences.HitNormalLength));
+            Gizmos.DrawSphere(normal.origin, Preferences.HitSphereRadius.Value);
         }
         private void DrawCastLine(Result<RaycastHit> result)
         {

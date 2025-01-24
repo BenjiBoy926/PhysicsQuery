@@ -12,7 +12,7 @@ namespace PhysicsQuery.Editor
         protected override Rect GetButtonPositionForElement(ElementIndex<RaycastHit> element)
         {
             Vector3 center = element.Value.point;
-            Vector3 offset = 2 * Preferences.HitSphereRadius * Vector3.up;
+            Vector3 offset = 2 * Preferences.HitSphereRadius.Value * Vector3.up;
             Vector3 bottomEdgeWorldPosition = center + offset;
 
             Vector2 size = GetButtonSize(element);

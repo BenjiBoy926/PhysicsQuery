@@ -7,18 +7,17 @@ namespace PhysicsQuery.Editor
     {
         private const string PreviewIndexPropertyNamePrefix = "PreviewIndex";
 
-        public static float HitSphereRadius => HitNormalLength.Value * HitSphereRadiusProportion.Value;
-        
+        public static float HitNormalLength => HitSphereRadius.Value * 5;
+
         public static readonly PreferenceProperty<Color> HitColor = new(nameof(HitColor), Color.green);
         public static readonly PreferenceProperty<Color> CacheFullColor = new(nameof(CacheFullColor), Color.red);
         public static readonly PreferenceProperty<Color> MissColor = new(nameof(MissColor), Color.gray);
         public static readonly PreferenceProperty<Color> ResultItemColor = new(nameof(ResultItemColor), Color.blue);
-        public static readonly PreferenceProperty<float> HitNormalLength = new(nameof(HitNormalLength), 0.3f);
-        public static readonly PreferenceProperty<float> HitSphereRadiusProportion = new(nameof(HitSphereRadiusProportion), 0.2f);
+        public static readonly PreferenceProperty<float> HitSphereRadius = new(nameof(HitSphereRadius), 0.05f);
         public static readonly PreferenceProperty<bool> AlwaysDrawGizmos = new(nameof(AlwaysDrawGizmos), false);
-        public static readonly PreferenceProperty[] Properties = new PreferenceProperty[]
+        public static readonly List<PreferenceProperty> Properties = new()
         {
-            HitColor, CacheFullColor, MissColor, ResultItemColor, HitNormalLength, HitSphereRadiusProportion, AlwaysDrawGizmos
+            HitColor, CacheFullColor, MissColor, ResultItemColor, HitSphereRadius, AlwaysDrawGizmos
         };
 
         private static readonly Dictionary<PhysicsQuery, PreferenceProperty<int>> _currentPreviewIndex = new();
@@ -37,7 +36,7 @@ namespace PhysicsQuery.Editor
         }
         public static void Clear()
         {
-            for (int i = 0; i < Properties.Length; i++)
+            for (int i = 0; i < Properties.Count; i++)
             {
                 Properties[i].Reset();
             }
