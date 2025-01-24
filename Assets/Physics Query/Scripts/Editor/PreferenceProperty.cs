@@ -1,9 +1,6 @@
 using System;
 using UnityEngine;
-
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
 
 namespace PhysicsQuery.Editor
 {
@@ -24,87 +21,55 @@ namespace PhysicsQuery.Editor
 
         public void Reset()
         {
-#if UNITY_EDITOR
             EditorPrefs.DeleteKey(Key);
-#endif
         }
 
         protected bool GetBool(bool defaultValue)
         {
-#if UNITY_EDITOR
             return EditorPrefs.GetBool(Key, defaultValue);
-#else
-            return defaultValue;
-#endif
         }
         protected void SetBool(bool value)
         {
-#if UNITY_EDITOR
             EditorPrefs.SetBool(Key, value);
-#endif
         }
 
         protected float GetFloat(float defaultValue)
         {
-#if UNITY_EDITOR
             return EditorPrefs.GetFloat(Key, defaultValue);
-#else
-            return defaultValue;
-#endif
         }
         protected void SetFloat(float value)
         {
-#if UNITY_EDITOR
             EditorPrefs.SetFloat(Key, value);
-#endif
         }
 
         protected int GetInt(int defaultValue)
         {
-#if UNITY_EDITOR
             return EditorPrefs.GetInt(Key, defaultValue);
-#else
-            return defaultValue;
-#endif
         }
         protected void SetInt(int value)
         {
-#if UNITY_EDITOR
             EditorPrefs.SetInt(Key, value);
-#endif
         }
 
         protected string GetString(string defaultValue)
         {
-#if UNITY_EDITOR
             return EditorPrefs.GetString(Key, defaultValue);
-#else
-            return defaultValue;
-#endif
         }
         protected void SetString(string value)
         {
-#if UNITY_EDITOR
             EditorPrefs.SetString(Key, value);
-#endif
         }
 
         protected object GetObject(object defaultValue, Type type)
         {
-#if UNITY_EDITOR
             string serializedDefaultValue = Serialize(defaultValue);
             string value = EditorPrefs.GetString(Key, serializedDefaultValue);
             return Deserialize(value, type);
-#else
-            return defaultValue;
-#endif
         }
         protected void SetObject(object value)
         {
-#if UNITY_EDITOR
             string serializedValue = Serialize(value);
             EditorPrefs.SetString(Key, serializedValue);
-#endif
         }
 
         private string Serialize(object value)
