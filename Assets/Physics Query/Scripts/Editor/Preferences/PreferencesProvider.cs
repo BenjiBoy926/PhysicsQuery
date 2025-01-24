@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
-using UnityEngine;
 
 namespace PhysicsQuery.Editor
 {
     public class PreferencesProvider : UnityEditor.SettingsProvider
     {
-        private const string Path = "Preferences/Physics Query Preferences";
+        public const string Path = "Preferences/Physics Query Preferences";
 
         public PreferencesProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
         {
@@ -31,7 +29,7 @@ namespace PhysicsQuery.Editor
         {
             base.OnGUI(searchContext);
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            PreferencesEditor.DrawInspectorGUI();
+            PreferencesEditor.DrawFullInspectorGUI();
             EditorGUILayout.EndVertical();
         }
     }

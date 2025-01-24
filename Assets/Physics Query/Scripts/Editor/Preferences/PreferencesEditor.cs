@@ -6,7 +6,7 @@ namespace PhysicsQuery.Editor
 {
     public class PreferencesEditor
     {
-        public static void DrawInspectorGUI()
+        public static void DrawFullInspectorGUI()
         {
             Preferences.Properties.ForEach(DrawPropertyField);
             DrawUseDefaultsButton();
@@ -18,7 +18,7 @@ namespace PhysicsQuery.Editor
                 Preferences.Clear();
             }
         }
-        private static void DrawPropertyField(PreferenceProperty property)
+        public static void DrawPropertyField(PreferenceProperty property)
         {
             if (property.PropertyType == typeof(bool))
             {
