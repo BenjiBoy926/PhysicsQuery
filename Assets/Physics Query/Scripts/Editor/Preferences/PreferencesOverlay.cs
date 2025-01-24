@@ -15,13 +15,19 @@ namespace PhysicsQuery.Editor
             PreferencesEditor.DrawPropertyField(Preferences.HitSphereRadius);
             PreferencesEditor.DrawPropertyField(Preferences.AlwaysDrawGizmos);
 
+            EditorGUILayout.Space();
             EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.Space();
+            
             PreferencesEditor.DrawUseDefaultsButton();
             if (GUILayout.Button("Open Preferences"))
             {
                 OpenPreferences();
             }
+
+            EditorGUILayout.Space();
             EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
         }
         private void OpenPreferences()
         {
