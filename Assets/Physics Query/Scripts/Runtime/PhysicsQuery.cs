@@ -67,60 +67,51 @@ namespace PQuery
         private readonly CachedArray<Collider> _colliderCache = new();
 
         private readonly ProfilerMarker _castMarker = new($"{nameof(PhysicsQuery)}.{nameof(Cast)}");
-        private readonly ProfilerMarker _worldRayMarker = new(nameof(GetWorldRay));
-        private readonly ProfilerMarker _hitCacheMarker = new(nameof(GetHitCache));
-        private readonly ProfilerMarker _doCastMarker = new(nameof(DoPhysicsCast));
-        private readonly ProfilerMarker _sortMarker = new(nameof(ResultSort.Sort));
+        private readonly ProfilerMarker _castNonAllocMarker = new($"{nameof(PhysicsQuery)}.{nameof(CastNonAlloc)}");
+        private readonly ProfilerMarker _checkMarker = new($"{nameof(PhysicsQuery)}.{nameof(Check)}");
+        private readonly ProfilerMarker _overlapNonAllocMarker = new($"{nameof(PhysicsQuery)}.{nameof(OverlapNonAlloc)}");
 
-        private readonly ProfilerMarker _overlapMarker = new($"{nameof(PhysicsQuery)}.{nameof(Overlap)}");
-        private readonly ProfilerMarker _worldOriginMarker = new(nameof(GetWorldOrigin));
-        private readonly ProfilerMarker _colliderCacheMarker = new(nameof(GetColliderCache));
-        private readonly ProfilerMarker _doOverlapMarker = new(nameof(DoPhysicsOverlap));
-
-        public Result<RaycastHit> Cast(ResultSort sort)
+        public bool Cast()
+        {
+            return Cast(out _);
+        }
+        public bool Cast(out RaycastHit hit)
+        {
+            _castMarker.Begin(this);
+            Ray worldRay = GetWorldRay();
+            bool didHit = DoPhysicsCast(worldRay, out hit);
+            _castMarker.End();
+            return didHit;
+        }
+        public Result<RaycastHit> CastNonAlloc(ResultSort sort)
         {
             if (sort == null)
             {
                 throw new ArgumentNullException(nameof(sort));
             }
-            _castMarker.Begin(this);
-            
-            _worldRayMarker.Begin(this);
-            Ray worldRay = GetWorldRay();
-            _worldRayMarker.End();
-            
-            _hitCacheMarker.Begin(this);
+            _castNonAllocMarker.Begin(this);
+            Ray worldRay = GetWorldRay();            
             RaycastHit[] hits = GetHitCache();
-            _hitCacheMarker.End();
-
-            _doCastMarker.Begin(this);
-            int count = DoPhysicsCast(worldRay, hits);
-            _doCastMarker.End();
-
-            _sortMarker.Begin(this);
+            int count = DoPhysicsCastNonAlloc(worldRay, hits);
             sort.Sort(hits, count);
-            _sortMarker.End();
-
-            _castMarker.End();
+            _castNonAllocMarker.End();
             return new(hits, count);
         }
-        public Result<Collider> Overlap()
+        public bool Check()
         {
-            _overlapMarker.Begin(this);
-
-            _worldOriginMarker.Begin(this);
+            _checkMarker.Begin(this);
             Vector3 origin = GetWorldOrigin();
-            _worldOriginMarker.End();
-
-            _colliderCacheMarker.Begin(this);
+            bool check = DoPhysicsCheck(origin);
+            _checkMarker.End();
+           return check;
+        }
+        public Result<Collider> OverlapNonAlloc()
+        {
+            _overlapNonAllocMarker.Begin(this);
+            Vector3 origin = GetWorldOrigin();
             Collider[] overlaps = GetColliderCache();
-            _colliderCacheMarker.End();
-
-            _doOverlapMarker.Begin(this);
-            int count = DoPhysicsOverlap(origin, overlaps);
-            _doOverlapMarker.End();
-
-            _overlapMarker.End();
+            int count = DoPhysicsOverlapNonAlloc(origin, overlaps);
+            _overlapNonAllocMarker.End();
             return new(overlaps, count);
         }
 
@@ -168,7 +159,9 @@ namespace PQuery
             DrawGizmosSelected(this);
         }
 
-        protected abstract int DoPhysicsCast(Ray worldRay, RaycastHit[] cache);
-        protected abstract int DoPhysicsOverlap(Vector3 worldOrigin, Collider[] cache);
+        protected abstract bool DoPhysicsCast(Ray worldRay, out RaycastHit hit);
+        protected abstract int DoPhysicsCastNonAlloc(Ray worldRay, RaycastHit[] cache);
+        protected abstract bool DoPhysicsCheck(Vector3 worldOrigin);
+        protected abstract int DoPhysicsOverlapNonAlloc(Vector3 worldOrigin, Collider[] cache);
     }
 }

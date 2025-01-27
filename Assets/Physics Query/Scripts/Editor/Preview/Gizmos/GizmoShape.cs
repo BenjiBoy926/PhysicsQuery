@@ -42,13 +42,13 @@ namespace PQuery.Editor
         public override void DrawCastGizmos(PhysicsQuery query)
         {
             _query = (TQuery)query;
-            var result = query.Cast(ResultSort.Distance);
+            var result = query.CastNonAlloc(ResultSort.Distance);
             DrawResult(result);
         }
         public override void DrawOverlapGizmos(PhysicsQuery query)
         {
             _query = (TQuery)query;
-            var result = query.Overlap();
+            var result = query.OverlapNonAlloc();
             DrawResult(result);
         }
 

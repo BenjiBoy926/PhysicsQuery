@@ -13,7 +13,7 @@ namespace PQuery.Editor
 
         protected override Result<RaycastHit> GetResult(PhysicsQuery query)
         {
-            return query.Cast(ResultSort.Distance);
+            return query.CastNonAlloc(ResultSort.Distance);
         }
         protected override void DrawElementInspectorGUI(RaycastHit element, int index)
         {

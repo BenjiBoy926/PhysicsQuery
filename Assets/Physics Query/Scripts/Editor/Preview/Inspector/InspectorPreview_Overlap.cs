@@ -14,7 +14,7 @@ namespace PQuery.Editor
         }
         protected override Result<Collider> GetResult(PhysicsQuery query)
         {
-            return query.Overlap();
+            return query.OverlapNonAlloc();
         }
         public override void HighlightElement(object element)
         {

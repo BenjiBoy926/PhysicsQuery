@@ -7,7 +7,7 @@ namespace PQuery.Editor
     {
         protected override Result<Collider> GetResult(PhysicsQuery query)
         {
-            return query.Overlap();
+            return query.OverlapNonAlloc();
         }
         protected override Rect GetButtonPositionForElement(ElementIndex<Collider> element)
         {
