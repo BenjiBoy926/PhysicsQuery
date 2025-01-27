@@ -33,12 +33,12 @@ namespace PQuery
         [SerializeField]
         private float _radius = 0.5f;
 
-        protected override int PerformCast(Ray worldRay, RaycastHit[] cache)
+        protected override int DoPhysicsCast(Ray worldRay, RaycastHit[] cache)
         {
             var (cap1, cap2) = GetCapPositions(worldRay.origin);
             return Physics.CapsuleCastNonAlloc(cap1, cap2, _radius, worldRay.direction, cache, MaxDistance, LayerMask, TriggerInteraction);
         }
-        protected override int PerformOverlap(Vector3 worldOrigin, Collider[] cache)
+        protected override int DoPhysicsOverlap(Vector3 worldOrigin, Collider[] cache)
         {
             var (cap1, cap2) = GetCapPositions(worldOrigin);
             return Physics.OverlapCapsuleNonAlloc(cap1, cap2, _radius, cache, LayerMask, TriggerInteraction);

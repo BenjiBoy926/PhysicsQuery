@@ -7,6 +7,7 @@ public class CastTest : MonoBehaviour
     private void Update()
     {
         _query.Cast(ResultSort.None);
+        _query.Overlap();
     }
     private void Reset()
     {

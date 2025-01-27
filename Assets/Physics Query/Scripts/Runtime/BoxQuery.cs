@@ -26,12 +26,12 @@ namespace PQuery
         [SerializeField]
         private Quaternion _orientation = Quaternion.identity;
 
-        protected override int PerformCast(Ray worldRay, RaycastHit[] cache)
+        protected override int DoPhysicsCast(Ray worldRay, RaycastHit[] cache)
         {
             Quaternion worldOrientation = GetWorldOrientation();
             return Physics.BoxCastNonAlloc(worldRay.origin, Extents, worldRay.direction, cache, worldOrientation, MaxDistance, LayerMask, TriggerInteraction);
         }
-        protected override int PerformOverlap(Vector3 worldOrigin, Collider[] cache)
+        protected override int DoPhysicsOverlap(Vector3 worldOrigin, Collider[] cache)
         {
             Quaternion worldOrientation = GetWorldOrientation();
             return Physics.OverlapBoxNonAlloc(worldOrigin, Extents, cache, worldOrientation, LayerMask, TriggerInteraction);

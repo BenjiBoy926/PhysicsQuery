@@ -15,11 +15,11 @@ namespace PQuery
         [SerializeField]
         private float _radius = 0.5f;
 
-        protected override int PerformCast(Ray worldRay, RaycastHit[] cache)
+        protected override int DoPhysicsCast(Ray worldRay, RaycastHit[] cache)
         {
             return Physics.SphereCastNonAlloc(worldRay, _radius, cache, MaxDistance, LayerMask, TriggerInteraction);
         }
-        protected override int PerformOverlap(Vector3 worldOrigin, Collider[] cache)
+        protected override int DoPhysicsOverlap(Vector3 worldOrigin, Collider[] cache)
         {
             return Physics.OverlapSphereNonAlloc(worldOrigin, _radius, cache, LayerMask, TriggerInteraction);
         }

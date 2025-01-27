@@ -65,7 +65,17 @@ namespace PQuery
         private int _cacheCapacity;
         private readonly CachedArray<RaycastHit> _hitCache = new();
         private readonly CachedArray<Collider> _colliderCache = new();
-        private readonly ProfilerMarker _castMarker = new("Cast");
+
+        private readonly ProfilerMarker _castMarker = new($"{nameof(PhysicsQuery)}.{nameof(Cast)}");
+        private readonly ProfilerMarker _worldRayMarker = new(nameof(GetWorldRay));
+        private readonly ProfilerMarker _hitCacheMarker = new(nameof(GetHitCache));
+        private readonly ProfilerMarker _doCastMarker = new(nameof(DoPhysicsCast));
+        private readonly ProfilerMarker _sortMarker = new(nameof(ResultSort.Sort));
+
+        private readonly ProfilerMarker _overlapMarker = new($"{nameof(PhysicsQuery)}.{nameof(Overlap)}");
+        private readonly ProfilerMarker _worldOriginMarker = new(nameof(GetWorldOrigin));
+        private readonly ProfilerMarker _colliderCacheMarker = new(nameof(GetColliderCache));
+        private readonly ProfilerMarker _doOverlapMarker = new(nameof(DoPhysicsOverlap));
 
         public Result<RaycastHit> Cast(ResultSort sort)
         {
@@ -74,18 +84,43 @@ namespace PQuery
                 throw new ArgumentNullException(nameof(sort));
             }
             _castMarker.Begin(this);
+            
+            _worldRayMarker.Begin(this);
             Ray worldRay = GetWorldRay();
+            _worldRayMarker.End();
+            
+            _hitCacheMarker.Begin(this);
             RaycastHit[] hits = GetHitCache();
-            int count = PerformCast(worldRay, hits);
+            _hitCacheMarker.End();
+
+            _doCastMarker.Begin(this);
+            int count = DoPhysicsCast(worldRay, hits);
+            _doCastMarker.End();
+
+            _sortMarker.Begin(this);
             sort.Sort(hits, count);
+            _sortMarker.End();
+
             _castMarker.End();
             return new(hits, count);
         }
         public Result<Collider> Overlap()
         {
+            _overlapMarker.Begin(this);
+
+            _worldOriginMarker.Begin(this);
             Vector3 origin = GetWorldOrigin();
+            _worldOriginMarker.End();
+
+            _colliderCacheMarker.Begin(this);
             Collider[] overlaps = GetColliderCache();
-            int count = PerformOverlap(origin, overlaps);
+            _colliderCacheMarker.End();
+
+            _doOverlapMarker.Begin(this);
+            int count = DoPhysicsOverlap(origin, overlaps);
+            _doOverlapMarker.End();
+
+            _overlapMarker.End();
             return new(overlaps, count);
         }
 
@@ -133,7 +168,7 @@ namespace PQuery
             DrawGizmosSelected(this);
         }
 
-        protected abstract int PerformCast(Ray worldRay, RaycastHit[] cache);
-        protected abstract int PerformOverlap(Vector3 worldOrigin, Collider[] cache);
+        protected abstract int DoPhysicsCast(Ray worldRay, RaycastHit[] cache);
+        protected abstract int DoPhysicsOverlap(Vector3 worldOrigin, Collider[] cache);
     }
 }
