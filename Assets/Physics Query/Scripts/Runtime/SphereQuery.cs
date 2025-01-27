@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace PhysicsQuery
+namespace PQuery
 {
     public class SphereQuery : PhysicsQuery
     {

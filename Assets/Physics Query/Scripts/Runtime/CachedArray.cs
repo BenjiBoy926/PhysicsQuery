@@ -1,4 +1,4 @@
-namespace PhysicsQuery
+namespace PQuery
 {
     internal class CachedArray<TElement>
     {

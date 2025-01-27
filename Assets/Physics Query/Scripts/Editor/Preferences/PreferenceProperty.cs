@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEditor;
 
-namespace PhysicsQuery.Editor
+namespace PQuery.Editor
 {
     public abstract class PreferenceProperty
     {

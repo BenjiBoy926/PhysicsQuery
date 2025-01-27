@@ -3,7 +3,7 @@ using UnityEngine;
 using System;
 using Object = UnityEngine.Object;
 
-namespace PhysicsQuery.Editor
+namespace PQuery.Editor
 {
     public class InspectorPreview_Overlap : InspectorPreview<Collider>
     {

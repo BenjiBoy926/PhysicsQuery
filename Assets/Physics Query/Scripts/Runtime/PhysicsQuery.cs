@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Unity.Profiling;
 
-namespace PhysicsQuery
+namespace PQuery
 {
     public abstract class PhysicsQuery : MonoBehaviour
     {

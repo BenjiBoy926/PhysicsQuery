@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace PhysicsQuery.Editor
+namespace PQuery.Editor
 {
     public class ScenePreview_Cast : ScenePreview<RaycastHit>
     {

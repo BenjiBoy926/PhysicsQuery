@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PhysicsQuery
+namespace PQuery
 {
     public abstract class ResultSort
     {

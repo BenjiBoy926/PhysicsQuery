@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace PhysicsQuery
+namespace PQuery
 {
     [CreateAssetMenu(fileName = PackageQualifiedName, menuName = MenuName)]
     public class Settings : ScriptableObject

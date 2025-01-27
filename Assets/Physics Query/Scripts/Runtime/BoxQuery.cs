@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PhysicsQuery
+namespace PQuery
 {
     public class BoxQuery : PhysicsQuery
     {

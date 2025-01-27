@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace PhysicsQuery.Editor
+namespace PQuery.Editor
 {
     [CustomEditor(typeof(Settings))]
     public class SettingsEditor : UnityEditor.Editor

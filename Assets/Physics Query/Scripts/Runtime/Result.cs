@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace PhysicsQuery
+namespace PQuery
 {
     public readonly struct Result<TElement> : IReadOnlyList<TElement>
     {

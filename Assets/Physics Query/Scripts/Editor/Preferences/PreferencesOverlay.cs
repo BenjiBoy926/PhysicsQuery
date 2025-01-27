@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEditor.Overlays;
 using UnityEngine;
 
-namespace PhysicsQuery.Editor
+namespace PQuery.Editor
 {
     [Overlay(typeof(SceneView), Id, "Physics Query Preferences")]
     public class PreferencesOverlay : IMGUIOverlay, ITransientOverlay

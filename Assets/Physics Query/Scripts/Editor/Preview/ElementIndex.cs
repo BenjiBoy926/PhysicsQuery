@@ -1,4 +1,4 @@
-namespace PhysicsQuery.Editor
+namespace PQuery.Editor
 {
     public readonly struct ElementIndex<TElement>
     {

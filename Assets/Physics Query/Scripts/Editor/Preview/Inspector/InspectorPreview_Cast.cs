@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace PhysicsQuery.Editor
+namespace PQuery.Editor
 {
     public class InspectorPreview_Cast : InspectorPreview<RaycastHit>
     {

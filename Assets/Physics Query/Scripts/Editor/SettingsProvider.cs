@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace PhysicsQuery.Editor
+namespace PQuery.Editor
 {
     public class SettingsProvider : UnityEditor.SettingsProvider
     {

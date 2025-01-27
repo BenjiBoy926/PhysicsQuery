@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEditor;
 
-namespace PhysicsQuery.Editor
+namespace PQuery.Editor
 {
     public class Preview
     {

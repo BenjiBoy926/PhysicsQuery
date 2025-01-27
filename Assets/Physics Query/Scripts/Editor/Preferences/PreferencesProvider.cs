@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 
-namespace PhysicsQuery.Editor
+namespace PQuery.Editor
 {
     public class PreferencesProvider : UnityEditor.SettingsProvider
     {

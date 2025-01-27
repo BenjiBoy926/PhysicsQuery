@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PhysicsQuery.Editor
+namespace PQuery.Editor
 {
     public class GizmoShape_Capsule : GizmoShape<CapsuleQuery>
     {

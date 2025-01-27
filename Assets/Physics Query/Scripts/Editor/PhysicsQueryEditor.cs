@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEditor;
 
-namespace PhysicsQuery.Editor
+namespace PQuery.Editor
 {
     [CustomEditor(typeof(PhysicsQuery), true)]
     public class PhysicsQueryEditor : UnityEditor.Editor
