@@ -48,7 +48,6 @@ namespace PhysicsQuery
             set => _cacheCapacity = Mathf.Max(value, MinCacheCapacity);
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
-        private readonly ProfilerMarker _castMarker = new("Cast");
 
         [SerializeField] 
         private Space _space;
@@ -66,6 +65,7 @@ namespace PhysicsQuery
         private int _cacheCapacity;
         private readonly CachedArray<RaycastHit> _hitCache = new();
         private readonly CachedArray<Collider> _colliderCache = new();
+        private readonly ProfilerMarker _castMarker = new("Cast");
 
         public Result<RaycastHit> Cast(ResultSort sort)
         {

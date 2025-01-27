@@ -6,7 +6,6 @@ namespace PhysicsQuery
 {
     public readonly struct Result<TElement> : IReadOnlyList<TElement>
     {
-        public static Result<TElement> Empty => new(null, 0);
         public bool IsEmpty => _cache == null || _cache.Length == 0 || _count == 0;
         public bool IsFull => _cache != null && _cache.Length <= _count;
         public int Count => _count;
@@ -33,7 +32,18 @@ namespace PhysicsQuery
         {
             if (!IsIndexValid(i))
             {
+                ThrowIndexOutOfRange(i);
+            }
+        }
+        private void ThrowIndexOutOfRange(int i)
+        {
+            if (_count > 0)
+            {
                 throw new IndexOutOfRangeException($"Expected index to be in the range [0, {_count}), but the index is {i}");
+            }
+            else
+            {
+                throw new IndexOutOfRangeException($"Cannot access index {i} because the result is empty");
             }
         }
         public bool IsIndexValid(int i)

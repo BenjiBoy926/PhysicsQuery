@@ -17,7 +17,7 @@ namespace PhysicsQuery
         public float Extent
         {
             get => _height / 2;
-            set => _height = value * 2;
+            set => Height = value * 2;
         }
         public float Radius
         {
@@ -35,20 +35,19 @@ namespace PhysicsQuery
 
         protected override int PerformCast(Ray worldRay, RaycastHit[] cache)
         {
-            GetCapPositions(worldRay.origin, out Vector3 cap1, out Vector3 cap2);
+            var (cap1, cap2) = GetCapPositions(worldRay.origin);
             return Physics.CapsuleCastNonAlloc(cap1, cap2, _radius, worldRay.direction, cache, MaxDistance, LayerMask, TriggerInteraction);
         }
         protected override int PerformOverlap(Vector3 worldOrigin, Collider[] cache)
         {
-            GetCapPositions(worldOrigin, out Vector3 cap1, out Vector3 cap2);
+            var (cap1, cap2) = GetCapPositions(worldOrigin);
             return Physics.OverlapCapsuleNonAlloc(cap1, cap2, _radius, cache, LayerMask, TriggerInteraction);
         }
 
-        public void GetCapPositions(Vector3 worldOrigin, out Vector3 cap1, out Vector3 cap2)
+        public (Vector3, Vector3) GetCapPositions(Vector3 worldOrigin)
         {
             Vector3 worldAxis = GetWorldAxis();
-            cap1 = worldOrigin + worldAxis;
-            cap2 = worldOrigin - worldAxis;
+            return (worldOrigin + worldAxis, worldOrigin - worldAxis);
         }
         public Vector3 GetWorldAxis()
         {
