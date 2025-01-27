@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Unity.Profiling;
 
 namespace PhysicsQuery
 {
@@ -47,6 +48,7 @@ namespace PhysicsQuery
             set => _cacheCapacity = Mathf.Max(value, MinCacheCapacity);
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
+        private readonly ProfilerMarker _castMarker = new("Cast");
 
         [SerializeField] 
         private Space _space;
@@ -71,10 +73,12 @@ namespace PhysicsQuery
             {
                 throw new ArgumentNullException(nameof(sort));
             }
+            _castMarker.Begin(this);
             Ray worldRay = GetWorldRay();
             RaycastHit[] hits = GetHitCache();
             int count = PerformCast(worldRay, hits);
             sort.Sort(hits, count);
+            _castMarker.End();
             return new(hits, count);
         }
         public Result<Collider> Overlap()
