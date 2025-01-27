@@ -6,7 +6,7 @@ public class CastTest : MonoBehaviour
     private PhysicsQuery _query;
     private void Update()
     {
-        _query.Cast(ResultSort.None);
+        _query.Cast(ResultSort.Distance);
         _query.Overlap();
     }
     private void Reset()
