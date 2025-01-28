@@ -31,7 +31,9 @@ namespace PQuery.Editor
             return _queryTypeToGizmoShape[queryType];
         }
 
+        public abstract void DrawCastGizmos(PhysicsQuery query);
         public abstract void DrawCastNonAllocGizmos(PhysicsQuery query);
+        public abstract void DrawCheckGizmos(PhysicsQuery query);
         public abstract void DrawOverlapNonAllocGizmos(PhysicsQuery query);
     }
     public abstract class GizmoShape<TQuery> : GizmoShape where TQuery : PhysicsQuery
@@ -39,10 +41,22 @@ namespace PQuery.Editor
         protected TQuery Query => _query;
         private TQuery _query;
 
+        public override void DrawCastGizmos(PhysicsQuery query)
+        {
+            _query = (TQuery)query;
+            bool result = query.Cast(out RaycastHit hit);
+            DrawResult(result, hit);
+        }
         public override void DrawCastNonAllocGizmos(PhysicsQuery query)
         {
             _query = (TQuery)query;
             var result = query.CastNonAlloc(ResultSort.Distance);
+            DrawResult(result);
+        }
+        public override void DrawCheckGizmos(PhysicsQuery query)
+        {
+            _query = (TQuery)query;
+            bool result = query.Check();
             DrawResult(result);
         }
         public override void DrawOverlapNonAllocGizmos(PhysicsQuery query)
@@ -52,6 +66,23 @@ namespace PQuery.Editor
             DrawResult(result);
         }
 
+        private void DrawResult(bool didHit, RaycastHit hit)
+        {
+            Vector3 start = GetStartPosition();
+            if (didHit)
+            {
+                Gizmos.color = Preferences.HitColor.Value;
+                Gizmos.DrawLine(start, GetShapeCenter(hit));
+                DrawHit(hit);
+            }
+            else
+            {
+                Vector3 end = GetEndPosition();       
+                DrawShape(start);
+                DrawShape(end);
+                Gizmos.DrawLine(start, end);
+            }
+        }
         private void DrawResult(Result<RaycastHit> result)
         {
             Color hitShapeColor = result.IsFull ? Preferences.CacheFullColor.Value : Preferences.HitColor.Value;
@@ -61,18 +92,18 @@ namespace PQuery.Editor
             for (int i = 0; i < result.Count; i++)
             {
                 RaycastHit hit = result[i];
-
                 Gizmos.color = hitShapeColor;
-                DrawShapeAtHit(hit);
-
-                Gizmos.color = Preferences.ResultItemColor.Value;
-                DrawHitPoint(hit);
-                ColliderGizmos.DrawGizmos(hit.collider);
+                DrawHit(hit);
             }
-            DrawCastLine(result);
+            DrawResultLine(result);
 
             Gizmos.color = Preferences.MissColor.Value;
             DrawShape(GetEndPosition());
+        }
+        private void DrawResult(bool check)
+        {
+            Gizmos.color = check ? Preferences.HitColor.Value : Preferences.MissColor.Value;
+            DrawOverlapShape();
         }
         private void DrawResult(Result<Collider> result)
         {
@@ -85,18 +116,25 @@ namespace PQuery.Editor
                 ColliderGizmos.DrawGizmos(result[i]);
             }
         }
+        private void DrawHit(RaycastHit hit)
+        {
+            DrawShapeAtHit(hit);
+            Gizmos.color = Preferences.ResultItemColor.Value;
+            DrawHitPointNormal(hit);
+            ColliderGizmos.DrawGizmos(hit.collider);
+        }
         private void DrawShapeAtHit(RaycastHit hit)
         {
             Vector3 center = GetShapeCenter(hit);
             DrawShape(center);
         }
-        private void DrawHitPoint(RaycastHit hit)
+        private void DrawHitPointNormal(RaycastHit hit)
         {
             Ray normal = new(hit.point, hit.normal);
             Gizmos.DrawLine(normal.origin, normal.GetPoint(Preferences.HitNormalLength));
             Gizmos.DrawSphere(normal.origin, Preferences.HitSphereRadius.Value);
         }
-        private void DrawCastLine(Result<RaycastHit> result)
+        private void DrawResultLine(Result<RaycastHit> result)
         {
             Vector3 start = GetStartPosition();
             Vector3 end = GetEndPosition();
