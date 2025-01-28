@@ -13,5 +13,9 @@ namespace PQuery.Editor
         {
             return query.CastNonAlloc(ResultSort.Distance);
         }
+        protected override string GetLabel(RaycastHit element, int index)
+        {
+            return $"[{index}]: {element.collider.name}";
+        }
     }
 }

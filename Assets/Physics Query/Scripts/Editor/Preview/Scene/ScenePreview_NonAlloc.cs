@@ -21,7 +21,9 @@ namespace PQuery.Editor
         {
             if (result.IsIndexValid(index))
             {
-                DrawButton(result[index], index.ToString());
+                TElement element = result[index];
+                string label = GetLabel(element, index);
+                DrawButton(element, label);
             }
             else
             {
@@ -30,5 +32,6 @@ namespace PQuery.Editor
         }
 
         protected abstract Result<TElement> GetResult(PhysicsQuery query);
+        protected abstract string GetLabel(TElement element, int index);
     }
 }

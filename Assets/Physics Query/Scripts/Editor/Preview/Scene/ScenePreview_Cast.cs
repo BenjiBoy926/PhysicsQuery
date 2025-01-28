@@ -11,7 +11,7 @@ namespace PQuery.Editor
             Handles.BeginGUI();
             if (didHit)
             {
-                DrawButton(hit, "Hit");
+                DrawButton(hit, hit.collider.name);
             }
             else
             {

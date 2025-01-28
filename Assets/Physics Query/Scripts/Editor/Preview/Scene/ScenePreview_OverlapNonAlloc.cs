@@ -13,5 +13,9 @@ namespace PQuery.Editor
         {
             return query.OverlapNonAlloc();
         }
+        protected override string GetLabel(Collider element, int index)
+        {
+            return $"[{index}]: {element.name}";
+        }
     }
 }
