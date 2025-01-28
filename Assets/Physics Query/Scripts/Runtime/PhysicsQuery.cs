@@ -115,6 +115,19 @@ namespace PQuery
             return new(overlaps, count);
         }
 
+        public void RefreshCache()
+        {
+            RefreshHitCache();
+            RefreshColliderCache();
+        }
+        public void RefreshHitCache()
+        {
+            _hitCache.SetCapacity(_cacheCapacity);
+        }
+        public void RefreshColliderCache()
+        {
+            _colliderCache.SetCapacity(_cacheCapacity);
+        }
         protected RaycastHit[] GetHitCache()
         {
             return _hitCache.GetArray(_cacheCapacity);

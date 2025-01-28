@@ -10,14 +10,14 @@ namespace PQuery.Editor
     {
         public override void DrawGizmos(PhysicsQuery query)
         {
-            GizmoShape.Get(query).DrawCastGizmos(query);
+            GizmoShape.Get(query).DrawCastNonAllocGizmos(query);
         }
     }
     public class GizmoPreview_OverlapNonAlloc : GizmoPreview
     {
         public override void DrawGizmos(PhysicsQuery query)
         {
-            GizmoShape.Get(query).DrawOverlapGizmos(query);
+            GizmoShape.Get(query).DrawOverlapNonAllocGizmos(query);
         }
     }
 }

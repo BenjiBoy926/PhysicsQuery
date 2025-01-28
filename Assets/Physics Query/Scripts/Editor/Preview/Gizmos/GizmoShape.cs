@@ -31,21 +31,21 @@ namespace PQuery.Editor
             return _queryTypeToGizmoShape[queryType];
         }
 
-        public abstract void DrawCastGizmos(PhysicsQuery query);
-        public abstract void DrawOverlapGizmos(PhysicsQuery query);
+        public abstract void DrawCastNonAllocGizmos(PhysicsQuery query);
+        public abstract void DrawOverlapNonAllocGizmos(PhysicsQuery query);
     }
     public abstract class GizmoShape<TQuery> : GizmoShape where TQuery : PhysicsQuery
     {
         protected TQuery Query => _query;
         private TQuery _query;
 
-        public override void DrawCastGizmos(PhysicsQuery query)
+        public override void DrawCastNonAllocGizmos(PhysicsQuery query)
         {
             _query = (TQuery)query;
             var result = query.CastNonAlloc(ResultSort.Distance);
             DrawResult(result);
         }
-        public override void DrawOverlapGizmos(PhysicsQuery query)
+        public override void DrawOverlapNonAllocGizmos(PhysicsQuery query)
         {
             _query = (TQuery)query;
             var result = query.OverlapNonAlloc();
@@ -71,14 +71,7 @@ namespace PQuery.Editor
             }
             DrawCastLine(result);
 
-            if (result.IsFull)
-            {
-                Gizmos.color = Preferences.CacheFullColor.Value;
-            }
-            else
-            {
-                Gizmos.color = Preferences.MissColor.Value;
-            }
+            Gizmos.color = Preferences.MissColor.Value;
             DrawShape(GetEndPosition());
         }
         private void DrawResult(Result<Collider> result)
