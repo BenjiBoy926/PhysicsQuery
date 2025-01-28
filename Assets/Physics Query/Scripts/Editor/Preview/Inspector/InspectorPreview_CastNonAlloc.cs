@@ -1,13 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace PQuery.Editor
 {
-    public class InspectorPreview_CastNonAlloc : InspectorPreview<RaycastHit>
+    public class InspectorPreview_CastNonAlloc : InspectorPreview_NonAlloc<RaycastHit>
     {
         private readonly Dictionary<int, bool> _foldout = new();
 
@@ -29,14 +27,7 @@ namespace PQuery.Editor
         }
         public override void HighlightElement(object element)
         {
-            if (element == null)
-            {
-                throw new ArgumentNullException(nameof(element));
-            }
-            if (element is not RaycastHit hit)
-            {
-                throw new ArgumentException($"Expected {element} to have the type {typeof(RaycastHit)}, but it has the type {element.GetType().Name}");
-            }
+            RaycastHit hit = CastHighlightElement<RaycastHit>(element);
             CollapseAllOtherFoldouts(hit);
             EditorGUIUtility.PingObject(hit.collider);
         }
@@ -69,45 +60,6 @@ namespace PQuery.Editor
         private int GetFoldoutID(RaycastHit hit)
         {
             return hit.colliderInstanceID;
-        }
-
-        private void DrawEachPropertyInspectorGUI(RaycastHit hit)
-        {
-            PropertyInfo[] properties = hit.GetType().GetProperties();
-            for (int i = 0; i < properties.Length; i++)
-            {
-                DrawPropertyInspectorGUI(hit, properties[i]);
-            }
-        }
-        private void DrawPropertyInspectorGUI(RaycastHit instance, PropertyInfo property)
-        {
-            string label = ObjectNames.NicifyVariableName(property.Name);
-            object value = property.GetValue(instance, null);
-
-            if (property.PropertyType.IsSubclassOf(typeof(Object)))
-            {
-                EditorGUILayout.ObjectField(label, value as Object, property.PropertyType, true);
-            }
-            else if (property.PropertyType == typeof(float))
-            {
-                EditorGUILayout.FloatField(label, (float)value);
-            }
-            else if (property.PropertyType == typeof(int))
-            {
-                EditorGUILayout.IntField(label, (int)value);
-            }
-            else if (property.PropertyType == typeof(Vector2))
-            {
-                EditorGUILayout.Vector2Field(label, (Vector2)value);
-            }
-            else if (property.PropertyType == typeof(Vector3))
-            {
-                EditorGUILayout.Vector3Field(label, (Vector3)value);
-            }
-            else
-            {
-                EditorGUILayout.HelpBox($"Cannot display property '{property.Name}' because the method for displaying the type '{property.PropertyType.Name}' has not been implemented", MessageType.Error);
-            }
         }
     }
 }

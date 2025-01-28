@@ -1,5 +1,8 @@
+using System;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace PQuery.Editor
 {
@@ -7,35 +10,56 @@ namespace PQuery.Editor
     {
         public abstract void DrawInspectorGUI(PhysicsQuery query);
         public abstract void HighlightElement(object element);
-    }
-    public abstract class InspectorPreview<TElement> : InspectorPreview
-    {
-        private static readonly string CacheFullMessage = "Cache capacity reached. " +
-            "Reduce the number of colliders in the scene " +
-            "or increase the query's cache capacity " +
-            "to ensure correct results";
 
-        public override void DrawInspectorGUI(PhysicsQuery query)
+        protected TValue CastHighlightElement<TValue>(object element)
         {
-            Result<TElement> result = GetResult(query);
-            DrawEachElementInspectorGUI(result);
-            if (result.IsFull)
+            if (element == null)
             {
-                EditorGUILayout.HelpBox(CacheFullMessage, MessageType.Error);
+                throw new ArgumentNullException(nameof(element));
+            }
+            if (element is not TValue value)
+            {
+                throw new ArgumentException($"Expected {element} to have the type {typeof(RaycastHit)}, but it has the type {element.GetType().Name}");
+            }
+            return value;
+        }
+        protected void DrawEachPropertyInspectorGUI(RaycastHit hit)
+        {
+            PropertyInfo[] properties = hit.GetType().GetProperties();
+            for (int i = 0; i < properties.Length; i++)
+            {
+                DrawPropertyInspectorGUI(hit, properties[i]);
             }
         }
-
-        private void DrawEachElementInspectorGUI(Result<TElement> result)
+        private void DrawPropertyInspectorGUI(RaycastHit instance, PropertyInfo property)
         {
-            GUI.enabled = false;
-            for (int i = 0; i < result.Count; i++)
-            {
-                DrawElementInspectorGUI(result[i], i);
-            }
-            GUI.enabled = true;
-        }
+            string label = ObjectNames.NicifyVariableName(property.Name);
+            object value = property.GetValue(instance, null);
 
-        protected abstract Result<TElement> GetResult(PhysicsQuery query);
-        protected abstract void DrawElementInspectorGUI(TElement element, int index);
+            if (property.PropertyType.IsSubclassOf(typeof(Object)))
+            {
+                EditorGUILayout.ObjectField(label, value as Object, property.PropertyType, true);
+            }
+            else if (property.PropertyType == typeof(float))
+            {
+                EditorGUILayout.FloatField(label, (float)value);
+            }
+            else if (property.PropertyType == typeof(int))
+            {
+                EditorGUILayout.IntField(label, (int)value);
+            }
+            else if (property.PropertyType == typeof(Vector2))
+            {
+                EditorGUILayout.Vector2Field(label, (Vector2)value);
+            }
+            else if (property.PropertyType == typeof(Vector3))
+            {
+                EditorGUILayout.Vector3Field(label, (Vector3)value);
+            }
+            else
+            {
+                EditorGUILayout.HelpBox($"Cannot display property '{property.Name}' because the method for displaying the type '{property.PropertyType.Name}' has not been implemented", MessageType.Error);
+            }
+        }
     }
 }

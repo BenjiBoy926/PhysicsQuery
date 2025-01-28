@@ -2,19 +2,15 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public class InspectorPreview_Check : InspectorPreview<Collider>
+    public class InspectorPreview_Check : InspectorPreview
     {
+        public override void DrawInspectorGUI(PhysicsQuery query)
+        {
+            // Nothing in the inspector to draw - check does not return a collider
+        }
         public override void HighlightElement(object element)
         {
-
-        }
-        protected override void DrawElementInspectorGUI(Collider element, int index)
-        {
-
-        }
-        protected override Result<Collider> GetResult(PhysicsQuery query)
-        {
-            return new(null, 0);
+            // Can't highlight anything - check does not return a collider
         }
     }
 }
