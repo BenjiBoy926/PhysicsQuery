@@ -1,45 +1,63 @@
 using System;
 using System.Collections.Generic;
-using Unity.Collections;
 using UnityEngine;
 
 namespace PQuery
 {
-    public abstract class ResultSort
+    public abstract class ResultSort : IComparer<RaycastHit>
     {
+        protected virtual bool WillSort => true;
+
         public static readonly ResultSort None = new ResultSort_None();
         public static readonly ResultSort Distance = new ResultSort_Distance();
+        private static readonly List<RaycastHit> _sortingCache = new(Settings.DefaultCacheCapacity);
 
-        public abstract void Sort(RaycastHit[] cache, int count);
+        public void Sort(RaycastHit[] cache, int count)
+        {
+            if (!ShouldSort(cache, count))
+            {
+                return;
+            }
+            List<RaycastHit> list = ReadFromArray(cache, count);
+            list.Sort(this);
+            WriteToArray(list, cache);
+        }
+        private static List<RaycastHit> ReadFromArray(RaycastHit[] cache, int count)
+        {
+            _sortingCache.Clear();
+            for (int i = 0; i < count; i++)
+            {
+                _sortingCache.Add(cache[i]);
+            }
+            return _sortingCache;
+        }
+        private static void WriteToArray(List<RaycastHit> list, RaycastHit[] array)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                array[i] = list[i];
+            }
+        }
+        private bool ShouldSort(RaycastHit[] cache, int count)
+        {
+            return WillSort && cache != null && cache.Length >= 2 && count >= 2;
+        }
+
+        public abstract int Compare(RaycastHit a, RaycastHit b);
     }
     internal class ResultSort_None : ResultSort
     {
-        public override void Sort(RaycastHit[] cache, int count)
+        protected override bool WillSort => false;
+        public override int Compare(RaycastHit a, RaycastHit b)
         {
-            // Do nothing!
+            return 0;
         }
     }
-    // NOTE: sorting the array using Array.Sort always allocates memory when invoked. Worse than that,
-    // an answer on Stack Overflow suggests that they method is slow irrespective of memory allocation.
-    // We probably need to implement our own sorting right here, but which algorithm to use? Apparently,
-    // List.Sort varies the algorithm based on the size of the list. Do we want to implement the same thing?
     internal class ResultSort_Distance : ResultSort
     {
-        private readonly struct DistanceComparer : IComparer<RaycastHit>
+        public override int Compare(RaycastHit a, RaycastHit b)
         {
-            public int Compare(RaycastHit a, RaycastHit b)
-            {
-                return a.distance.CompareTo(b.distance);
-            }
-        }
-        private static readonly DistanceComparer Comparer = new();
-
-        public override void Sort(RaycastHit[] cache, int count)
-        {
-            if (count >= 2)
-            {
-                Array.Sort(cache, 0, count, Comparer);
-            }
+            return a.distance.CompareTo(b.distance);
         }
     }
 }

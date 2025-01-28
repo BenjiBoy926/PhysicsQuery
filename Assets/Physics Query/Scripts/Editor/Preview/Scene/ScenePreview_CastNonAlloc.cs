@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public class ScenePreview_Cast : ScenePreview<RaycastHit>
+    public class ScenePreview_CastNonAlloc : ScenePreview<RaycastHit>
     {
         protected override Result<RaycastHit> GetResult(PhysicsQuery query)
         {

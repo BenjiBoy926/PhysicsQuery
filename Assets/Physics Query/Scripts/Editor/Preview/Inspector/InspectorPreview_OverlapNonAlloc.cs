@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace PQuery.Editor
 {
-    public class InspectorPreview_Overlap : InspectorPreview<Collider>
+    public class InspectorPreview_OverlapNonAlloc : InspectorPreview<Collider>
     {
         protected override void DrawElementInspectorGUI(Collider element, int index)
         {

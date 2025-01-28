@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public class ScenePreview_Overlap : ScenePreview<Collider>
+    public class ScenePreview_OverlapNonAlloc : ScenePreview<Collider>
     {
         protected override Result<Collider> GetResult(PhysicsQuery query)
         {

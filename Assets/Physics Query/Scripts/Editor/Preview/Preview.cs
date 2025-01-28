@@ -10,21 +10,21 @@ namespace PQuery.Editor
 
         public static string[] Labels => _previews.Select(x => x.Label).ToArray();
         public static int Count => _previews.Length;
-        public string Label => _label;
+        public string Label => ObjectNames.NicifyVariableName(_methodName);
 
         private static readonly Preview[] _previews = new Preview[]
         {
-            new("Cast", new GizmoPreview_Cast(), new InspectorPreview_Cast(), new ScenePreview_Cast()),
-            new("Overlap", new GizmoPreview_Overlap(), new InspectorPreview_Overlap(), new ScenePreview_Overlap()),
+            new(nameof(PhysicsQuery.CastNonAlloc), new GizmoPreview_CastNonAlloc(), new InspectorPreview_CastNonAlloc(), new ScenePreview_CastNonAlloc()),
+            new(nameof(PhysicsQuery.OverlapNonAlloc), new GizmoPreview_OverlapNonAlloc(), new InspectorPreview_OverlapNonAlloc(), new ScenePreview_OverlapNonAlloc()),
         };
-        private readonly string _label;
+        private readonly string _methodName;
         private readonly GizmoPreview _gizmo;
         private readonly InspectorPreview _inspector;
         private readonly ScenePreview _scene;
 
-        protected Preview(string label, GizmoPreview gizmo, InspectorPreview inspector, ScenePreview scene)
+        protected Preview(string methodName, GizmoPreview gizmo, InspectorPreview inspector, ScenePreview scene)
         {
-            _label = label;
+            _methodName = methodName;
             _gizmo = gizmo;
             _inspector = inspector;
             _scene = scene;

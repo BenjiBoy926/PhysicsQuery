@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace PQuery.Editor
 {
-    public class InspectorPreview_Cast : InspectorPreview<RaycastHit>
+    public class InspectorPreview_CastNonAlloc : InspectorPreview<RaycastHit>
     {
         private readonly Dictionary<int, bool> _foldout = new();
 
