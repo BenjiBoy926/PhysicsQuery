@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public class ScenePreview_OverlapNonAlloc : ScenePreview<Collider>
+    public class ScenePreview_OverlapNonAlloc : ScenePreview_NonAlloc<Collider>
     {
         protected override Result<Collider> GetResult(PhysicsQuery query)
         {
             return query.OverlapNonAlloc();
         }
-        protected override Rect GetButtonPositionForElement(ElementIndex<Collider> element)
+        protected override Rect GetButtonPosition(ElementIndex<Collider> element)
         {
-            Vector2 size = GetButtonSize(element);
+            Vector2 size = GetButtonSize(GetButtonContent(element));
             Vector2 topLeftGUIPosition = HandleUtility.WorldToGUIPoint(element.Value.transform.position);
             Vector2 position = topLeftGUIPosition - 0.5f * size;
             return new(position, size);
@@ -20,7 +20,7 @@ namespace PQuery.Editor
         {
             return element.name;
         }
-        protected override bool IsElementValid(Collider element)
+        protected override bool IsAbleToDisplayElement(Collider element)
         {
             return element != null && IsPositionOnScreen(element.transform.position);
         }

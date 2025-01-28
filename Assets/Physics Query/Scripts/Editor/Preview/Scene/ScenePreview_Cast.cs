@@ -1,24 +1,46 @@
+using UnityEditor;
 using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public class ScenePreview_Cast : ScenePreview<RaycastHit>
+    public class ScenePreview_Cast : ScenePreview
     {
-        protected override Rect GetButtonPositionForElement(ElementIndex<RaycastHit> element)
+        public override void DrawSceneGUI(PhysicsQuery query)
         {
-            return Rect.zero;
+            bool didHit = query.Cast(out RaycastHit hit);
+            Handles.BeginGUI();
+            if (didHit)
+            {
+                DrawButton(hit);
+            }
+            else
+            {
+                DrawEmptyButton();
+            }
+            Handles.EndGUI();
         }
-        protected override Result<RaycastHit> GetResult(PhysicsQuery query)
+        private void DrawButton(RaycastHit hit)
         {
-            return new(null, 0);
+            if (IsAbleToDisplay(hit))
+            {
+                Rect position = GetButtonPosition(hit, GetContent(hit));
+                DrawButton(position, hit);
+            }
+            else
+            {
+                DrawEmptyButton();
+            }
         }
-        protected override string GetTooltipForElement(RaycastHit element)
+        private void DrawButton(Rect position, RaycastHit hit) 
         {
-            return string.Empty;
+            if (GUI.Button(position, GetContent(hit), ButtonStyle))
+            {
+                NotifyElementClicked(hit);
+            }
         }
-        protected override bool IsElementValid(RaycastHit element)
+        private GUIContent GetContent(RaycastHit hit)
         {
-            return false;
+            return new("Hit", GetTooltip(hit));
         }
     }
 }

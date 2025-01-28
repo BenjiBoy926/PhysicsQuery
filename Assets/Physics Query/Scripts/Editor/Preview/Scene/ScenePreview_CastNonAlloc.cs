@@ -3,35 +3,23 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public class ScenePreview_CastNonAlloc : ScenePreview<RaycastHit>
+    public class ScenePreview_CastNonAlloc : ScenePreview_NonAlloc<RaycastHit>
     {
         protected override Result<RaycastHit> GetResult(PhysicsQuery query)
         {
             return query.CastNonAlloc(ResultSort.Distance);
         }
-        protected override Rect GetButtonPositionForElement(ElementIndex<RaycastHit> element)
+        protected override Rect GetButtonPosition(ElementIndex<RaycastHit> element)
         {
-            Vector3 center = element.Value.point;
-            Vector3 offset = 2 * Preferences.HitSphereRadius.Value * Vector3.up;
-            Vector3 bottomEdgeWorldPosition = center + offset;
-
-            Vector2 size = GetButtonSize(element);
-            Vector2 bottomLeftGUIPosition = HandleUtility.WorldToGUIPoint(bottomEdgeWorldPosition);
-            Vector2 topLeftGUIPosition = bottomLeftGUIPosition + Vector2.down * size.y;
-            Vector2 position = topLeftGUIPosition + 0.5f * size.x * Vector2.left;
-
-            return new(position, size);
+            return GetButtonPosition(element.Value, GetButtonContent(element));
         }
         protected override string GetTooltipForElement(RaycastHit element)
         {
-            return $"Collider: {element.collider.name}\n" +
-                $"Point: {element.point}\n" +
-                $"Normal: {element.normal}\n" +
-                $"Distance: {element.distance}";
+            return GetTooltip(element);
         }
-        protected override bool IsElementValid(RaycastHit element)
+        protected override bool IsAbleToDisplayElement(RaycastHit element)
         {
-            return element.collider != null && IsPositionOnScreen(element.point);
+            return IsAbleToDisplay(element);
         }
     }
 }
