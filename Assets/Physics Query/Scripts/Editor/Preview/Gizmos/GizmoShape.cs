@@ -73,6 +73,7 @@ namespace PQuery.Editor
             {
                 Gizmos.color = Preferences.HitColor.Value;
                 Gizmos.DrawLine(start, GetShapeCenter(hit));
+                DrawShape(start);
                 DrawHit(hit);
             }
             else
