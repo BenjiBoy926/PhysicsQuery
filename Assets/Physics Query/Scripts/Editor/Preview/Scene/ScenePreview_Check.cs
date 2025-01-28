@@ -6,5 +6,9 @@ namespace PQuery.Editor
         {
             // Nothing to draw - no buttons that can click on anything in scene
         }
+        protected override SceneButtonStrategy GetButtonStrategy()
+        {
+            return new SceneButtonStrategy_Collider();
+        }
     }
 }

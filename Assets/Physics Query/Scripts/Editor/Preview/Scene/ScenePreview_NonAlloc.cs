@@ -5,6 +5,7 @@ namespace PQuery.Editor
 {
     public abstract class ScenePreview_NonAlloc<TElement> : ScenePreview
     {
+
         public override void DrawSceneGUI(PhysicsQuery query)
         {
             Result<TElement> result = GetResult(query);
@@ -20,40 +21,14 @@ namespace PQuery.Editor
         {
             if (result.IsIndexValid(index))
             {
-                DrawButton(new(result, index));
+                DrawButton(result[index], index.ToString());
             }
             else
             {
-                DrawEmptyButton();
+                SceneButtonStrategy.DrawEmptyButton();
             }
-        }
-        private void DrawButton(ElementIndex<TElement> element)
-        {
-            if (IsAbleToDisplayElement(element.Value))
-            {
-                Rect position = GetButtonPosition(element);
-                DrawButton(position, element);
-            }
-            else
-            {
-                DrawEmptyButton();
-            }
-        }
-        private void DrawButton(Rect position, ElementIndex<TElement> element)
-        {
-            if (GUI.Button(position, GetButtonContent(element), ButtonStyle))
-            {
-                NotifyElementClicked(element.Value);
-            }
-        }
-        protected GUIContent GetButtonContent(ElementIndex<TElement> element)
-        {
-            return new(element.Index.ToString(), GetTooltipForElement(element.Value));
         }
 
         protected abstract Result<TElement> GetResult(PhysicsQuery query);
-        protected abstract Rect GetButtonPosition(ElementIndex<TElement> element);
-        protected abstract string GetTooltipForElement(TElement element);
-        protected abstract bool IsAbleToDisplayElement(TElement element);
     }
 }
