@@ -77,6 +77,7 @@ namespace PQuery.Editor
             }
             else
             {
+                Gizmos.color = Preferences.MissColor.Value;
                 Vector3 end = GetEndPosition();       
                 DrawShape(start);
                 DrawShape(end);

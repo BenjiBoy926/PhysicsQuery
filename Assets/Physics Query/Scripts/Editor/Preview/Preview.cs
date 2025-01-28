@@ -14,7 +14,9 @@ namespace PQuery.Editor
 
         private static readonly Preview[] _previews = new Preview[]
         {
+            new(nameof(PhysicsQuery.Cast), new GizmoPreview_Cast(), new InspectorPreview_Cast(), new ScenePreview_Cast()),
             new(nameof(PhysicsQuery.CastNonAlloc), new GizmoPreview_CastNonAlloc(), new InspectorPreview_CastNonAlloc(), new ScenePreview_CastNonAlloc()),
+            new(nameof(PhysicsQuery.Check), new GizmoPreview_Check(), new InspectorPreview_Check(), new ScenePreview_Check()),
             new(nameof(PhysicsQuery.OverlapNonAlloc), new GizmoPreview_OverlapNonAlloc(), new InspectorPreview_OverlapNonAlloc(), new ScenePreview_OverlapNonAlloc()),
         };
         private readonly string _methodName;
