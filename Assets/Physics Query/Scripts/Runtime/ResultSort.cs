@@ -8,52 +8,48 @@ namespace PQuery
     public abstract class ResultSort
     {
         protected virtual bool WillSort => true;
+        private Comparison<RaycastHit> Comparison => _comparison ??= Compare;
 
         public static readonly ResultSort None = new ResultSort_None();
         public static readonly ResultSort Distance = new ResultSort_Distance();
-
-        public abstract void Sort(RaycastHit[] cache, int count);
-        protected bool ShouldSort(RaycastHit[] cache, int count)
-        {
-            return WillSort && cache != null && cache.Length >= 2 && count >= 2;
-        }
-    }
-    public abstract class ResultSort<TWrapper> : ResultSort where TWrapper : IComparable<TWrapper>
-    {
-        private static readonly List<TWrapper> _sortingCache = new(Settings.DefaultCacheCapacity);
+        private static readonly List<RaycastHit> _sortingCache = new(Settings.DefaultCacheCapacity);
         private static readonly ProfilerMarker _marker = new("Raycast Hit Sort");
+        private Comparison<RaycastHit> _comparison;
 
-        public override void Sort(RaycastHit[] cache, int count)
+        public void Sort(RaycastHit[] cache, int count)
         {
             if (!ShouldSort(cache, count))
             {
                 return;
             }
             _marker.Begin();
-            List<TWrapper> list = ReadFromArray(cache, count);
-            list.Sort();
+            List<RaycastHit> list = ReadFromArray(cache, count);
+            list.Sort(Comparison);
             WriteToArray(list, cache);
             _marker.End();
         }
 
-        private List<TWrapper> ReadFromArray(RaycastHit[] cache, int count)
+        private List<RaycastHit> ReadFromArray(RaycastHit[] cache, int count)
         {
             _sortingCache.Clear();
             for (int i = 0; i < count; i++)
             {
-                TWrapper item = Wrap(cache[i]);
-                _sortingCache.Add(item);
+                _sortingCache.Add(cache[i]);
             }
             return _sortingCache;
         }
-        private void WriteToArray(List<TWrapper> list, RaycastHit[] array)
+        private void WriteToArray(List<RaycastHit> list, RaycastHit[] array)
         {
             for (int i = 0; i < list.Count; i++)
             {
-                array[i] = Unwrap(list[i]);
+                array[i] = list[i];
             }
         }
-        protected abstract TWrapper Wrap(RaycastHit hit);
-        protected abstract RaycastHit Unwrap(TWrapper wrapper);
+        protected bool ShouldSort(RaycastHit[] cache, int count)
+        {
+            return WillSort && cache != null && cache.Length >= 2 && count >= 2;
+        }
+
+        protected abstract int Compare(RaycastHit a, RaycastHit b);
     }
 }
