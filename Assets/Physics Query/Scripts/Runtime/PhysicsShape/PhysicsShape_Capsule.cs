@@ -7,6 +7,7 @@ namespace PQuery
     public class PhysicsShape_Capsule : PhysicsShape
     {
         private float Extent => _height / 2;
+        public float Radius => _radius;
 
         [SerializeField]
         private Vector3 _axis = Vector3.up;

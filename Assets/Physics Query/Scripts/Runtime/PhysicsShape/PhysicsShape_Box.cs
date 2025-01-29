@@ -6,6 +6,7 @@ namespace PQuery
     [Serializable]
     public class PhysicsShape_Box : PhysicsShape
     {
+        public Vector3 Size => _size;
         private Vector3 Extents => _size / 2;
 
         [SerializeField]
@@ -47,6 +48,5 @@ namespace PQuery
         {
             return query.Space == Space.Self ? query.transform.rotation * _orientation : _orientation;
         }
-
     }
 }

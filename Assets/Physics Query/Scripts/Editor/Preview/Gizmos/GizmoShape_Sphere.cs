@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public class GizmoShape_Sphere : GizmoShape<SphereQuery>
+    public class GizmoShape_Sphere : GizmoShape
     {
         protected override void DrawOverlapShape()
         {
@@ -10,7 +10,8 @@ namespace PQuery.Editor
         }
         protected override void DrawShape(Vector3 center)
         {
-            Gizmos.DrawWireSphere(center, Query.Radius);
+            PhysicsShape_Sphere shape = (PhysicsShape_Sphere)Query.Shape;
+            Gizmos.DrawWireSphere(center, shape.Radius);
         }
     }
 }

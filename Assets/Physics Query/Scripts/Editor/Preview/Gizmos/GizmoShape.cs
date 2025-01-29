@@ -8,14 +8,16 @@ namespace PQuery.Editor
     {
         protected const float MaxDistance = 1000;
 
-        private static readonly Dictionary<Type, GizmoShape> _queryTypeToGizmoShape = new()
+        protected PhysicsQuery Query => _query;
+
+        private static readonly Dictionary<Type, GizmoShape> _queryShapeToGizmoShape = new()
         {
-            { typeof(BoxQuery), new GizmoShape_Box() },
-            { typeof(CapsuleQuery), new GizmoShape_Capsule() },
-            { typeof(EmptyQuery), new GizmoShape_Empty() },
-            { typeof(RayQuery), new GizmoShape_Ray() },
-            { typeof(SphereQuery), new GizmoShape_Sphere() }
+            { typeof(PhysicsShape_Box), new GizmoShape_Box() },
+            { typeof(PhysicsShape_Capsule), new GizmoShape_Capsule() },
+            { typeof(PhysicsShape_Ray), new GizmoShape_Ray() },
+            { typeof(PhysicsShape_Sphere), new GizmoShape_Sphere() }
         };
+        private PhysicsQuery _query;
 
         public static GizmoShape Get(PhysicsQuery query)
         {
@@ -23,45 +25,35 @@ namespace PQuery.Editor
             {
                 throw new ArgumentNullException(nameof(query));
             }
-            Type queryType = query.GetType();
-            if (!_queryTypeToGizmoShape.ContainsKey(queryType))
+            Type queryShapeType = query.Shape.GetType();
+            if (!_queryShapeToGizmoShape.ContainsKey(queryShapeType))
             {
-                throw new NotImplementedException($"Query type '{queryType}' has no gizmo shape defined");
+                throw new NotImplementedException($"Query type '{queryShapeType}' has no gizmo shape defined");
             }
-            return _queryTypeToGizmoShape[queryType];
+            return _queryShapeToGizmoShape[queryShapeType];
         }
 
-        public abstract void DrawCastGizmos(PhysicsQuery query);
-        public abstract void DrawCastNonAllocGizmos(PhysicsQuery query);
-        public abstract void DrawCheckGizmos(PhysicsQuery query);
-        public abstract void DrawOverlapNonAllocGizmos(PhysicsQuery query);
-    }
-    public abstract class GizmoShape<TQuery> : GizmoShape where TQuery : PhysicsQuery
-    {
-        protected TQuery Query => _query;
-        private TQuery _query;
-
-        public override void DrawCastGizmos(PhysicsQuery query)
+        public void DrawCastGizmos(PhysicsQuery query)
         {
-            _query = (TQuery)query;
+            _query = query;
             bool result = query.Cast(out RaycastHit hit);
             DrawResult(result, hit);
         }
-        public override void DrawCastNonAllocGizmos(PhysicsQuery query)
+        public void DrawCastNonAllocGizmos(PhysicsQuery query)
         {
-            _query = (TQuery)query;
+            _query = query;
             var result = query.CastNonAlloc(ResultSort.Distance);
             DrawResult(result);
         }
-        public override void DrawCheckGizmos(PhysicsQuery query)
+        public void DrawCheckGizmos(PhysicsQuery query)
         {
-            _query = (TQuery)query;
+            _query = query;
             bool result = query.Check();
             DrawResult(result);
         }
-        public override void DrawOverlapNonAllocGizmos(PhysicsQuery query)
+        public void DrawOverlapNonAllocGizmos(PhysicsQuery query)
         {
-            _query = (TQuery)query;
+            _query = query;
             var result = query.OverlapNonAlloc();
             DrawResult(result);
         }
@@ -79,7 +71,7 @@ namespace PQuery.Editor
             else
             {
                 Gizmos.color = Preferences.MissColor.Value;
-                Vector3 end = GetEndPosition();       
+                Vector3 end = GetEndPosition();
                 DrawShape(start);
                 DrawShape(end);
                 Gizmos.DrawLine(start, end);
@@ -140,7 +132,7 @@ namespace PQuery.Editor
         {
             Vector3 start = GetStartPosition();
             Vector3 end = GetEndPosition();
-                
+
             if (result.IsFull)
             {
                 Gizmos.color = Preferences.CacheFullColor.Value;

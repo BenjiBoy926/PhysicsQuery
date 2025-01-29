@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public class GizmoShape_Capsule : GizmoShape<CapsuleQuery>
+    public class GizmoShape_Capsule : GizmoShape
     {
         protected override void DrawOverlapShape()
         {
@@ -10,8 +10,9 @@ namespace PQuery.Editor
         }
         protected override void DrawShape(Vector3 center)
         {
-            Vector3 up = Query.GetWorldAxis();
-            float radius = Query.Radius;
+            PhysicsShape_Capsule shape = (PhysicsShape_Capsule)Query.Shape;
+            Vector3 up = shape.GetWorldAxis(Query);
+            float radius = shape.Radius;
             CapsuleGizmo.Draw(center, up, radius);
         }
     }

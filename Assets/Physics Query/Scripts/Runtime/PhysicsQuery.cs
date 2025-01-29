@@ -4,7 +4,7 @@ using Unity.Profiling;
 
 namespace PQuery
 {
-    public abstract class PhysicsQuery : MonoBehaviour
+    public class PhysicsQuery : MonoBehaviour
     {
         protected const float MinNonZeroFloat = 1E-5f;
         private const int MinCacheCapacity = 1;
@@ -52,10 +52,9 @@ namespace PQuery
             get => _cacheCapacity;
             set => _cacheCapacity = Mathf.Max(value, MinCacheCapacity);
         }
-        public bool IsEmpty => GetType() == typeof(EmptyQuery);
 
         [SerializeReference]
-        private PhysicsShape _shape;
+        private PhysicsShape _shape = new PhysicsShape_Ray();
         [SerializeField] 
         private Space _space;
         [SerializeField] 
@@ -84,42 +83,19 @@ namespace PQuery
         }
         public bool Cast(out RaycastHit hit)
         {
-            _castMarker.Begin(this);
-            Ray worldRay = GetWorldRay();
-            bool didHit = DoPhysicsCast(worldRay, out hit);
-            _castMarker.End();
-            return didHit;
+            return _shape.Cast(this, out hit);
         }
         public Result<RaycastHit> CastNonAlloc(ResultSort sort)
         {
-            if (sort == null)
-            {
-                throw new ArgumentNullException(nameof(sort));
-            }
-            _castNonAllocMarker.Begin(this);
-            Ray worldRay = GetWorldRay();
-            RaycastHit[] hits = GetHitCache();
-            int count = DoPhysicsCastNonAlloc(worldRay, hits);
-            sort.Sort(hits, count);
-            _castNonAllocMarker.End();
-            return new(hits, count);
+            return _shape.CastNonAlloc(this, sort);
         }
         public bool Check()
         {
-            _checkMarker.Begin(this);
-            Vector3 origin = GetWorldOrigin();
-            bool check = DoPhysicsCheck(origin);
-            _checkMarker.End();
-           return check;
+            return _shape.Check(this);
         }
         public Result<Collider> OverlapNonAlloc()
         {
-            _overlapNonAllocMarker.Begin(this);
-            Vector3 origin = GetWorldOrigin();
-            Collider[] overlaps = GetColliderCache();
-            int count = DoPhysicsOverlapNonAlloc(origin, overlaps);
-            _overlapNonAllocMarker.End();
-            return new(overlaps, count);
+            return _shape.OverlapNonAlloc(this);
         }
 
         public void RefreshCache()
@@ -178,10 +154,5 @@ namespace PQuery
         {
             DrawGizmosSelected(this);
         }
-
-        protected abstract bool DoPhysicsCast(Ray worldRay, out RaycastHit hit);
-        protected abstract int DoPhysicsCastNonAlloc(Ray worldRay, RaycastHit[] cache);
-        protected abstract bool DoPhysicsCheck(Vector3 worldOrigin);
-        protected abstract int DoPhysicsOverlapNonAlloc(Vector3 worldOrigin, Collider[] cache);
     }
 }

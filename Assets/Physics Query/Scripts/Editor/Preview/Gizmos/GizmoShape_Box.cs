@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public class GizmoShape_Box : GizmoShape<BoxQuery>
+    public class GizmoShape_Box : GizmoShape
     {
         protected override void DrawOverlapShape()
         {
@@ -10,12 +10,13 @@ namespace PQuery.Editor
         }
         protected override void DrawShape(Vector3 center)
         {
-            Quaternion worldOrientation = Query.GetWorldOrientation();
+            PhysicsShape_Box shape = (PhysicsShape_Box)Query.Shape;
+            Quaternion worldOrientation = shape.GetWorldOrientation(Query);
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
             center = rotationMatrix.inverse.MultiplyVector(center);
 
             Gizmos.matrix = rotationMatrix;
-            Gizmos.DrawWireCube(center, Query.Size);
+            Gizmos.DrawWireCube(center, shape.Size);
             Gizmos.matrix = Matrix4x4.identity;
         }
     }
