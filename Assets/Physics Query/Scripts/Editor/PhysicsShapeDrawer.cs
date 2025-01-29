@@ -29,10 +29,14 @@ namespace PQuery.Editor
             {
                 SetIndex(property, 0);
             }
+            position.height = EditorGUIUtility.singleLineHeight;
             DrawPopup(position, property, label);
-            position.y += EditorGUIUtility.singleLineHeight;
+            position.y += position.height;
             position.y += EditorGUIUtility.standardVerticalSpacing;
-            DrawSubProperties(position, property);
+            using (new EditorGUI.IndentLevelScope())
+            {
+                DrawSubProperties(position, property);
+            }
         }
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -59,9 +63,12 @@ namespace PQuery.Editor
         }
         private void DrawPopup(Rect position, SerializedProperty property, GUIContent label)
         {
-            int current = GetIndex(property);
-            current = EditorGUI.Popup(position, label, current, Labels);
-            SetIndex(property, current);
+            int oldIndex = GetIndex(property);
+            int newIndex = EditorGUI.Popup(position, label, oldIndex, Labels);
+            if (oldIndex != newIndex)
+            {
+                SetIndex(property, newIndex);
+            }
         }
         private void DrawSubProperties(Rect position, SerializedProperty property)
         {
@@ -69,8 +76,9 @@ namespace PQuery.Editor
             for (int i = 0; i < subProperties.Count; i++)
             {
                 SerializedProperty subProperty = subProperties[i];
+                position.height = EditorGUI.GetPropertyHeight(subProperty, true);
                 EditorGUI.PropertyField(position, subProperty, true);
-                position.y += EditorGUI.GetPropertyHeight(subProperty);
+                position.y += position.height;
                 position.y += EditorGUIUtility.standardVerticalSpacing;
             }
         }
