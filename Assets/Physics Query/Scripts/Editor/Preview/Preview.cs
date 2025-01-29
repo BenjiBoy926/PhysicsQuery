@@ -39,12 +39,6 @@ namespace PQuery.Editor
             ElementClicked();
         }
 
-        public static void DrawGizmos(PhysicsQuery query)
-        {
-            int previewIndex = Preferences.GetPreviewIndex(query);
-            Preview preview = Get(previewIndex);
-            preview.DrawGizmosInternal(query);
-        }
         public static Preview Get(PhysicsQuery query)
         {
             int index = Preferences.GetPreviewIndex(query);
@@ -55,7 +49,7 @@ namespace PQuery.Editor
             return _previews[index];
         }
 
-        private void DrawGizmosInternal(PhysicsQuery query)
+        public void DrawGizmos(PhysicsQuery query)
         {
             _gizmo.DrawGizmos(query);
         }

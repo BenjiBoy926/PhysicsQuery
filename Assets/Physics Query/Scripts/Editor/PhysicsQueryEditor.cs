@@ -1,4 +1,4 @@
-using System.Linq;
+using UnityEngine;
 using UnityEditor;
 
 namespace PQuery.Editor
@@ -47,7 +47,30 @@ namespace PQuery.Editor
         }
         private void OnSceneGUI()
         {
+            if (Preferences.AlwaysDrawGizmos.Value)
+            {
+                return;
+            }
             CurrentPreview.DrawSceneGUI(_query);
+        }
+
+        [InitializeOnLoadMethod]
+        private static void ListenForSceneGUI()
+        {
+            SceneView.duringSceneGui += DrawAllSceneGUIs;
+        }
+        private static void DrawAllSceneGUIs(SceneView view)
+        {
+            if (!Preferences.AlwaysDrawGizmos.Value)
+            {
+                return;
+            }
+            PhysicsQuery[] allQueries = FindObjectsByType<PhysicsQuery>(FindObjectsSortMode.None);
+            for (int i = 0; i < allQueries.Length; i++)
+            {
+                PhysicsQuery query = allQueries[i];
+                Preview.Get(query).DrawSceneGUI(query);
+            }
         }
 
         [InitializeOnLoadMethod]
@@ -60,14 +83,14 @@ namespace PQuery.Editor
         {
             if (Preferences.AlwaysDrawGizmos.Value)
             {
-                Preview.DrawGizmos(obj);
+                Preview.Get(obj).DrawGizmos(obj);
             }
         }
         private static void OnDrawGizmosSelected(PhysicsQuery obj)
         {
             if (!Preferences.AlwaysDrawGizmos.Value)
             {
-                Preview.DrawGizmos(obj);
+                Preview.Get(obj).DrawGizmos(obj);
             }
         }
     }
