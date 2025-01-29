@@ -8,7 +8,7 @@ namespace PQuery.Editor
         {
             // Nothing in the inspector to draw - check does not return a collider
         }
-        public override void HighlightElement(object element)
+        public override void OnColliderClicked(Collider collider)
         {
             // Can't highlight anything - check does not return a collider
         }

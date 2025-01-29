@@ -11,7 +11,7 @@ namespace PQuery.Editor
             Handles.BeginGUI();
             if (didHit)
             {
-                DrawButton(hit, hit.collider.name);
+                DrawButton(hit);
             }
             else
             {
@@ -19,6 +19,14 @@ namespace PQuery.Editor
             }
             Handles.EndGUI();
         }
+        private void DrawButton(RaycastHit hit)
+        {
+            if (DrawButton(hit, hit.collider.name))
+            {
+                ClickCollider(hit.collider);
+            }
+        }
+
         protected override SceneButtonStrategy GetButtonStrategy()
         {
             return new SceneButtonStrategy_RaycastHit();

@@ -9,17 +9,16 @@ namespace PQuery.Editor
     {
         private void OnEnable()
         {            
-            for (int i = 0; i < Preview.Count; i++)
-            {
-                Preview.Get(i).ElementClicked += Repaint;
-            }
+            ScenePreview.ColliderClicked += OnColliderClicked;
         }
         private void OnDisable()
         {
-            for (int i = 0; i < Preview.Count; i++)
-            {
-                Preview.Get(i).ElementClicked -= Repaint;
-            }
+            ScenePreview.ColliderClicked -= OnColliderClicked;
+        }
+
+        private void OnColliderClicked(Collider other)
+        {
+            Repaint();
         }
 
         public override void OnInspectorGUI()

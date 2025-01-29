@@ -17,5 +17,9 @@ namespace PQuery.Editor
         {
             return $"[{index}]: {element.name}";
         }
+        protected override Collider GetCollider(Collider element)
+        {
+            return element;
+        }
     }
 }

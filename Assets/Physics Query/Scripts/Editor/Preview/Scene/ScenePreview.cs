@@ -5,22 +5,20 @@ namespace PQuery.Editor
 {
     public abstract class ScenePreview
     {
-        public delegate void ElementClickedHandler(object element);
-        public event ElementClickedHandler ElementClicked = delegate { };
+        public delegate void ColliderClickHandler(Collider collider);
+        public static event ColliderClickHandler ColliderClicked = delegate { };
 
         protected SceneButtonStrategy ButtonStrategy => _buttonStrategy ??= GetButtonStrategy();
         private SceneButtonStrategy _buttonStrategy;
 
-        protected void DrawButton(object value, string label)
+        protected bool DrawButton(object value, string label)
         {
-            if (ButtonStrategy.Draw(value, label))
-            {
-                NotifyElementClicked(value);
-            }
+            return ButtonStrategy.Draw(value, label);
         }
-        protected void NotifyElementClicked(object element)
+        protected static void ClickCollider(Collider collider)
         {
-            ElementClicked(element);
+            EditorGUIUtility.PingObject(collider);
+            ColliderClicked(collider);
         }
 
         public abstract void DrawSceneGUI(PhysicsQuery query);

@@ -30,8 +30,16 @@ namespace PQuery.Editor
                 SceneButtonStrategy.DrawEmptyButton();
             }
         }
+        private void DrawButton(TElement element, string label)
+        {
+            if (DrawButton((object)element, label))
+            {
+                ClickCollider(GetCollider(element));
+            }
+        }
 
         protected abstract Result<TElement> GetResult(PhysicsQuery query);
         protected abstract string GetLabel(TElement element, int index);
+        protected abstract Collider GetCollider(TElement element);
     }
 }

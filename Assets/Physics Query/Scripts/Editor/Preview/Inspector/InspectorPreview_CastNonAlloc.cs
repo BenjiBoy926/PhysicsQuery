@@ -25,11 +25,9 @@ namespace PQuery.Editor
             }
             EditorGUI.indentLevel--;
         }
-        public override void HighlightElement(object element)
+        public override void OnColliderClicked(Collider collider)
         {
-            RaycastHit hit = CastHighlightElement<RaycastHit>(element);
-            CollapseAllOtherFoldouts(hit);
-            EditorGUIUtility.PingObject(hit.collider);
+            CollapseAllOtherFoldouts(collider);
         }
 
         private void DrawFoldoutInspectorGUI(RaycastHit element, int index)
@@ -39,10 +37,10 @@ namespace PQuery.Editor
             value = EditorGUILayout.Foldout(value, label);
             SetFoldoutValue(element, value);
         }
-        private void CollapseAllOtherFoldouts(RaycastHit hit)
+        private void CollapseAllOtherFoldouts(Collider collider)
         {
             List<int> keys = new(_foldout.Keys);
-            int foldedOut = GetFoldoutID(hit);
+            int foldedOut = GetFoldoutID(collider);
             for (int i = 0; i < keys.Count; i++)
             {
                 int key = keys[i];
@@ -59,7 +57,11 @@ namespace PQuery.Editor
         }
         private int GetFoldoutID(RaycastHit hit)
         {
-            return hit.colliderInstanceID;
+            return GetFoldoutID(hit.collider);
+        }
+        private int GetFoldoutID(Collider collider)
+        {
+            return collider.GetInstanceID();
         }
     }
 }

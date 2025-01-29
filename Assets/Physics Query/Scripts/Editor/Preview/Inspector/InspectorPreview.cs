@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -8,21 +7,14 @@ namespace PQuery.Editor
 {
     public abstract class InspectorPreview
     {
-        public abstract void DrawInspectorGUI(PhysicsQuery query);
-        public abstract void HighlightElement(object element);
-
-        protected TValue CastHighlightElement<TValue>(object element)
+        protected InspectorPreview()
         {
-            if (element == null)
-            {
-                throw new ArgumentNullException(nameof(element));
-            }
-            if (element is not TValue value)
-            {
-                throw new ArgumentException($"Expected {element} to have the type {typeof(RaycastHit)}, but it has the type {element.GetType().Name}");
-            }
-            return value;
+            ScenePreview.ColliderClicked += OnColliderClicked;
         }
+
+        public abstract void DrawInspectorGUI(PhysicsQuery query);
+        public abstract void OnColliderClicked(Collider collider);
+
         protected void DrawEachPropertyInspectorGUI(RaycastHit hit)
         {
             PropertyInfo[] properties = hit.GetType().GetProperties();

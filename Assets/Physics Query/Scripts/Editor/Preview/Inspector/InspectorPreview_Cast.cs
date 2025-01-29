@@ -15,10 +15,9 @@ namespace PQuery.Editor
                 GUI.enabled = true;
             }
         }
-        public override void HighlightElement(object element)
+        public override void OnColliderClicked(Collider collider)
         {
-            RaycastHit hit = CastHighlightElement<RaycastHit>(element);
-            EditorGUIUtility.PingObject(hit.collider);
+
         }
     }
 }

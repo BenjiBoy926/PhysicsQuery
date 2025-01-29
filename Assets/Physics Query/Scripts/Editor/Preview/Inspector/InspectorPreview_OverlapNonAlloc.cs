@@ -14,10 +14,9 @@ namespace PQuery.Editor
         {
             return query.OverlapNonAlloc();
         }
-        public override void HighlightElement(object element)
+        public override void OnColliderClicked(Collider collider)
         {
-            Object value = CastHighlightElement<Object>(element);
-            EditorGUIUtility.PingObject(value);
+
         }
     }
 }

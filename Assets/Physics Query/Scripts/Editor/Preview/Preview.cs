@@ -6,8 +6,6 @@ namespace PQuery.Editor
 {
     public class Preview
     {
-        public event Action ElementClicked = delegate { };
-
         public static string[] Labels => _labels ??= CreateLabels();
         public static int Count => _previews.Length;
         public string Label => ObjectNames.NicifyVariableName(_methodName);
@@ -32,13 +30,6 @@ namespace PQuery.Editor
             _gizmo = gizmo;
             _inspector = inspector;
             _scene = scene;
-            scene.ElementClicked += OnElementClicked;
-        }
-
-        private void OnElementClicked(object element)
-        {
-            _inspector.HighlightElement(element);
-            ElementClicked();
         }
 
         public static void DrawGizmos(PhysicsQuery query)

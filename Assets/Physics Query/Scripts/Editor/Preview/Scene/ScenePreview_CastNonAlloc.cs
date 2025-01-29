@@ -17,5 +17,9 @@ namespace PQuery.Editor
         {
             return $"[{index}]: {element.collider.name}";
         }
+        protected override Collider GetCollider(RaycastHit element)
+        {
+            return element.collider;
+        }
     }
 }
