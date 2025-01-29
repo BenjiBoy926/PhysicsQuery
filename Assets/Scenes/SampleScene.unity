@@ -969,7 +969,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shape:
-    rid: 6208947236521116643
+    rid: 6208947237319082796
   _space: 1
   _origin: {x: 0, y: 0, z: 0}
   _direction: {x: 0, y: 0, z: 1}
@@ -982,10 +982,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6208947236521116643
-      type: {class: PhysicsShape_Sphere, ns: PQuery, asm: PhysicsQuery}
+    - rid: 6208947237319082796
+      type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
       data:
-        _radius: 0.5
+        _size: {x: 1, y: 1, z: 1}
+        _orientation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!4 &1676319916
 Transform:
   m_ObjectHideFlags: 0

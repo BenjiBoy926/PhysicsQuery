@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace PQuery.Editor
 {
@@ -20,6 +21,7 @@ namespace PQuery.Editor
         };
         private static GUIContent[] _labels;
         private static readonly Type[] _noArgs = new Type[0];
+        private static readonly List<SerializedProperty> _subProperties = new(3);
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -29,11 +31,19 @@ namespace PQuery.Editor
             }
             DrawPopup(position, property, label);
             position.y += EditorGUIUtility.singleLineHeight;
+            position.y += EditorGUIUtility.standardVerticalSpacing;
             DrawSubProperties(position, property);
         }
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorGUIUtility.singleLineHeight;
+            float height = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+            List<SerializedProperty> subProperties = GetSubProperties(property);
+            for (int i = 0; i < subProperties.Count; i++)
+            {
+                height += EditorGUI.GetPropertyHeight(subProperties[i]);
+                height += EditorGUIUtility.standardVerticalSpacing;
+            }
+            return height;
         }
 
         private static GUIContent[] CreateShapeLabels()
@@ -55,20 +65,33 @@ namespace PQuery.Editor
         }
         private void DrawSubProperties(Rect position, SerializedProperty property)
         {
-            SerializedProperty iterator = property.Copy();
-            SerializedProperty end = property.Copy();
+            List<SerializedProperty> subProperties = GetSubProperties(property);
+            for (int i = 0; i < subProperties.Count; i++)
+            {
+                SerializedProperty subProperty = subProperties[i];
+                EditorGUI.PropertyField(position, subProperty, true);
+                position.y += EditorGUI.GetPropertyHeight(subProperty);
+                position.y += EditorGUIUtility.standardVerticalSpacing;
+            }
+        }
+        private List<SerializedProperty> GetSubProperties(SerializedProperty parent)
+        {
+            _subProperties.Clear();
+            SerializedProperty iterator = parent.Copy();
+            SerializedProperty end = parent.Copy();
             bool gotChildProperty = iterator.NextVisible(true);
             bool gotEndProperty = end.NextVisible(false);
             if (!gotChildProperty && !gotEndProperty)
             {
-                return;
+                return _subProperties;
             }
+
             while (!SerializedProperty.EqualContents(iterator, end))
             {
-                EditorGUI.PropertyField(position, iterator, true);
-                position.y += EditorGUI.GetPropertyHeight(iterator, true);
+                _subProperties.Add(iterator.Copy());
                 iterator.NextVisible(false);
             }
+            return _subProperties;
         }
         private int GetIndex(SerializedProperty property)
         {
