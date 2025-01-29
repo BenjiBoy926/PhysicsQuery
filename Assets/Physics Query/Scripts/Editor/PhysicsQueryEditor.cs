@@ -3,6 +3,7 @@ using UnityEditor;
 
 namespace PQuery.Editor
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(PhysicsQuery), true)]
     public class PhysicsQueryEditor : UnityEditor.Editor
     {
