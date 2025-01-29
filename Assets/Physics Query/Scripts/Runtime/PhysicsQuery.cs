@@ -12,6 +12,11 @@ namespace PQuery
         public static event Action<PhysicsQuery> DrawGizmos = delegate { };
         public static event Action<PhysicsQuery> DrawGizmosSelected = delegate { };
 
+        public PhysicsShape Shape
+        {
+            get => _shape;
+            set => _shape = value;
+        }
         public Space Space
         {
             get => _space;
@@ -49,6 +54,8 @@ namespace PQuery
         }
         public bool IsEmpty => GetType() == typeof(EmptyQuery);
 
+        [SerializeReference]
+        private PhysicsShape _shape;
         [SerializeField] 
         private Space _space;
         [SerializeField] 

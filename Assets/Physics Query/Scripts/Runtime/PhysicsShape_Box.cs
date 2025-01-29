@@ -6,26 +6,18 @@ namespace PQuery
     [Serializable]
     public class PhysicsShape_Box : PhysicsShape
     {
-        public Vector3 Size
-        {
-            get => _size;
-            set => _size = value;
-        }
-        public Vector3 Extents
-        {
-            get => _size / 2;
-            set => _size = value * 2;
-        }
-        public Quaternion Orientation
-        {
-            get => _orientation;
-            set => _orientation = value;
-        }
+        private Vector3 Extents => _size / 2;
 
         [SerializeField]
         private Vector3 _size = Vector3.one;
         [SerializeField]
         private Quaternion _orientation = Quaternion.identity;
+
+        public PhysicsShape_Box(Vector3 size, Quaternion orientation)
+        {
+            _size = size;
+            _orientation = orientation;
+        }
 
         protected override bool DoPhysicsCast(PhysicsQuery query, Ray worldRay, out RaycastHit hit)
         {
