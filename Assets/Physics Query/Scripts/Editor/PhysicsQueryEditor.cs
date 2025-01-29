@@ -7,28 +7,8 @@ namespace PQuery.Editor
     [CustomEditor(typeof(PhysicsQuery), true)]
     public class PhysicsQueryEditor : UnityEditor.Editor
     {
-        private int PreviewIndex
-        {
-            get => Preferences.GetPreviewIndex(_query);
-            set => Preferences.SetPreviewIndex(_query, value);
-        }
-        private Preview CurrentPreview => Preview.Get(PreviewIndex);
-
-        private PhysicsQuery _query;
-
-        [InitializeOnLoadMethod]
-        private static void Initialize()
-        {
-            SceneView.duringSceneGui += OnDuringSceneGUI;
-            PhysicsQuery.DrawGizmos += OnDrawGizmos;
-            PhysicsQuery.DrawGizmosSelected += OnDrawGizmosSelected;
-        }
-
         private void OnEnable()
-        {
-            PhysicsQuery query = (PhysicsQuery)target;
-            _query = query;
-            
+        {            
             for (int i = 0; i < Preview.Count; i++)
             {
                 Preview.Get(i).ElementClicked += Repaint;
@@ -45,18 +25,39 @@ namespace PQuery.Editor
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            EditorGUILayout.Space();
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
-            PreviewIndex = EditorGUILayout.Popup("Function", PreviewIndex, Preview.Labels);
-            CurrentPreview.DrawThisInspectorGUI(_query);
-            EditorGUILayout.EndVertical();
+            Object[] targets = serializedObject.targetObjects;
+            for (int i = 0; i < targets.Length; i++)
+            {
+                DrawInspectorPreview((PhysicsQuery)targets[i]);
+            }
         }
         private void OnSceneGUI()
         {
             Preview.DrawSceneGUI((PhysicsQuery)target);
         }
 
+        private void DrawInspectorPreview(PhysicsQuery query)
+        {
+            EditorGUILayout.Space();
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
+            int current = Preferences.GetPreviewIndex(query);
+            int next = EditorGUILayout.Popup("Function", current, Preview.Labels);
+            if (current != next)
+            {
+                Preferences.SetPreviewIndex(query, next);
+            }
+            Preview.DrawInspectorGUI(query);
+            EditorGUILayout.EndVertical();
+        }
+
+        [InitializeOnLoadMethod]
+        private static void Initialize()
+        {
+            SceneView.duringSceneGui += OnDuringSceneGUI;
+            PhysicsQuery.DrawGizmos += OnDrawGizmos;
+            PhysicsQuery.DrawGizmosSelected += OnDrawGizmosSelected;
+        }
         private static void OnDuringSceneGUI(SceneView view)
         {
             if (!Preferences.AlwaysDrawGizmos.Value)

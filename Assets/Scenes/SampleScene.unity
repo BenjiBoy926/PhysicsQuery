@@ -486,6 +486,69 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -47.72, y: 0, z: 0}
+--- !u!1 &609441578
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 609441580}
+  - component: {fileID: 609441579}
+  m_Layer: 0
+  m_Name: Query (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &609441579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609441578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 960dbb52d9dde674da630e04048de172, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shape:
+    rid: 6208947238188089407
+  _space: 1
+  _origin: {x: 0, y: 0, z: 0}
+  _direction: {x: 0, y: 0, z: 1}
+  _maxDistance: 10
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967291
+  _triggerInteraction: 0
+  _cacheCapacity: 8
+  references:
+    version: 2
+    RefIds:
+    - rid: 6208947238188089407
+      type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
+      data:
+        _size: {x: 1, y: 1, z: 1}
+        _orientation: {x: 0, y: 0, z: 0, w: 1}
+--- !u!4 &609441580
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609441578}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.821, z: 0.191}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1001,7 +1064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shape:
-    rid: 6208947238188089407
+    rid: 6208947238188089408
   _space: 1
   _origin: {x: 0, y: 0, z: 0}
   _direction: {x: 0, y: 0, z: 1}
@@ -1014,11 +1077,9 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6208947238188089407
-      type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
-      data:
-        _size: {x: 1, y: 1, z: 1}
-        _orientation: {x: 0, y: 0, z: 0, w: 1}
+    - rid: 6208947238188089408
+      type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
+      data: 
 --- !u!4 &2001225513
 Transform:
   m_ObjectHideFlags: 0
@@ -1047,3 +1108,4 @@ SceneRoots:
   - {fileID: 1481787831}
   - {fileID: 602112795}
   - {fileID: 2001225513}
+  - {fileID: 609441580}
