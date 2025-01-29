@@ -40,7 +40,7 @@ namespace PQuery.Editor
         {
             EditorGUILayout.Space();
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField($"{query.name} Preview", EditorStyles.boldLabel);
             int current = Preferences.GetPreviewIndex(query);
             int next = EditorGUILayout.Popup("Function", current, Preview.Labels);
             if (current != next)
