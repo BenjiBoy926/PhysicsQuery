@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 
 namespace PQuery.Editor
 {
-    [CanEditMultipleObjects]
     [CustomEditor(typeof(PhysicsQuery), true)]
     public class PhysicsQueryEditor : UnityEditor.Editor
     {
@@ -14,14 +14,25 @@ namespace PQuery.Editor
         }
         private Preview CurrentPreview => Preview.Get(PreviewIndex);
 
+        private static PhysicsQueryEditor _inspector;
+        private static List<PhysicsQuery> _selected = new(8);
+        private static SerializedObject _serializedSelected;
         private PhysicsQuery _query;
-        private string[] _previewLabels;
+
+        [InitializeOnLoadMethod]
+        private static void ListenForStaticEvents()
+        {
+            Selection.selectionChanged += OnSelectionChanged;
+            SceneView.duringSceneGui += OnDuringSceneGUI;
+            PhysicsQuery.DrawGizmos += OnDrawGizmos;
+            PhysicsQuery.DrawGizmosSelected += OnDrawGizmosSelected;
+        }
 
         private void OnEnable()
         {
+            _inspector = this;
             PhysicsQuery query = (PhysicsQuery)target;
             _query = query;
-            _previewLabels = Preview.Labels;
             
             for (int i = 0; i < Preview.Count; i++)
             {
@@ -42,56 +53,58 @@ namespace PQuery.Editor
             EditorGUILayout.Space();
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
-            PreviewIndex = EditorGUILayout.Popup("Function", PreviewIndex, _previewLabels);
-            CurrentPreview.DrawInspectorGUI(_query);
+            PreviewIndex = EditorGUILayout.Popup("Function", PreviewIndex, Preview.Labels);
+            CurrentPreview.DrawThisInspectorGUI(_query);
             EditorGUILayout.EndVertical();
         }
-        private void OnSceneGUI()
+
+        private static void OnSelectionChanged()
         {
+            Transform[] transforms = Selection.transforms;
+            _selected.Clear();
+            for (int i = 0; i < transforms.Length; i++)
+            {
+                Transform transform = transforms[i];
+                if (transform.TryGetComponent(out PhysicsQuery query))
+                {
+                    _selected.Add(query);
+                }
+            }
+            _serializedSelected = new(_selected.ToArray());
+        }
+        private static void OnDuringSceneGUI(SceneView view)
+        {
+            List<PhysicsQuery> queries;
             if (Preferences.AlwaysDrawGizmos.Value)
             {
-                return;
+                queries = new(FindObjectsByType<PhysicsQuery>(FindObjectsSortMode.None));
             }
-            CurrentPreview.DrawSceneGUI(_query);
-        }
-
-        [InitializeOnLoadMethod]
-        private static void ListenForSceneGUI()
-        {
-            SceneView.duringSceneGui += DrawAllSceneGUIs;
-        }
-        private static void DrawAllSceneGUIs(SceneView view)
-        {
-            if (!Preferences.AlwaysDrawGizmos.Value)
+            else
             {
-                return;
+                queries = _selected;
             }
-            PhysicsQuery[] allQueries = FindObjectsByType<PhysicsQuery>(FindObjectsSortMode.None);
-            for (int i = 0; i < allQueries.Length; i++)
-            {
-                PhysicsQuery query = allQueries[i];
-                Preview.Get(query).DrawSceneGUI(query);
-            }
-        }
-
-        [InitializeOnLoadMethod]
-        private static void ListenForGizmoDraw()
-        {
-            PhysicsQuery.DrawGizmos += OnDrawGizmos;
-            PhysicsQuery.DrawGizmosSelected += OnDrawGizmosSelected;
+            DrawSceneGUI(queries);
         }
         private static void OnDrawGizmos(PhysicsQuery obj)
         {
             if (Preferences.AlwaysDrawGizmos.Value)
             {
-                Preview.Get(obj).DrawGizmos(obj);
+                Preview.DrawGizmos(obj);
             }
         }
         private static void OnDrawGizmosSelected(PhysicsQuery obj)
         {
             if (!Preferences.AlwaysDrawGizmos.Value)
             {
-                Preview.Get(obj).DrawGizmos(obj);
+                Preview.DrawGizmos(obj);
+            }
+        }
+
+        private static void DrawSceneGUI(List<PhysicsQuery> queries)
+        {
+            for (int i = 0; i < queries.Count; i++)
+            {
+                Preview.DrawSceneGUI(queries[i]);
             }
         }
     }

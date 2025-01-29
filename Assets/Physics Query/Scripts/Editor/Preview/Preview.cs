@@ -8,7 +8,7 @@ namespace PQuery.Editor
     {
         public event Action ElementClicked = delegate { };
 
-        public static string[] Labels => _previews.Select(x => x.Label).ToArray();
+        public static string[] Labels => _labels ??= CreateLabels();
         public static int Count => _previews.Length;
         public string Label => ObjectNames.NicifyVariableName(_methodName);
 
@@ -19,6 +19,8 @@ namespace PQuery.Editor
             new(nameof(PhysicsQuery.Check), new GizmoPreview_Check(), new InspectorPreview_Check(), new ScenePreview_Check()),
             new(nameof(PhysicsQuery.OverlapNonAlloc), new GizmoPreview_OverlapNonAlloc(), new InspectorPreview_OverlapNonAlloc(), new ScenePreview_OverlapNonAlloc()),
         };
+        private static string[] _labels;
+
         private readonly string _methodName;
         private readonly GizmoPreview _gizmo;
         private readonly InspectorPreview _inspector;
@@ -39,6 +41,18 @@ namespace PQuery.Editor
             ElementClicked();
         }
 
+        public static void DrawGizmos(PhysicsQuery query)
+        {
+            Get(query).DrawThisGizmo(query);
+        }
+        public static void DrawInspectorGUI(PhysicsQuery query)
+        {
+            Get(query).DrawThisInspectorGUI(query);
+        }
+        public static void DrawSceneGUI(PhysicsQuery query)
+        {
+            Get(query).DrawThisSceneGUI(query);
+        }
         public static Preview Get(PhysicsQuery query)
         {
             int index = Preferences.GetPreviewIndex(query);
@@ -48,16 +62,20 @@ namespace PQuery.Editor
         {
             return _previews[index];
         }
+        private static string[] CreateLabels()
+        {
+            return _previews.Select(x => x.Label).ToArray();
+        }
 
-        public void DrawGizmos(PhysicsQuery query)
+        public void DrawThisGizmo(PhysicsQuery query)
         {
             _gizmo.DrawGizmos(query);
         }
-        public void DrawInspectorGUI(PhysicsQuery query)
+        public void DrawThisInspectorGUI(PhysicsQuery query)
         {
             _inspector.DrawInspectorGUI(query);
         }
-        public void DrawSceneGUI(PhysicsQuery query)
+        public void DrawThisSceneGUI(PhysicsQuery query)
         {
             _scene.DrawSceneGUI(query);
         }
