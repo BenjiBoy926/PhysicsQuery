@@ -15,6 +15,9 @@ namespace PQuery
         [SerializeField]
         private float _radius = 0.5f;
 
+        public PhysicsShape_Capsule()
+        {
+        }
         public PhysicsShape_Capsule(Vector3 axis, float height, float radius)
         {
             _axis = axis;

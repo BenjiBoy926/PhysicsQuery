@@ -6,6 +6,10 @@ namespace PQuery
     [Serializable]
     public class PhysicsShape_Ray : PhysicsShape
     {
+        public PhysicsShape_Ray()
+        {
+        }
+
         protected override bool DoPhysicsCast(PhysicsQuery query, Ray worldRay, out RaycastHit hit)
         {
             return Physics.Raycast(worldRay, out hit, query.MaxDistance, query.LayerMask, query.TriggerInteraction);

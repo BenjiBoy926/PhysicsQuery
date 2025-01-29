@@ -9,6 +9,9 @@ namespace PQuery
         [SerializeField]
         private float _radius = 0.5f;
 
+        public PhysicsShape_Sphere()
+        {
+        }
         public PhysicsShape_Sphere(float radius)
         {
             _radius = radius;

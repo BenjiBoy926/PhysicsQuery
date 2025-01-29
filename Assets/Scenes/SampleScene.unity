@@ -164,6 +164,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a59a50d9eedeff740ac708168cf0bc94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _shape:
+    rid: -2
   _space: 1
   _origin: {x: 0, y: 0, z: 0}
   _direction: {x: 0, y: 0, z: 1}
@@ -174,6 +176,11 @@ MonoBehaviour:
   _triggerInteraction: 0
   _cacheCapacity: 8
   _radius: 0.5
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!114 &316590913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -961,6 +968,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57a8ec518b706da469c822a08f4e79ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _shape:
+    rid: 6208947236521115892
   _space: 1
   _origin: {x: 0, y: 0, z: 0}
   _direction: {x: 0, y: 0, z: 1}
@@ -970,6 +979,12 @@ MonoBehaviour:
     m_Bits: 4294967291
   _triggerInteraction: 0
   _cacheCapacity: 8
+  references:
+    version: 2
+    RefIds:
+    - rid: 6208947236521115892
+      type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
+      data: 
 --- !u!4 &1676319916
 Transform:
   m_ObjectHideFlags: 0
@@ -1136,6 +1151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 680fb5b3b66e75e49ba1ccf3fc42c77a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _shape:
+    rid: -2
   _space: 1
   _origin: {x: 0, y: 0, z: 0}
   _direction: {x: 0, y: 0, z: 1}
@@ -1148,6 +1165,11 @@ MonoBehaviour:
   _axis: {x: 0, y: 1, z: 0}
   _height: 1
   _radius: 0.5
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!4 &1726772719
 Transform:
   m_ObjectHideFlags: 0
@@ -1221,6 +1243,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2c0b2a7f7f94841921121afda3a6d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _shape:
+    rid: -2
   _space: 1
   _origin: {x: 0, y: 0, z: 0}
   _direction: {x: 0, y: 0, z: 1}
@@ -1232,6 +1256,11 @@ MonoBehaviour:
   _cacheCapacity: 8
   _size: {x: 1, y: 1, z: 1}
   _orientation: {x: 0, y: 0, z: 0, w: 1}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!114 &2119687233
 MonoBehaviour:
   m_ObjectHideFlags: 0

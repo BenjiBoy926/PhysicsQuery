@@ -13,6 +13,9 @@ namespace PQuery
         [SerializeField]
         private Quaternion _orientation = Quaternion.identity;
 
+        public PhysicsShape_Box()
+        {
+        }
         public PhysicsShape_Box(Vector3 size, Quaternion orientation)
         {
             _size = size;
