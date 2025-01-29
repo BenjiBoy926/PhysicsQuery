@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace PQuery.Editor
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(PhysicsQuery), true)]
     public class PhysicsQueryEditor : UnityEditor.Editor
     {
@@ -20,12 +21,13 @@ namespace PQuery.Editor
         private PhysicsQuery _query;
 
         [InitializeOnLoadMethod]
-        private static void ListenForStaticEvents()
+        private static void Initialize()
         {
             Selection.selectionChanged += OnSelectionChanged;
             SceneView.duringSceneGui += OnDuringSceneGUI;
             PhysicsQuery.DrawGizmos += OnDrawGizmos;
             PhysicsQuery.DrawGizmosSelected += OnDrawGizmosSelected;
+            OnSelectionChanged();
         }
 
         private void OnEnable()

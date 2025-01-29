@@ -90,7 +90,7 @@ namespace PQuery
                 throw new ArgumentNullException(nameof(sort));
             }
             _castNonAllocMarker.Begin(this);
-            Ray worldRay = GetWorldRay();            
+            Ray worldRay = GetWorldRay();
             RaycastHit[] hits = GetHitCache();
             int count = DoPhysicsCastNonAlloc(worldRay, hits);
             sort.Sort(hits, count);
@@ -128,11 +128,11 @@ namespace PQuery
         {
             _colliderCache.SetCapacity(_cacheCapacity);
         }
-        protected RaycastHit[] GetHitCache()
+        internal RaycastHit[] GetHitCache()
         {
             return _hitCache.GetArray(_cacheCapacity);
         }
-        private Collider[] GetColliderCache()
+        internal Collider[] GetColliderCache()
         {
             return _colliderCache.GetArray(_cacheCapacity);
         }
