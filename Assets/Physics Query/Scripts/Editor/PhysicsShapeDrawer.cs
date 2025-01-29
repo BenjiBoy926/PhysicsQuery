@@ -9,7 +9,7 @@ namespace PQuery.Editor
     [CustomPropertyDrawer(typeof(PhysicsShape))]
     public class PhysicsShapeDrawer : PropertyDrawer
     {
-        private static string[] Labels => _labels ??= CreateShapeLabels();
+        private static GUIContent[] Labels => _labels ??= CreateShapeLabels();
 
         private readonly static List<Type> _shapes = new()
         {
@@ -18,7 +18,7 @@ namespace PQuery.Editor
             typeof(PhysicsShape_Ray), 
             typeof(PhysicsShape_Sphere)
         };
-        private static string[] _labels;
+        private static GUIContent[] _labels;
         private static readonly Type[] _noArgs = new Type[0];
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -27,25 +27,48 @@ namespace PQuery.Editor
             {
                 SetIndex(property, 0);
             }
-            int current = GetIndex(property);
-            current = EditorGUI.Popup(position, current, Labels);
-            SetIndex(property, current);
+            DrawPopup(position, property, label);
+            position.y += EditorGUIUtility.singleLineHeight;
+            DrawSubProperties(position, property);
         }
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return EditorGUIUtility.singleLineHeight;
         }
 
-        private static string[] CreateShapeLabels()
+        private static GUIContent[] CreateShapeLabels()
         {
-            string[] labels = new string[_shapes.Count];
+            GUIContent[] labels = new GUIContent[_shapes.Count];
             string prefix = $"{nameof(PhysicsShape)}_";
             int prefixLength = prefix.Length; 
             for (int i = 0; i < labels.Length; i++)
             {
-                labels[i] = _shapes[i].Name[prefixLength..];
+                labels[i] = new(_shapes[i].Name[prefixLength..]);
             }
             return labels;
+        }
+        private void DrawPopup(Rect position, SerializedProperty property, GUIContent label)
+        {
+            int current = GetIndex(property);
+            current = EditorGUI.Popup(position, label, current, Labels);
+            SetIndex(property, current);
+        }
+        private void DrawSubProperties(Rect position, SerializedProperty property)
+        {
+            SerializedProperty iterator = property.Copy();
+            SerializedProperty end = property.Copy();
+            bool gotChildProperty = iterator.NextVisible(true);
+            bool gotEndProperty = end.NextVisible(false);
+            if (!gotChildProperty && !gotEndProperty)
+            {
+                return;
+            }
+            while (!SerializedProperty.EqualContents(iterator, end))
+            {
+                EditorGUI.PropertyField(position, iterator, true);
+                position.y += EditorGUI.GetPropertyHeight(iterator, true);
+                iterator.NextVisible(false);
+            }
         }
         private int GetIndex(SerializedProperty property)
         {
