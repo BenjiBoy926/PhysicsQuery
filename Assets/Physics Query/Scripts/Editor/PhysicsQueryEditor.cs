@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
 
 namespace PQuery.Editor
 {
@@ -15,24 +14,18 @@ namespace PQuery.Editor
         }
         private Preview CurrentPreview => Preview.Get(PreviewIndex);
 
-        private static PhysicsQueryEditor _inspector;
-        private static List<PhysicsQuery> _selected = new(8);
-        private static SerializedObject _serializedSelected;
         private PhysicsQuery _query;
 
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
-            Selection.selectionChanged += OnSelectionChanged;
             SceneView.duringSceneGui += OnDuringSceneGUI;
             PhysicsQuery.DrawGizmos += OnDrawGizmos;
             PhysicsQuery.DrawGizmosSelected += OnDrawGizmosSelected;
-            OnSelectionChanged();
         }
 
         private void OnEnable()
         {
-            _inspector = this;
             PhysicsQuery query = (PhysicsQuery)target;
             _query = query;
             
@@ -59,33 +52,22 @@ namespace PQuery.Editor
             CurrentPreview.DrawThisInspectorGUI(_query);
             EditorGUILayout.EndVertical();
         }
-
-        private static void OnSelectionChanged()
+        private void OnSceneGUI()
         {
-            Transform[] transforms = Selection.transforms;
-            _selected.Clear();
-            for (int i = 0; i < transforms.Length; i++)
-            {
-                Transform transform = transforms[i];
-                if (transform.TryGetComponent(out PhysicsQuery query))
-                {
-                    _selected.Add(query);
-                }
-            }
-            _serializedSelected = new(_selected.ToArray());
+            Preview.DrawSceneGUI((PhysicsQuery)target);
         }
+
         private static void OnDuringSceneGUI(SceneView view)
         {
-            List<PhysicsQuery> queries;
-            if (Preferences.AlwaysDrawGizmos.Value)
+            if (!Preferences.AlwaysDrawGizmos.Value)
             {
-                queries = new(FindObjectsByType<PhysicsQuery>(FindObjectsSortMode.None));
+                return;
             }
-            else
+            PhysicsQuery[] queries = FindObjectsByType<PhysicsQuery>(FindObjectsSortMode.None);
+            for (int i = 0; i < queries.Length; i++)
             {
-                queries = _selected;
+                Preview.DrawSceneGUI(queries[i]);
             }
-            DrawSceneGUI(queries);
         }
         private static void OnDrawGizmos(PhysicsQuery obj)
         {
@@ -99,14 +81,6 @@ namespace PQuery.Editor
             if (!Preferences.AlwaysDrawGizmos.Value)
             {
                 Preview.DrawGizmos(obj);
-            }
-        }
-
-        private static void DrawSceneGUI(List<PhysicsQuery> queries)
-        {
-            for (int i = 0; i < queries.Count; i++)
-            {
-                Preview.DrawSceneGUI(queries[i]);
             }
         }
     }
