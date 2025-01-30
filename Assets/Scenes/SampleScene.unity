@@ -534,8 +534,8 @@ MonoBehaviour:
     - rid: 6208947253993013458
       type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
       data:
-        _size: {x: 1, y: 0.89, z: 1}
-        _orientation: {x: 0, y: 0.24615328, z: 0, w: 0.9692309}
+        _size: {x: 1, y: 1.14, z: 1}
+        _orientation: {x: 0, y: 0.4693945, z: 0, w: -0.8829886}
 --- !u!4 &609441580
 Transform:
   m_ObjectHideFlags: 0
@@ -1085,7 +1085,7 @@ MonoBehaviour:
       type: {class: PhysicsShape_Capsule, ns: PQuery, asm: PhysicsQuery}
       data:
         _axis: {x: 0, y: 1, z: 0}
-        _height: 1
+        _height: 1.5
         _radius: 0.46
 --- !u!4 &2001225513
 Transform:
