@@ -12,6 +12,14 @@ namespace PQuery.Editor
             _defaultValue = defaultValue;
         }
 
+        public void SetValuesWhereNameContains(string token, TValue value)
+        {
+            List<PreferenceProperty<TValue>> matches = _properties.FindAll(x => x.Name.Contains(token));
+            for (int i = 0; i < matches.Count; i++)
+            {
+                matches[i].Value = value;
+            }
+        }
         public void SetAllValues(TValue value)
         {
             for (int i = 0; i < _properties.Count; i++)

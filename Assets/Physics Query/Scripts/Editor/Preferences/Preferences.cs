@@ -58,9 +58,10 @@ namespace PQuery.Editor
         {
             SetRaycastHitFoldout(query, collider, true);
         }
-        public static void CollapseAllRaycastHitFoldouts()
+        public static void CollapseAllRaycastHitFoldouts(PhysicsQuery query)
         {
-            _raycastHitFoldout.SetAllValues(false);
+            string token = query.GetInstanceID().ToString();
+            _raycastHitFoldout.SetValuesWhereNameContains(token, false);
         }
         public static bool GetRaycastHitFoldout(PhysicsQuery query, Collider collider)
         {

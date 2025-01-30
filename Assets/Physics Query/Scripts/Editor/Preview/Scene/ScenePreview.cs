@@ -20,9 +20,9 @@ namespace PQuery.Editor
         private static void ExpandRaycastHitsWithCollider(Collider collider)
         {
             List<PhysicsQuery> queries = GetSelectedQueries();
-            Preferences.CollapseAllRaycastHitFoldouts();
             for (int i = 0; i < queries.Count; i++)
             {
+                Preferences.CollapseAllRaycastHitFoldouts(queries[i]);
                 Preferences.ExpandRaycastHitFoldout(queries[i], collider);
             }
         }
