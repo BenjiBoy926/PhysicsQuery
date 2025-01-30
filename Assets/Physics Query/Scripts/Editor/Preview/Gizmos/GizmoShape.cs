@@ -65,15 +65,15 @@ namespace PQuery.Editor
             {
                 Gizmos.color = Preferences.HitColor.Value;
                 Gizmos.DrawLine(start, GetShapeCenter(hit));
-                DrawShape(start);
+                Query.DrawGizmo(start);
                 DrawHit(hit);
             }
             else
             {
                 Gizmos.color = Preferences.MissColor.Value;
                 Vector3 end = GetEndPosition();
-                DrawShape(start);
-                DrawShape(end);
+                Query.DrawGizmo(start);
+                Query.DrawGizmo(end);
                 Gizmos.DrawLine(start, end);
             }
         }
@@ -82,7 +82,7 @@ namespace PQuery.Editor
             Color hitShapeColor = result.IsFull ? Preferences.CacheFullColor.Value : Preferences.HitColor.Value;
 
             Gizmos.color = Preferences.GetColorForResult(result);
-            DrawShape(GetStartPosition());
+            Query.DrawGizmo(GetStartPosition());
             for (int i = 0; i < result.Count; i++)
             {
                 RaycastHit hit = result[i];
@@ -92,17 +92,17 @@ namespace PQuery.Editor
             DrawResultLine(result);
 
             Gizmos.color = Preferences.MissColor.Value;
-            DrawShape(GetEndPosition());
+            Query.DrawGizmo(GetEndPosition());
         }
         private void DrawResult(bool check)
         {
             Gizmos.color = check ? Preferences.HitColor.Value : Preferences.MissColor.Value;
-            DrawOverlapShape();
+            Query.DrawOverlapGizmo();
         }
         private void DrawResult(Result<Collider> result)
         {
             Gizmos.color = Preferences.GetColorForResult(result);
-            DrawOverlapShape();
+            Query.DrawOverlapGizmo();
 
             Gizmos.color = Preferences.ResultItemColor.Value;
             for (int i = 0; i < result.Count; i++)
@@ -120,7 +120,7 @@ namespace PQuery.Editor
         private void DrawShapeAtHit(RaycastHit hit)
         {
             Vector3 center = GetShapeCenter(hit);
-            DrawShape(center);
+            Query.DrawGizmo(center);
         }
         private void DrawHitPointNormal(RaycastHit hit)
         {
@@ -173,8 +173,5 @@ namespace PQuery.Editor
         {
             return _query.GetWorldRay();
         }
-
-        protected abstract void DrawShape(Vector3 center);
-        protected abstract void DrawOverlapShape();
     }
 }

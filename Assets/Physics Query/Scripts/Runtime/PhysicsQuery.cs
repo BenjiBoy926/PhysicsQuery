@@ -176,5 +176,13 @@ namespace PQuery
         {
             DrawGizmosSelected(this);
         }
+        public void DrawOverlapGizmo()
+        {
+            _shape.Shape.DrawOverlapGizmo(this);
+        }
+        public void DrawGizmo(Vector3 center)
+        {
+            _shape.Shape.DrawGizmo(this, center);
+        }
     }
 }

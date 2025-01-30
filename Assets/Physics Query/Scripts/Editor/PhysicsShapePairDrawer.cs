@@ -66,6 +66,7 @@ namespace PQuery.Editor
                 SerializedProperty individualReference = individualObject.FindProperty(shape.propertyPath);
                 individualReference.managedReferenceValue = PhysicsShapePair.CreateShape(type);
                 individualObject.ApplyModifiedProperties();
+                individualObject.Update();
             }
         }
         private void DrawImmediateChildren(Rect position, SerializedProperty property)

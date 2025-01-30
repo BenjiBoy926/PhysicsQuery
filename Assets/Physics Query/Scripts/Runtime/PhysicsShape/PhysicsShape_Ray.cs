@@ -35,6 +35,16 @@ namespace PQuery
             }
             return count;
         }
-
+        public override void DrawOverlapGizmo(PhysicsQuery query)
+        {
+            Ray worldRay = query.GetWorldRay();
+            Vector3 start = worldRay.origin;
+            Vector3 end = worldRay.GetPoint(query.MaxDistance);
+            Gizmos.DrawLine(start, end);
+        }
+        public override void DrawGizmo(PhysicsQuery query, Vector3 center)
+        {
+            // No shapes to draw for raycasting
+        }
     }
 }

@@ -43,6 +43,20 @@ namespace PQuery
             Quaternion worldOrientation = GetWorldOrientation(query);
             return Physics.OverlapBoxNonAlloc(worldOrigin, Extents, cache, worldOrientation, query.LayerMask, query.TriggerInteraction);
         }
+        public override void DrawOverlapGizmo(PhysicsQuery query)
+        {
+            DrawGizmo(query, query.GetWorldOrigin());
+        }
+        public override void DrawGizmo(PhysicsQuery query, Vector3 center)
+        {
+            Quaternion worldOrientation = GetWorldOrientation(query);
+            Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
+            center = rotationMatrix.inverse.MultiplyVector(center);
+
+            Gizmos.matrix = rotationMatrix;
+            Gizmos.DrawWireCube(center, _size);
+            Gizmos.matrix = Matrix4x4.identity;
+        }
 
         public Quaternion GetWorldOrientation(PhysicsQuery query)
         {

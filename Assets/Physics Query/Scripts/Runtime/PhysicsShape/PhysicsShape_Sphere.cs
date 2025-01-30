@@ -35,5 +35,13 @@ namespace PQuery
         {
             return Physics.OverlapSphereNonAlloc(worldOrigin, _radius, cache, query.LayerMask, query.TriggerInteraction);
         }
+        public override void DrawOverlapGizmo(PhysicsQuery query)
+        {
+            DrawGizmo(query, query.GetWorldOrigin());
+        }
+        public override void DrawGizmo(PhysicsQuery query, Vector3 center)
+        {
+            Gizmos.DrawWireSphere(center, _radius);
+        }
     }
 }

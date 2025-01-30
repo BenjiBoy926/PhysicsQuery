@@ -46,6 +46,14 @@ namespace PQuery
             var (cap1, cap2) = GetCapPositions(query, worldOrigin);
             return Physics.OverlapCapsuleNonAlloc(cap1, cap2, _radius, cache, query.LayerMask, query.TriggerInteraction);
         }
+        public override void DrawOverlapGizmo(PhysicsQuery query)
+        {
+            DrawGizmo(query, query.GetWorldOrigin());
+        }
+        public override void DrawGizmo(PhysicsQuery query, Vector3 center)
+        {
+            CapsuleGizmo.Draw(center, GetWorldAxis(query), _radius);
+        }
 
         public (Vector3, Vector3) GetCapPositions(PhysicsQuery query, Vector3 worldOrigin)
         {

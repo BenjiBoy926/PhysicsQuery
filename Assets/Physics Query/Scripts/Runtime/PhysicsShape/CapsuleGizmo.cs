@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PQuery.Editor
+namespace PQuery
 {
     public static class CapsuleGizmo
     {
