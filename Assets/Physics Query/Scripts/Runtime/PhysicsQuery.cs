@@ -12,10 +12,10 @@ namespace PQuery
         public static event Action<PhysicsQuery> DrawGizmos = delegate { };
         public static event Action<PhysicsQuery> DrawGizmosSelected = delegate { };
 
-        public PhysicsShapePair Shape
+        public PhysicsShape Shape
         {
-            get => _shape;
-            set => _shape = value;
+            get => _shape.Shape;
+            set => _shape.SetShape(value);
         }
         public Space Space
         {

@@ -25,7 +25,7 @@ namespace PQuery.Editor
             {
                 throw new ArgumentNullException(nameof(query));
             }
-            Type queryShapeType = query.Shape.Shape.GetType();
+            Type queryShapeType = query.Shape.GetType();
             if (!_queryShapeToGizmoShape.ContainsKey(queryShapeType))
             {
                 throw new NotImplementedException($"Query type '{queryShapeType}' has no gizmo shape defined");

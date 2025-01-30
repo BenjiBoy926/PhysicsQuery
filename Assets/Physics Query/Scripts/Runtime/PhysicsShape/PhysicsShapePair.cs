@@ -46,6 +46,15 @@ namespace PQuery
             return (PhysicsShape)constructor.Invoke(null);
         }
 
+        public void SetShape(PhysicsShape shape)
+        {
+            bool HasSameShape(PhysicsShapePair pair) => pair._shape.GetType() == shape.GetType();
+            PhysicsShapePair templateItem = _template.Find(HasSameShape) ??
+                throw new NotImplementedException($"{shape.GetType().Name} has not been added to the template for {nameof(PhysicsShapePair)}");
+
+            _type = templateItem._type;
+            _shape = shape;
+        }
         public bool Cast(PhysicsQuery query, Ray worldRay, out RaycastHit hit)
         {
             return _shape.Cast(query, worldRay, out hit);

@@ -10,7 +10,7 @@ namespace PQuery.Editor
         }
         protected override void DrawShape(Vector3 center)
         {
-            PhysicsShape_Sphere shape = (PhysicsShape_Sphere)Query.Shape.Shape;
+            PhysicsShape_Sphere shape = (PhysicsShape_Sphere)Query.Shape;
             Gizmos.DrawWireSphere(center, shape.Radius);
         }
     }

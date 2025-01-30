@@ -5,7 +5,7 @@ using UnityEngine;
 namespace PQuery.Editor
 {
     [CustomPropertyDrawer(typeof(PhysicsShapePair))]
-    public class PhysicsShapePropertyDrawer : PropertyDrawer
+    public class PhysicsShapePairDrawer : PropertyDrawer
     {
         private static readonly List<SerializedProperty> _subProperties = new(3);
 

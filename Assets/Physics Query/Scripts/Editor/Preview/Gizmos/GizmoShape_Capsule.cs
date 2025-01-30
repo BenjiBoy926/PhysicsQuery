@@ -10,7 +10,7 @@ namespace PQuery.Editor
         }
         protected override void DrawShape(Vector3 center)
         {
-            PhysicsShape_Capsule shape = (PhysicsShape_Capsule)Query.Shape.Shape;
+            PhysicsShape_Capsule shape = (PhysicsShape_Capsule)Query.Shape;
             Vector3 up = shape.GetWorldAxis(Query);
             float radius = shape.Radius;
             CapsuleGizmo.Draw(center, up, radius);
