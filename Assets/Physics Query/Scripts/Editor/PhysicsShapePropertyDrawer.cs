@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    [CustomPropertyDrawer(typeof(PhysicsShapeProperty))]
+    [CustomPropertyDrawer(typeof(PhysicsShapePair))]
     public class PhysicsShapePropertyDrawer : PropertyDrawer
     {
         private static readonly List<SerializedProperty> _subProperties = new(3);
@@ -51,8 +51,8 @@ namespace PQuery.Editor
 
         private (SerializedProperty, SerializedProperty) GetTypeAndShape(SerializedProperty property)
         {
-            return (property.FindPropertyRelative(PhysicsShapeProperty.TypeFieldName), 
-                property.FindPropertyRelative(PhysicsShapeProperty.ShapeFieldName));
+            return (property.FindPropertyRelative(PhysicsShapePair.TypeFieldName), 
+                property.FindPropertyRelative(PhysicsShapePair.ShapeFieldName));
         }
         private void SetShape(SerializedProperty shape, PhysicsShapeType type)
         {
@@ -64,7 +64,7 @@ namespace PQuery.Editor
             {
                 SerializedObject individualObject = new(targets[i]);
                 SerializedProperty individualReference = individualObject.FindProperty(shape.propertyPath);
-                individualReference.managedReferenceValue = PhysicsShape.Create(type);
+                individualReference.managedReferenceValue = PhysicsShapePair.CreateShape(type);
                 individualObject.ApplyModifiedProperties();
             }
         }
