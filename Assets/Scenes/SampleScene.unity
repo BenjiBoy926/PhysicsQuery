@@ -1064,7 +1064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shape:
-    rid: 6208947238188089408
+    rid: 6208947253993013306
   _space: 1
   _origin: {x: 0, y: 0, z: 0}
   _direction: {x: 0, y: 0, z: 1}
@@ -1077,9 +1077,12 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6208947238188089408
-      type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
-      data: 
+    - rid: 6208947253993013306
+      type: {class: PhysicsShape_Capsule, ns: PQuery, asm: PhysicsQuery}
+      data:
+        _axis: {x: 0, y: 1, z: 0}
+        _height: 0.36
+        _radius: 0.5
 --- !u!4 &2001225513
 Transform:
   m_ObjectHideFlags: 0
@@ -1089,7 +1092,7 @@ Transform:
   m_GameObject: {fileID: 2001225511}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.509, z: 0.347}
+  m_LocalPosition: {x: 0, y: 0.818, z: 0.347}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

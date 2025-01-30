@@ -23,22 +23,22 @@ namespace PQuery
             _orientation = orientation;
         }
 
-        protected override bool DoPhysicsCast(PhysicsQuery query, Ray worldRay, out RaycastHit hit)
+        public override bool Cast(PhysicsQuery query, Ray worldRay, out RaycastHit hit)
         {
             Quaternion worldOrientation = GetWorldOrientation(query);
             return Physics.BoxCast(worldRay.origin, Extents, worldRay.direction, out hit, worldOrientation, query.MaxDistance, query.LayerMask, query.TriggerInteraction);
         }
-        protected override int DoPhysicsCastNonAlloc(PhysicsQuery query, Ray worldRay, RaycastHit[] cache)
+        public override int CastNonAlloc(PhysicsQuery query, Ray worldRay, RaycastHit[] cache)
         {
             Quaternion worldOrientation = GetWorldOrientation(query);
             return Physics.BoxCastNonAlloc(worldRay.origin, Extents, worldRay.direction, cache, worldOrientation, query.MaxDistance, query.LayerMask, query.TriggerInteraction);
         }
-        protected override bool DoPhysicsCheck(PhysicsQuery query, Vector3 worldOrigin)
+        public override bool Check(PhysicsQuery query, Vector3 worldOrigin)
         {
             Quaternion worldOrientation = GetWorldOrientation(query);
             return Physics.CheckBox(worldOrigin, Extents, worldOrientation, query.LayerMask, query.TriggerInteraction);
         }
-        protected override int DoPhysicsOverlapNonAlloc(PhysicsQuery query, Vector3 worldOrigin, Collider[] cache)
+        public override int OverlapNonAlloc(PhysicsQuery query, Vector3 worldOrigin, Collider[] cache)
         {
             Quaternion worldOrientation = GetWorldOrientation(query);
             return Physics.OverlapBoxNonAlloc(worldOrigin, Extents, cache, worldOrientation, query.LayerMask, query.TriggerInteraction);

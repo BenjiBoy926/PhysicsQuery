@@ -83,21 +83,56 @@ namespace PQuery
         }
         public bool Cast(out RaycastHit hit)
         {
-            return _shape.Cast(this, out hit);
+            _castMarker.Begin();
+            Ray worldRay = GetWorldRay();
+            bool didHit = _shape.Cast(this, worldRay, out hit);
+            _castMarker.End();
+            return didHit;
         }
         public Result<RaycastHit> CastNonAlloc(ResultSort sort)
         {
-            return _shape.CastNonAlloc(this, sort);
+            if (sort == null)
+            {
+                throw new ArgumentNullException(nameof(sort));
+            }
+            _castNonAllocMarker.Begin();
+            Ray worldRay = GetWorldRay();
+            RaycastHit[] hits = GetHitCache();
+            int count = _shape.CastNonAlloc(this, worldRay, hits);
+            sort.Sort(hits, count);
+            _castNonAllocMarker.End();
+            return new(hits, count);
         }
         public bool Check()
         {
-            return _shape.Check(this);
+            _checkMarker.Begin();
+            Vector3 origin = GetWorldOrigin();
+            bool check = _shape.Check(this, origin);
+            _checkMarker.End();
+            return check;
         }
         public Result<Collider> OverlapNonAlloc()
         {
-            return _shape.OverlapNonAlloc(this);
+            _overlapNonAllocMarker.Begin();
+            Vector3 origin = GetWorldOrigin();
+            Collider[] overlaps = GetColliderCache();
+            int count = _shape.OverlapNonAlloc(this, origin, overlaps);
+            _overlapNonAllocMarker.End();
+            return new(overlaps, count);
         }
 
+        public Ray GetWorldRay()
+        {
+            return new(GetWorldOrigin(), GetWorldDirection());
+        }
+        public Vector3 GetWorldOrigin()
+        {
+            return _space == Space.Self ? transform.TransformPoint(_origin) : _origin;
+        }
+        public Vector3 GetWorldDirection()
+        {
+            return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
+        }
         public void RefreshCache()
         {
             RefreshHitCache();
@@ -118,19 +153,6 @@ namespace PQuery
         internal Collider[] GetColliderCache()
         {
             return _colliderCache.GetArray(_cacheCapacity);
-        }
-
-        public Ray GetWorldRay()
-        {
-            return new(GetWorldOrigin(), GetWorldDirection());
-        }
-        public Vector3 GetWorldOrigin()
-        {
-            return _space == Space.Self ? transform.TransformPoint(_origin) : _origin;
-        }
-        public Vector3 GetWorldDirection()
-        {
-            return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
         }
 
         protected virtual void Reset()

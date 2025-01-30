@@ -26,22 +26,22 @@ namespace PQuery
             _radius = radius;
         }
 
-        protected override bool DoPhysicsCast(PhysicsQuery query, Ray worldRay, out RaycastHit hit)
+        public override bool Cast(PhysicsQuery query, Ray worldRay, out RaycastHit hit)
         {
             var (cap1, cap2) = GetCapPositions(query, worldRay.origin);
             return Physics.CapsuleCast(cap1, cap2, _radius, worldRay.direction, out hit, query.MaxDistance, query.LayerMask, query.TriggerInteraction);
         }
-        protected override int DoPhysicsCastNonAlloc(PhysicsQuery query, Ray worldRay, RaycastHit[] cache)
+        public override int CastNonAlloc(PhysicsQuery query, Ray worldRay, RaycastHit[] cache)
         {
             var (cap1, cap2) = GetCapPositions(query, worldRay.origin);
             return Physics.CapsuleCastNonAlloc(cap1, cap2, _radius, worldRay.direction, cache, query.MaxDistance, query.LayerMask, query.TriggerInteraction);
         }
-        protected override bool DoPhysicsCheck(PhysicsQuery query, Vector3 worldOrigin)
+        public override bool Check(PhysicsQuery query, Vector3 worldOrigin)
         {
             var (cap1, cap2) = GetCapPositions(query, worldOrigin);
             return Physics.CheckCapsule(cap1, cap2, _radius, query.LayerMask, query.TriggerInteraction);
         }
-        protected override int DoPhysicsOverlapNonAlloc(PhysicsQuery query, Vector3 worldOrigin, Collider[] cache)
+        public override int OverlapNonAlloc(PhysicsQuery query, Vector3 worldOrigin, Collider[] cache)
         {
             var (cap1, cap2) = GetCapPositions(query, worldOrigin);
             return Physics.OverlapCapsuleNonAlloc(cap1, cap2, _radius, cache, query.LayerMask, query.TriggerInteraction);
