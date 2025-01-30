@@ -15,9 +15,5 @@ namespace PQuery.Editor
                 GUI.enabled = true;
             }
         }
-        public override void OnColliderClicked(Collider collider)
-        {
-
-        }
     }
 }

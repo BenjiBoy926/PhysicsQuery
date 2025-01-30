@@ -7,13 +7,7 @@ namespace PQuery.Editor
 {
     public abstract class InspectorPreview
     {
-        protected InspectorPreview()
-        {
-            ScenePreview.ColliderClicked += OnColliderClicked;
-        }
-
         public abstract void DrawInspectorGUI(PhysicsQuery query);
-        public abstract void OnColliderClicked(Collider collider);
 
         protected void DrawEachPropertyInspectorGUI(RaycastHit hit)
         {

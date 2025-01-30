@@ -13,24 +13,24 @@ namespace PQuery.Editor
         public override void DrawInspectorGUI(PhysicsQuery query)
         {
             Result<TElement> result = GetResult(query);
-            DrawEachElementInspectorGUI(result);
+            DrawEachElementInspectorGUI(query, result);
             if (result.IsFull)
             {
                 EditorGUILayout.HelpBox(CacheFullMessage, MessageType.Error);
             }
         }
 
-        private void DrawEachElementInspectorGUI(Result<TElement> result)
+        private void DrawEachElementInspectorGUI(PhysicsQuery query, Result<TElement> result)
         {
             GUI.enabled = false;
             for (int i = 0; i < result.Count; i++)
             {
-                DrawElementInspectorGUI(result[i], i);
+                DrawElementInspectorGUI(query, result[i], i);
             }
             GUI.enabled = true;
         }
 
         protected abstract Result<TElement> GetResult(PhysicsQuery query);
-        protected abstract void DrawElementInspectorGUI(TElement element, int index);
+        protected abstract void DrawElementInspectorGUI(PhysicsQuery query, TElement element, int index);
     }
 }

@@ -7,17 +7,14 @@ namespace PQuery.Editor
 {
     public class InspectorPreview_CastNonAlloc : InspectorPreview_NonAlloc<RaycastHit>
     {
-        private readonly Dictionary<int, bool> _foldout = new();
-
         protected override Result<RaycastHit> GetResult(PhysicsQuery query)
         {
             return query.CastNonAlloc(ResultSort.Distance);
         }
-        protected override void DrawElementInspectorGUI(RaycastHit element, int index)
+        protected override void DrawElementInspectorGUI(PhysicsQuery query, RaycastHit element, int index)
         {
             EditorGUI.indentLevel++;
-            DrawFoldoutInspectorGUI(element, index);
-            if (GetFoldoutValue(element))
+            if (DrawFoldoutInspectorGUI(query, element, index))
             {
                 EditorGUI.indentLevel++;
                 DrawEachPropertyInspectorGUI(element);
@@ -25,43 +22,14 @@ namespace PQuery.Editor
             }
             EditorGUI.indentLevel--;
         }
-        public override void OnColliderClicked(Collider collider)
-        {
-            CollapseAllOtherFoldouts(collider);
-        }
 
-        private void DrawFoldoutInspectorGUI(RaycastHit element, int index)
+        private bool DrawFoldoutInspectorGUI(PhysicsQuery query, RaycastHit element, int index)
         {
-            bool value = GetFoldoutValue(element);
+            bool value = Preferences.GetRaycastHitFoldout(query, element.collider);
             string label = $"Element {index}";
             value = EditorGUILayout.Foldout(value, label);
-            SetFoldoutValue(element, value);
-        }
-        private void CollapseAllOtherFoldouts(Collider collider)
-        {
-            List<int> keys = new(_foldout.Keys);
-            int foldedOut = GetFoldoutID(collider);
-            for (int i = 0; i < keys.Count; i++)
-            {
-                int key = keys[i];
-                _foldout[key] = key == foldedOut;
-            }
-        }
-        private bool GetFoldoutValue(RaycastHit hit)
-        {
-            return _foldout.GetValueOrDefault(GetFoldoutID(hit));
-        }
-        private void SetFoldoutValue(RaycastHit hit, bool value)
-        {
-            _foldout[GetFoldoutID(hit)] = value;
-        }
-        private int GetFoldoutID(RaycastHit hit)
-        {
-            return GetFoldoutID(hit.collider);
-        }
-        private int GetFoldoutID(Collider collider)
-        {
-            return collider.GetInstanceID();
+            Preferences.SetRaycastHitFoldout(query, element.collider, value);
+            return value;
         }
     }
 }
