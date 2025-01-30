@@ -12,6 +12,13 @@ namespace PQuery.Editor
             _defaultValue = defaultValue;
         }
 
+        public void SetAllValues(TValue value)
+        {
+            for (int i = 0; i < _properties.Count; i++)
+            {
+                _properties[i].Value = value;
+            }
+        }
         public TValue GetValue(string name)
         {
             return GetProperty(name).Value;

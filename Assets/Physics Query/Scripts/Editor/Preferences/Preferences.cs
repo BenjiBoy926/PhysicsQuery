@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace PQuery.Editor
 {
@@ -51,6 +52,15 @@ namespace PQuery.Editor
         {
             string name = GetPreviewIndexPropertyName(query);
             _previewIndices.SetValue(name, ClampPreviewIndex(index));
+        }
+
+        public static void ExpandRaycastHitFoldout(PhysicsQuery query, Collider collider)
+        {
+            SetRaycastHitFoldout(query, collider, true);
+        }
+        public static void CollapseAllRaycastHitFoldouts()
+        {
+            _raycastHitFoldout.SetAllValues(false);
         }
         public static bool GetRaycastHitFoldout(PhysicsQuery query, Collider collider)
         {
