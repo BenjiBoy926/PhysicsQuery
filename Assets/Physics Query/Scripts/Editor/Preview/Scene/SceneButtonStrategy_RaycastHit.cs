@@ -20,8 +20,7 @@ namespace PQuery.Editor
         }
         protected override string GetTooltip(RaycastHit value)
         {
-            return $"Collider: {value.collider.name}\n" +
-                $"Point: {value.point}\n" +
+            return $"Point: {value.point}\n" +
                 $"Normal: {value.normal}\n" +
                 $"Distance: {value.distance}";
         }

@@ -5,10 +5,6 @@ namespace PQuery.Editor
 {
     public class ScenePreview_OverlapNonAlloc : ScenePreview_NonAlloc<Collider>
     {
-        protected override SceneButtonStrategy GetButtonStrategy()
-        {
-            return new SceneButtonStrategy_Collider();
-        }
         protected override Result<Collider> GetResult(PhysicsQuery query)
         {
             return query.OverlapNonAlloc();
@@ -20,6 +16,10 @@ namespace PQuery.Editor
         protected override Collider GetCollider(Collider element)
         {
             return element;
+        }
+        protected override SceneButtonStrategy<Collider> GetSceneButtonStrategy()
+        {
+            return new SceneButtonStrategy_Collider();
         }
     }
 }

@@ -5,6 +5,8 @@ namespace PQuery.Editor
 {
     public class ScenePreview_Cast : ScenePreview
     {
+        private readonly SceneButtonStrategy_RaycastHit _button = new();
+
         public override void DrawSceneGUI(PhysicsQuery query)
         {
             bool didHit = query.Cast(out RaycastHit hit);
@@ -21,15 +23,10 @@ namespace PQuery.Editor
         }
         private void DrawButton(RaycastHit hit)
         {
-            if (DrawButton(hit, hit.collider.name))
+            if (_button.Draw(hit, hit.collider.name))
             {
                 ClickCollider(hit.collider);
             }
-        }
-
-        protected override SceneButtonStrategy GetButtonStrategy()
-        {
-            return new SceneButtonStrategy_RaycastHit();
         }
     }
 }

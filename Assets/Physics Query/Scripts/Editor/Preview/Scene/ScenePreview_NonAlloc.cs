@@ -5,6 +5,12 @@ namespace PQuery.Editor
 {
     public abstract class ScenePreview_NonAlloc<TElement> : ScenePreview
     {
+        private readonly SceneButtonStrategy<TElement> _button;
+
+        protected ScenePreview_NonAlloc()
+        {
+            _button = GetSceneButtonStrategy();
+        }
 
         public override void DrawSceneGUI(PhysicsQuery query)
         {
@@ -32,7 +38,7 @@ namespace PQuery.Editor
         }
         private void DrawButton(TElement element, string label)
         {
-            if (DrawButton((object)element, label))
+            if (_button.Draw(element, label))
             {
                 ClickCollider(GetCollider(element));
             }
@@ -41,5 +47,6 @@ namespace PQuery.Editor
         protected abstract Result<TElement> GetResult(PhysicsQuery query);
         protected abstract string GetLabel(TElement element, int index);
         protected abstract Collider GetCollider(TElement element);
+        protected abstract SceneButtonStrategy<TElement> GetSceneButtonStrategy();
     }
 }

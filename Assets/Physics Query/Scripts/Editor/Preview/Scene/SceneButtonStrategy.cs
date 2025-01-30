@@ -19,23 +19,9 @@ namespace PQuery.Editor
         {
             GUI.Button(Rect.zero, GUIContent.none, GUIStyle.none);
         }
-
-        public abstract bool Draw(object value, string label);
     }
     public abstract class SceneButtonStrategy<TValue> : SceneButtonStrategy
     {
-        public override bool Draw(object value, string label)
-        {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-            if (value is not TValue castValue)
-            {
-                throw new ArithmeticException($"Expected {value} to be an object of type {typeof(TValue).Name}, but it has the type {value.GetType().Name}");
-            }
-            return Draw(castValue, label);
-        }
         public bool Draw(TValue value, string label)
         {
             if (IsVisible(value))
