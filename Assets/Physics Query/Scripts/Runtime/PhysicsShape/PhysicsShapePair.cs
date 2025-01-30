@@ -27,6 +27,7 @@ namespace PQuery
         [SerializeReference]
         private PhysicsShape _shape = new PhysicsShape_Ray();
 
+        internal PhysicsShapePair() : this(PhysicsShapeType.Ray, new PhysicsShape_Ray()) { }
         internal PhysicsShapePair(PhysicsShapeType type, PhysicsShape shape)
         {
             _type = type;

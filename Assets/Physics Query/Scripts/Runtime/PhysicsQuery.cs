@@ -12,11 +12,6 @@ namespace PQuery
         public static event Action<PhysicsQuery> DrawGizmos = delegate { };
         public static event Action<PhysicsQuery> DrawGizmosSelected = delegate { };
 
-        public PhysicsShape Shape
-        {
-            get => _shape.Shape;
-            set => _shape.SetShape(value);
-        }
         public Space Space
         {
             get => _space;
@@ -52,9 +47,12 @@ namespace PQuery
             get => _cacheCapacity;
             set => _cacheCapacity = Mathf.Max(value, MinCacheCapacity);
         }
+        public PhysicsShape Shape
+        {
+            get => _shape.Shape;
+            set => _shape.SetShape(value);
+        }
 
-        [SerializeField]
-        private PhysicsShapePair _shape;
         [SerializeField] 
         private Space _space;
         [SerializeField] 
@@ -69,6 +67,8 @@ namespace PQuery
         private QueryTriggerInteraction _triggerInteraction;
         [SerializeField] 
         private int _cacheCapacity;
+        [SerializeField, Space]
+        private PhysicsShapePair _shape = new();
         private readonly CachedArray<RaycastHit> _hitCache = new();
         private readonly CachedArray<Collider> _colliderCache = new();
 
