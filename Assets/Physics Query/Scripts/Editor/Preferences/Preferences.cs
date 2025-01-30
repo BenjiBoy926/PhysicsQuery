@@ -20,7 +20,7 @@ namespace PQuery.Editor
             HitColor, CacheFullColor, MissColor, ResultItemColor, HitSphereRadius, AlwaysDrawGizmos
         };
 
-        private static readonly Dictionary<PhysicsQuery, PreferenceProperty<int>> _currentPreviewIndex = new();
+        private static readonly List<PreferenceProperty<int>> _previewIndices = new();
 
         public static Color GetColorForResult<TElement>(Result<TElement> result)
         {
@@ -44,23 +44,26 @@ namespace PQuery.Editor
 
         public static int GetPreviewIndex(PhysicsQuery query)
         {
-            AddToDictionary(query);
-            int value = _currentPreviewIndex[query].Value;
+            PreferenceProperty<int> property = GetPreviewIndexProperty(query);
+            int value = property.Value;
             return ClampPreviewIndex(value);
         }
         public static void SetPreviewIndex(PhysicsQuery query, int index)
         {
-            AddToDictionary(query);
-            _currentPreviewIndex[query].Value = ClampPreviewIndex(index);
+            PreferenceProperty<int> property = GetPreviewIndexProperty(query);
+            property.Value = ClampPreviewIndex(index);
         }
-        private static void AddToDictionary(PhysicsQuery query)
+        private static PreferenceProperty<int> GetPreviewIndexProperty(PhysicsQuery query)
         {
-            if (_currentPreviewIndex.ContainsKey(query))
-            {
-                return;
-            }
+            string name = GetPreviewIndexPropertyName(query);
+            PreferenceProperty<int> property = _previewIndices.Find(x => x.Name == name);
+            return property ?? AddNewPreviewIndexProperty(query);
+        }
+        private static PreferenceProperty<int> AddNewPreviewIndexProperty(PhysicsQuery query)
+        {
             PreferenceProperty<int> newProperty = new(GetPreviewIndexPropertyName(query), 0);
-            _currentPreviewIndex.Add(query, newProperty);
+            _previewIndices.Add(newProperty);
+            return newProperty;
         }
         private static string GetPreviewIndexPropertyName(PhysicsQuery query)
         {
