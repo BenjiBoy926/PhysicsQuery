@@ -516,7 +516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shape:
-    rid: 6208947238188089407
+    rid: 6208947253993013327
   _space: 1
   _origin: {x: 0, y: 0, z: 0}
   _direction: {x: 0, y: 0, z: 1}
@@ -529,11 +529,12 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6208947238188089407
-      type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
+    - rid: 6208947253993013327
+      type: {class: PhysicsShape_Capsule, ns: PQuery, asm: PhysicsQuery}
       data:
-        _size: {x: 1, y: 1, z: 1}
-        _orientation: {x: 0, y: 0, z: 0, w: 1}
+        _axis: {x: 0, y: 1, z: 0}
+        _height: 1
+        _radius: 0.5
 --- !u!4 &609441580
 Transform:
   m_ObjectHideFlags: 0
@@ -1064,7 +1065,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shape:
-    rid: 6208947253993013306
+    rid: 6208947253993013328
   _space: 1
   _origin: {x: 0, y: 0, z: 0}
   _direction: {x: 0, y: 0, z: 1}
@@ -1077,11 +1078,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6208947253993013306
+    - rid: 6208947253993013328
       type: {class: PhysicsShape_Capsule, ns: PQuery, asm: PhysicsQuery}
       data:
         _axis: {x: 0, y: 1, z: 0}
-        _height: 0.36
+        _height: 1
         _radius: 0.5
 --- !u!4 &2001225513
 Transform:

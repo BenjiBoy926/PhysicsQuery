@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace PQuery.Editor
 {
@@ -33,6 +33,10 @@ namespace PQuery.Editor
             DrawPopup(position, property, label);
             position.y += position.height;
             position.y += EditorGUIUtility.standardVerticalSpacing;
+            if (property.hasMultipleDifferentValues)
+            {
+                return;
+            }
             using (new EditorGUI.IndentLevelScope())
             {
                 DrawSubProperties(position, property);
@@ -41,6 +45,10 @@ namespace PQuery.Editor
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             float height = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+            if (property.hasMultipleDifferentValues)
+            {
+                return height;
+            }
             List<SerializedProperty> subProperties = GetSubProperties(property);
             for (int i = 0; i < subProperties.Count; i++)
             {
@@ -86,14 +94,11 @@ namespace PQuery.Editor
         {
             _subProperties.Clear();
             SerializedProperty iterator = parent.Copy();
-            SerializedProperty end = parent.Copy();
-            bool gotChildProperty = iterator.NextVisible(true);
-            bool gotEndProperty = end.NextVisible(false);
-            if (!gotChildProperty && !gotEndProperty)
+            SerializedProperty end = parent.GetEndProperty();
+            if (!iterator.NextVisible(true))
             {
                 return _subProperties;
             }
-
             while (!SerializedProperty.EqualContents(iterator, end))
             {
                 _subProperties.Add(iterator.Copy());
@@ -108,7 +113,16 @@ namespace PQuery.Editor
         private void SetIndex(SerializedProperty property, int index)
         {
             ConstructorInfo constructor = _shapes[index].GetConstructor(_noArgs);
-            property.managedReferenceValue = constructor.Invoke(null);
+            Object[] targets = property.serializedObject.targetObjects;
+            // Note: you have to construct a new managed reference for EACH target during multi-editing or else Unity will print an error to the console
+            for (int i = 0; i < targets.Length; i++)
+            {
+                SerializedObject serializedTarget = new(targets[i]);
+                SerializedProperty referenceProperty = serializedTarget.FindProperty(property.propertyPath);
+                referenceProperty.managedReferenceValue = constructor.Invoke(null);
+                serializedTarget.ApplyModifiedProperties();
+                serializedTarget.Update();
+            }
         }
     }
 }
