@@ -12,7 +12,7 @@ namespace PQuery
         public static event Action<PhysicsQuery> DrawGizmos = delegate { };
         public static event Action<PhysicsQuery> DrawGizmosSelected = delegate { };
 
-        public PhysicsShape Shape
+        public PhysicsShapeProperty Shape
         {
             get => _shape;
             set => _shape = value;
@@ -54,9 +54,7 @@ namespace PQuery
         }
 
         [SerializeField]
-        private PhysicsShapeProperty _test;
-        [SerializeReference]
-        private PhysicsShape _shape = new PhysicsShape_Ray();
+        private PhysicsShapeProperty _shape;
         [SerializeField] 
         private Space _space;
         [SerializeField] 

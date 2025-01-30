@@ -23,12 +23,8 @@ namespace PQuery
                 throw new NotImplementedException($"Enum value {type} has no corresponding class definition");
             }
             Type definition = _enumToType[type];
-            ConstructorInfo constructor = definition.GetConstructor(_noArgs);
-            if (constructor == null)
-            {
-                throw new NotImplementedException($"Expected {definition.Name} to have a parameterless constructor defined, " +
-                    $"but no such definition could be found");
-            }
+            ConstructorInfo constructor = definition.GetConstructor(_noArgs) ?? 
+                throw new NotImplementedException($"Expected {definition.Name} to have a parameterless constructor defined, but no such definition could be found");
             object result = constructor.Invoke(null);
             if (result is not PhysicsShape shape)
             {

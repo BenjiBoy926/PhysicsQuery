@@ -10,7 +10,7 @@ namespace PQuery.Editor
         }
         protected override void DrawShape(Vector3 center)
         {
-            PhysicsShape_Box shape = (PhysicsShape_Box)Query.Shape;
+            PhysicsShape_Box shape = (PhysicsShape_Box)Query.Shape.Shape;
             Quaternion worldOrientation = shape.GetWorldOrientation(Query);
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
             center = rotationMatrix.inverse.MultiplyVector(center);
