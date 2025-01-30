@@ -9,29 +9,7 @@ namespace PQuery.Editor
         protected const float MaxDistance = 1000;
 
         protected PhysicsQuery Query => _query;
-
-        private static readonly Dictionary<Type, GizmoShape> _queryShapeToGizmoShape = new()
-        {
-            { typeof(PhysicsShape_Box), new GizmoShape_Box() },
-            { typeof(PhysicsShape_Capsule), new GizmoShape_Capsule() },
-            { typeof(PhysicsShape_Ray), new GizmoShape_Ray() },
-            { typeof(PhysicsShape_Sphere), new GizmoShape_Sphere() }
-        };
         private PhysicsQuery _query;
-
-        public static GizmoShape Get(PhysicsQuery query)
-        {
-            if (query == null)
-            {
-                throw new ArgumentNullException(nameof(query));
-            }
-            Type queryShapeType = query.Shape.GetType();
-            if (!_queryShapeToGizmoShape.ContainsKey(queryShapeType))
-            {
-                throw new NotImplementedException($"Query type '{queryShapeType}' has no gizmo shape defined");
-            }
-            return _queryShapeToGizmoShape[queryShapeType];
-        }
 
         public void DrawCastGizmos(PhysicsQuery query)
         {
