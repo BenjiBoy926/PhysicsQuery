@@ -12,11 +12,11 @@ namespace PQuery.Editor
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var (type, shape) = GetTypeAndShape(property);
-            position.height = EditorGUIUtility.singleLineHeight;
             EditorGUI.BeginChangeCheck();
-            EditorGUI.PropertyField(position, shape, label);
+            position = PropertyField(position, type, label);
             if (EditorGUI.EndChangeCheck())
             {
+                property.serializedObject.ApplyModifiedProperties();
                 SetShape(shape, (PhysicsShapeType)type.enumValueIndex);
             }
 
@@ -24,8 +24,6 @@ namespace PQuery.Editor
             {
                 return;
             }
-            position.y += position.height;
-            position.y += EditorGUIUtility.standardVerticalSpacing;
             EditorGUI.indentLevel++;
             DrawImmediateChildren(position, shape);
             EditorGUI.indentLevel--;
@@ -67,20 +65,29 @@ namespace PQuery.Editor
                 SerializedObject individualObject = new(targets[i]);
                 SerializedProperty individualReference = individualObject.FindProperty(shape.propertyPath);
                 individualReference.managedReferenceValue = PhysicsShape.Create(type);
+                individualObject.ApplyModifiedProperties();
             }
         }
         private void DrawImmediateChildren(Rect position, SerializedProperty property)
         {
-            List<SerializedProperty> subProperties = GetImmediateChildren(property);
-            for (int i = 0; i < subProperties.Count; i++)
+            List<SerializedProperty> immediateChildren = GetImmediateChildren(property);
+            for (int i = 0; i < immediateChildren.Count; i++)
             {
-                SerializedProperty subProperty = subProperties[i];
-                position.height = EditorGUI.GetPropertyHeight(subProperty, true);
-                EditorGUI.PropertyField(position, subProperty, true);
-                position.y += position.height;
-                position.y += EditorGUIUtility.standardVerticalSpacing;
+                SerializedProperty subProperty = immediateChildren[i];
+                position = PropertyField(position, subProperty, null);
             }
         }
+
+        private static Rect PropertyField(Rect position, SerializedProperty property, GUIContent label)
+        {
+            label ??= new(property.displayName);
+            position.height = EditorGUI.GetPropertyHeight(property, true);
+            EditorGUI.PropertyField(position, property, label, true);
+            position.y += position.height;
+            position.y += EditorGUIUtility.standardVerticalSpacing;
+            return position;
+        }
+
         private List<SerializedProperty> GetImmediateChildren(SerializedProperty parent)
         {
             _subProperties.Clear();

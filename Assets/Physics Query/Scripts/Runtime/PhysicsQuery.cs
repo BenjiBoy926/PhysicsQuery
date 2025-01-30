@@ -53,6 +53,8 @@ namespace PQuery
             set => _cacheCapacity = Mathf.Max(value, MinCacheCapacity);
         }
 
+        [SerializeField]
+        private PhysicsShapeProperty _test;
         [SerializeReference]
         private PhysicsShape _shape = new PhysicsShape_Ray();
         [SerializeField] 
