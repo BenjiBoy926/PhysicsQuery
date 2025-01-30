@@ -5,8 +5,6 @@ namespace PQuery.Editor
 {
     public static class Preferences
     {
-        private const string PreviewIndexPropertyNamePrefix = "PreviewIndex";
-
         public static float HitNormalLength => HitSphereRadius.Value * 5;
 
         public static readonly PreferenceProperty<Color> HitColor = new(nameof(HitColor), Color.green);
@@ -20,7 +18,8 @@ namespace PQuery.Editor
             HitColor, CacheFullColor, MissColor, ResultItemColor, HitSphereRadius, AlwaysDrawGizmos
         };
 
-        private static readonly List<PreferenceProperty<int>> _previewIndices = new();
+        private static readonly PreferencePropertyCollection<int> _previewIndices = new(0);
+        private static readonly PreferencePropertyCollection<bool> _raycastHitFoldout = new(false);
 
         public static Color GetColorForResult<TElement>(Result<TElement> result)
         {
@@ -44,30 +43,33 @@ namespace PQuery.Editor
 
         public static int GetPreviewIndex(PhysicsQuery query)
         {
-            PreferenceProperty<int> property = GetPreviewIndexProperty(query);
-            int value = property.Value;
+            string name = GetPreviewIndexPropertyName(query);
+            int value = _previewIndices.GetValue(name);
             return ClampPreviewIndex(value);
         }
         public static void SetPreviewIndex(PhysicsQuery query, int index)
         {
-            PreferenceProperty<int> property = GetPreviewIndexProperty(query);
-            property.Value = ClampPreviewIndex(index);
-        }
-        private static PreferenceProperty<int> GetPreviewIndexProperty(PhysicsQuery query)
-        {
             string name = GetPreviewIndexPropertyName(query);
-            PreferenceProperty<int> property = _previewIndices.Find(x => x.Name == name);
-            return property ?? AddNewPreviewIndexProperty(query);
+            _previewIndices.SetValue(name, ClampPreviewIndex(index));
         }
-        private static PreferenceProperty<int> AddNewPreviewIndexProperty(PhysicsQuery query)
+        public static bool GetRaycastHitFoldout(PhysicsQuery query, Collider collider)
         {
-            PreferenceProperty<int> newProperty = new(GetPreviewIndexPropertyName(query), 0);
-            _previewIndices.Add(newProperty);
-            return newProperty;
+            string name = GetRaycastHitFoldoutPropertyName(query, collider);
+            return _raycastHitFoldout.GetValue(name);
+        }
+        public static void SetRaycastHitFoldout(PhysicsQuery query, Collider collider, bool foldout)
+        {
+            string name = GetRaycastHitFoldoutPropertyName(query, collider);
+            _raycastHitFoldout.SetValue(name, foldout);
+        }
+
+        private static string GetRaycastHitFoldoutPropertyName(PhysicsQuery query, Collider collider)
+        {
+            return $"RaycastHitFoldout-{query.GetInstanceID()}-{collider.GetInstanceID()}";
         }
         private static string GetPreviewIndexPropertyName(PhysicsQuery query)
         {
-            return $"{PreviewIndexPropertyNamePrefix}{query.GetInstanceID()}";
+            return $"PreviewIndex-{query.GetInstanceID()}";
         }
         private static int ClampPreviewIndex(int index)
         {
