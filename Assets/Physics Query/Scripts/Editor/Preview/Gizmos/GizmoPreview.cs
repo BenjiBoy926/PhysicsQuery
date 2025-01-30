@@ -6,20 +6,17 @@ namespace PQuery.Editor
     {
         protected const float MaxDistance = 1000;
 
-        protected PhysicsQuery Query => _query;
-        protected PhysicsQuery _query;
-
-        protected void DrawHit(RaycastHit hit)
+        protected void DrawHit(PhysicsQuery query, RaycastHit hit)
         {
-            DrawShapeAtHit(hit);
+            DrawShapeAtHit(query, hit);
             Gizmos.color = Preferences.ResultItemColor.Value;
             DrawHitPointNormal(hit);
             ColliderGizmos.DrawGizmos(hit.collider);
         }
-        private void DrawShapeAtHit(RaycastHit hit)
+        private void DrawShapeAtHit(PhysicsQuery query, RaycastHit hit)
         {
-            Vector3 center = GetShapeCenter(hit);
-            Query.DrawGizmo(center);
+            Vector3 center = GetShapeCenter(query, hit);
+            query.DrawGizmo(center);
         }
         private void DrawHitPointNormal(RaycastHit hit)
         {
@@ -28,25 +25,25 @@ namespace PQuery.Editor
             Gizmos.DrawSphere(normal.origin, Preferences.HitSphereRadius.Value);
         }
 
-        protected Vector3 GetStartPosition()
+        protected Vector3 GetStartPosition(PhysicsQuery query)
         {
-            return GetWorldRay().origin;
+            return GetWorldRay(query).origin;
         }
-        protected Vector3 GetEndPosition()
+        protected Vector3 GetEndPosition(PhysicsQuery query)
         {
-            return GetWorldRay().GetPoint(GetMaxDistance());
+            return GetWorldRay(query).GetPoint(GetMaxDistance(query));
         }
-        private float GetMaxDistance()
+        private float GetMaxDistance(PhysicsQuery query)
         {
-            return Mathf.Min(MaxDistance, _query.MaxDistance);
+            return Mathf.Min(MaxDistance, query.MaxDistance);
         }
-        protected Vector3 GetShapeCenter(RaycastHit hit)
+        protected Vector3 GetShapeCenter(PhysicsQuery query, RaycastHit hit)
         {
-            return GetWorldRay().GetPoint(hit.distance);
+            return GetWorldRay(query).GetPoint(hit.distance);
         }
-        protected Ray GetWorldRay()
+        protected Ray GetWorldRay(PhysicsQuery query)
         {
-            return _query.GetWorldRay();
+            return query.GetWorldRay();
         }
 
         public abstract void DrawGizmos(PhysicsQuery query);

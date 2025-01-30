@@ -6,31 +6,26 @@ namespace PQuery.Editor
     {
         public override void DrawGizmos(PhysicsQuery query)
         {
-            _query = query;
             var result = query.CastNonAlloc(ResultSort.Distance);
-            DrawResult(result);
-        }
-        private void DrawResult(Result<RaycastHit> result)
-        {
             Color hitShapeColor = result.IsFull ? Preferences.CacheFullColor.Value : Preferences.HitColor.Value;
 
             Gizmos.color = Preferences.GetColorForResult(result);
-            Query.DrawGizmo(GetStartPosition());
+            query.DrawGizmo(GetStartPosition(query));
             for (int i = 0; i < result.Count; i++)
             {
                 RaycastHit hit = result[i];
                 Gizmos.color = hitShapeColor;
-                DrawHit(hit);
+                DrawHit(query, hit);
             }
-            DrawResultLine(result);
+            DrawResultLine(query, result);
 
             Gizmos.color = Preferences.MissColor.Value;
-            Query.DrawGizmo(GetEndPosition());
+            query.DrawGizmo(GetEndPosition(query));
         }
-        private void DrawResultLine(Result<RaycastHit> result)
+        private void DrawResultLine(PhysicsQuery query, Result<RaycastHit> result)
         {
-            Vector3 start = GetStartPosition();
-            Vector3 end = GetEndPosition();
+            Vector3 start = GetStartPosition(query);
+            Vector3 end = GetEndPosition(query);
 
             if (result.IsFull)
             {
@@ -44,7 +39,7 @@ namespace PQuery.Editor
             }
             else
             {
-                Vector3 midpoint = GetWorldRay().GetPoint(result.Last.distance);
+                Vector3 midpoint = GetWorldRay(query).GetPoint(result.Last.distance);
                 Gizmos.color = Preferences.HitColor.Value;
                 Gizmos.DrawLine(start, midpoint);
                 Gizmos.color = Preferences.MissColor.Value;

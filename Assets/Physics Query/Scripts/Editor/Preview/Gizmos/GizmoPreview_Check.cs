@@ -6,14 +6,9 @@ namespace PQuery.Editor
     {
         public override void DrawGizmos(PhysicsQuery query)
         {
-            _query = query;
             bool result = query.Check();
-            DrawResult(result);
-        }
-        private void DrawResult(bool check)
-        {
-            Gizmos.color = check ? Preferences.HitColor.Value : Preferences.MissColor.Value;
-            Query.DrawOverlapGizmo();
+            Gizmos.color = result ? Preferences.HitColor.Value : Preferences.MissColor.Value;
+            query.DrawOverlapGizmo();
         }
     }
 }
