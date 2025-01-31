@@ -175,11 +175,11 @@ MonoBehaviour:
   _shape:
     _type: 2
     _shape:
-      rid: 6208947277557661763
+      rid: 6208947281081139202
   references:
     version: 2
     RefIds:
-    - rid: 6208947277557661763
+    - rid: 6208947281081139202
       type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
       data: 
 --- !u!1 &489777385
