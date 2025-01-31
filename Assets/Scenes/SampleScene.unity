@@ -525,17 +525,15 @@ MonoBehaviour:
   _triggerInteraction: 0
   _cacheCapacity: 8
   _shape:
-    _type: 0
+    _type: 2
     _shape:
-      rid: 6208947253993013474
+      rid: 6208947277557661758
   references:
     version: 2
     RefIds:
-    - rid: 6208947253993013474
-      type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
-      data:
-        _size: {x: 1, y: 1, z: 1}
-        _orientation: {x: 0, y: 0, z: 0, w: 1}
+    - rid: 6208947277557661758
+      type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
+      data: 
 --- !u!4 &609441580
 Transform:
   m_ObjectHideFlags: 0
@@ -545,7 +543,7 @@ Transform:
   m_GameObject: {fileID: 609441578}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.198, z: 0.191}
+  m_LocalPosition: {x: -0.18, y: -1.198, z: 0.24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1075,18 +1073,15 @@ MonoBehaviour:
   _triggerInteraction: 0
   _cacheCapacity: 8
   _shape:
-    _type: 1
+    _type: 2
     _shape:
-      rid: 6208947253993013457
+      rid: 6208947277557661759
   references:
     version: 2
     RefIds:
-    - rid: 6208947253993013457
-      type: {class: PhysicsShape_Capsule, ns: PQuery, asm: PhysicsQuery}
-      data:
-        _axis: {x: 0, y: 1, z: 0}
-        _height: 1.5
-        _radius: 0.46
+    - rid: 6208947277557661759
+      type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
+      data: 
 --- !u!4 &2001225513
 Transform:
   m_ObjectHideFlags: 0
@@ -1095,13 +1090,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2001225511}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.377, z: 0}
+  m_LocalRotation: {x: -0, y: 0.03341715, z: -0, w: 0.99944156}
+  m_LocalPosition: {x: -0.18, y: -0.377, z: 0.049}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 3.83, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

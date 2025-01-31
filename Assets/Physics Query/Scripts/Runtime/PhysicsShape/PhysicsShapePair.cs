@@ -20,7 +20,8 @@ namespace PQuery
             new(PhysicsShapeType.Sphere, new PhysicsShape_Sphere())
         };
         private static readonly Type[] _noArgs = new Type[0];
-        internal PhysicsShape Shape => _shape;
+        public PhysicsShape Shape => _shape;
+        private Type ShapeClassType => _shape.GetType();
 
         [SerializeField]
         private PhysicsShapeType _type = PhysicsShapeType.Ray;
@@ -36,26 +37,29 @@ namespace PQuery
 
         public static PhysicsShape CreateShape(PhysicsShapeType type)
         {
-            bool HasSameType(PhysicsShapePair pair) => pair._type == type;
-            PhysicsShapePair templateItem = _template.Find(HasSameType) ??
-                 throw new NotImplementedException($"Enum value {type} has no corresponding class definition");
+            PhysicsShapePair templateItem = _template.Find(x => x._type == type) ??
+                 throw new NotImplementedException(MissingTemplateMessage(type.ToString()));
             
-            Type definition = templateItem._shape.GetType();
+            Type definition = templateItem.ShapeClassType;
             ConstructorInfo constructor = definition.GetConstructor(_noArgs) ??
                 throw new NotImplementedException($"Expected {definition.Name} to have a parameterless constructor defined, but no such definition could be found");
             
             return (PhysicsShape)constructor.Invoke(null);
         }
-
         public void SetShape(PhysicsShape shape)
         {
-            bool HasSameShape(PhysicsShapePair pair) => pair._shape.GetType() == shape.GetType();
-            PhysicsShapePair templateItem = _template.Find(HasSameShape) ??
-                throw new NotImplementedException($"{shape.GetType().Name} has not been added to the template for {nameof(PhysicsShapePair)}");
+            Type intendedShapeType = shape.GetType();
+            PhysicsShapePair templateItem = _template.Find(x => x.ShapeClassType == intendedShapeType) ??
+                throw new NotImplementedException(MissingTemplateMessage(intendedShapeType.Name));
 
             _type = templateItem._type;
             _shape = shape;
         }
+        private static string MissingTemplateMessage(string itemName)
+        {
+            return $"{itemName} does not exist in the {nameof(PhysicsShapePair)} template";
+        }
+
         public bool Cast(PhysicsQuery query, Ray worldRay, out RaycastHit hit)
         {
             return _shape.Cast(query, worldRay, out hit);
