@@ -11,16 +11,30 @@ namespace PQuery.Editor
 
             Gizmos.color = Preferences.GetColorForResult(result);
             query.DrawGizmo(GetStartPosition(query));
+
+            // Note: we draw each hit and the collider first before the shapes so that the shapes show up on top
+            DrawEachHit(query, result);
+            DrawResultLine(query, result);
+            DrawShapeAtEachHit(query, result, hitShapeColor); 
+
+            Gizmos.color = Preferences.MissColor.Value;
+            query.DrawGizmo(GetEndPosition(query));
+        }
+        private void DrawShapeAtEachHit(PhysicsQuery query, Result<RaycastHit> result, Color hitShapeColor)
+        {
             for (int i = 0; i < result.Count; i++)
             {
                 RaycastHit hit = result[i];
                 Gizmos.color = hitShapeColor;
-                DrawHit(query, hit);
+                DrawShapeAtHit(query, hit);
             }
-            DrawResultLine(query, result);
-
-            Gizmos.color = Preferences.MissColor.Value;
-            query.DrawGizmo(GetEndPosition(query));
+        }
+        private void DrawEachHit(PhysicsQuery query, Result<RaycastHit> result)
+        {
+            for (int i = 0; i < result.Count; i++)
+            {
+                DrawHit(query, result[i]);
+            }
         }
         private void DrawResultLine(PhysicsQuery query, Result<RaycastHit> result)
         {

@@ -6,17 +6,16 @@ namespace PQuery.Editor
     {
         protected const float MaxDistance = 1000;
 
-        protected void DrawHit(PhysicsQuery query, RaycastHit hit)
-        {
-            DrawShapeAtHit(query, hit);
-            Gizmos.color = Preferences.ResultItemColor.Value;
-            DrawHitPointNormal(hit);
-            ColliderGizmos.DrawGizmos(hit.collider);
-        }
-        private void DrawShapeAtHit(PhysicsQuery query, RaycastHit hit)
+        protected void DrawShapeAtHit(PhysicsQuery query, RaycastHit hit)
         {
             Vector3 center = GetShapeCenter(query, hit);
             query.DrawGizmo(center);
+        }
+        protected void DrawHit(PhysicsQuery query, RaycastHit hit)
+        {
+            Gizmos.color = Preferences.ResultItemColor.Value;
+            DrawHitPointNormal(hit);
+            ColliderGizmos.DrawGizmos(hit.collider);
         }
         private void DrawHitPointNormal(RaycastHit hit)
         {
