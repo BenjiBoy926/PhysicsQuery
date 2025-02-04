@@ -640,7 +640,7 @@ MonoBehaviour:
     - rid: 2234344072898674780
       type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
       data:
-        _size: {x: 1, y: 1, z: 1}
+        _size: {x: 1, y: 1.22, z: 1}
         _orientation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!4 &609441580
 Transform:
@@ -1181,14 +1181,14 @@ MonoBehaviour:
   _triggerInteraction: 0
   _cacheCapacity: 8
   _shape:
-    rid: 2234344072898674781
+    rid: 2234344072898674783
   references:
     version: 2
     RefIds:
-    - rid: 2234344072898674781
+    - rid: 2234344072898674783
       type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
       data:
-        _size: {x: 1, y: 1, z: 1}
+        _size: {x: 1, y: 1.22, z: 1}
         _orientation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!4 &2001225513
 Transform:
