@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Unity.Plastic.Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -33,7 +34,7 @@ namespace PQuery.Editor
             DrawPopup(position, property, label);
             position.y += position.height;
             position.y += EditorGUIUtility.standardVerticalSpacing;
-            if (property.hasMultipleDifferentValues)
+            if (!IsEachReferenceTheSameType(property))
             {
                 return;
             }
@@ -45,7 +46,7 @@ namespace PQuery.Editor
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             float height = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-            if (property.hasMultipleDifferentValues)
+            if (!IsEachReferenceTheSameType(property))
             {
                 return height;
             }
@@ -132,6 +133,44 @@ namespace PQuery.Editor
                 serializedTarget.ApplyModifiedProperties();
             }
             property.serializedObject.Update();
+        }
+        private bool IsEachReferenceTheSameType(SerializedProperty property)
+        {
+            Object[] targets = property.serializedObject.targetObjects;
+            if (targets.Length <= 1)
+            {
+                return true;
+            }
+            if (property.managedReferenceValue == null)
+            {
+                return false;
+            }
+            for (int i = 0; i < targets.Length; i++)
+            {
+                SerializedObject serializedTarget = new(targets[i]);
+                SerializedProperty referenceProperty = serializedTarget.FindProperty(property.propertyPath);
+                if (!IsEachReferenceTheSameType(property, referenceProperty))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private bool IsEachReferenceTheSameType(SerializedProperty a, SerializedProperty b)
+        {
+            if (!IsManagedReference(a) || !IsManagedReference(b))
+            {
+                return false;
+            }
+            if (a.managedReferenceValue == null || b.managedReferenceValue == null)
+            {
+                return false;
+            }
+            return a.managedReferenceValue.GetType() == b.managedReferenceValue.GetType();
+        }
+        private bool IsManagedReference(SerializedProperty property)
+        {
+            return property.propertyType == SerializedPropertyType.ManagedReference;
         }
     }
 }
