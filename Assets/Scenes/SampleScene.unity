@@ -149,13 +149,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shape:
-    rid: 2234344072898674772
+    rid: 2234344072898674775
   references:
     version: 2
     RefIds:
-    - rid: 2234344072898674772
-      type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
-      data: 
+    - rid: 2234344072898674775
+      type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
+      data:
+        _size: {x: 2.86, y: 1, z: 1}
+        _orientation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!4 &27626474
 Transform:
   m_ObjectHideFlags: 0
@@ -459,13 +461,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shape:
-    rid: 2234344072898674771
+    rid: 2234344072898674774
   references:
     version: 2
     RefIds:
-    - rid: 2234344072898674771
-      type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
-      data: 
+    - rid: 2234344072898674774
+      type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
+      data:
+        _size: {x: 2.86, y: 1, z: 1}
+        _orientation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!4 &413213413
 Transform:
   m_ObjectHideFlags: 0
@@ -629,15 +633,15 @@ MonoBehaviour:
   _triggerInteraction: 0
   _cacheCapacity: 8
   _shape:
-    _type: 2
-    _shape:
-      rid: 6208947277557661758
+    rid: 2234344072898674780
   references:
     version: 2
     RefIds:
-    - rid: 6208947277557661758
-      type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
-      data: 
+    - rid: 2234344072898674780
+      type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
+      data:
+        _size: {x: 1, y: 1, z: 1}
+        _orientation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!4 &609441580
 Transform:
   m_ObjectHideFlags: 0
@@ -1177,15 +1181,15 @@ MonoBehaviour:
   _triggerInteraction: 0
   _cacheCapacity: 8
   _shape:
-    _type: 2
-    _shape:
-      rid: 2234344072898674758
+    rid: 2234344072898674781
   references:
     version: 2
     RefIds:
-    - rid: 2234344072898674758
-      type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
-      data: 
+    - rid: 2234344072898674781
+      type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
+      data:
+        _size: {x: 1, y: 1, z: 1}
+        _orientation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!4 &2001225513
 Transform:
   m_ObjectHideFlags: 0

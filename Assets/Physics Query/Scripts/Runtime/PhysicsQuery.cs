@@ -49,8 +49,8 @@ namespace PQuery
         }
         public PhysicsShape Shape
         {
-            get => _shape.Shape;
-            set => _shape.SetShape(value);
+            get => _shape;
+            set => _shape = value;
         }
 
         [SerializeField] 
@@ -67,8 +67,8 @@ namespace PQuery
         private QueryTriggerInteraction _triggerInteraction;
         [SerializeField] 
         private int _cacheCapacity;
-        [SerializeField, Space]
-        private PhysicsShapeTuple _shape = new();
+        [SerializeReference, Space]
+        private PhysicsShape _shape = new PhysicsShape_Ray();
         private readonly CachedArray<RaycastHit> _hitCache = new();
         private readonly CachedArray<Collider> _colliderCache = new();
 

@@ -130,7 +130,8 @@ namespace PQuery.Editor
         {
             ConstructorInfo constructor = _shapes[index].GetConstructor(_noArgs);
             Object[] targets = property.serializedObject.targetObjects;
-            // Note: you have to construct a new managed reference for EACH target during multi-editing or else Unity will print an error to the console
+            // Note: you have to construct a new managed reference for EACH target during multi-editing
+            // or else Unity will print an error to the console.
             for (int i = 0; i < targets.Length; i++)
             {
                 SerializedObject serializedTarget = new(targets[i]);
