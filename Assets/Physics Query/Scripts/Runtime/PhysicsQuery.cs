@@ -68,7 +68,7 @@ namespace PQuery
         [SerializeField] 
         private int _cacheCapacity;
         [SerializeField, Space]
-        private PhysicsShapePair _shape = new();
+        private PhysicsShapeTuple _shape = new();
         private readonly CachedArray<RaycastHit> _hitCache = new();
         private readonly CachedArray<Collider> _colliderCache = new();
 
@@ -178,11 +178,11 @@ namespace PQuery
         }
         public void DrawOverlapGizmo()
         {
-            _shape.Shape.DrawOverlapGizmo(this);
+            _shape.DrawOverlapGizmo(this);
         }
         public void DrawGizmo(Vector3 center)
         {
-            _shape.Shape.DrawGizmo(this, center);
+            _shape.DrawGizmo(this, center);
         }
     }
 }

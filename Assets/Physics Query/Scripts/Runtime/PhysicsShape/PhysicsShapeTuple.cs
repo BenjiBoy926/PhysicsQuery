@@ -7,12 +7,12 @@ namespace PQuery
 {
     // Put enum and class together so that it plays well with multi object editing in the inspector
     [Serializable]
-    public class PhysicsShapePair
+    public class PhysicsShapeTuple
     {
         public const string TypeFieldName = nameof(_type);
         public const string ShapeFieldName = nameof(_shape);
 
-        private static readonly List<PhysicsShapePair> _template = new()
+        private static readonly List<PhysicsShapeTuple> _template = new()
         {
             new(PhysicsShapeType.Box, new PhysicsShape_Box()),
             new(PhysicsShapeType.Capsule, new PhysicsShape_Capsule()),
@@ -28,8 +28,8 @@ namespace PQuery
         [SerializeReference]
         private PhysicsShape _shape = new PhysicsShape_Ray();
 
-        internal PhysicsShapePair() : this(PhysicsShapeType.Ray, new PhysicsShape_Ray()) { }
-        internal PhysicsShapePair(PhysicsShapeType type, PhysicsShape shape)
+        internal PhysicsShapeTuple() : this(PhysicsShapeType.Ray, new PhysicsShape_Ray()) { }
+        internal PhysicsShapeTuple(PhysicsShapeType type, PhysicsShape shape)
         {
             _type = type;
             _shape = shape;
@@ -37,7 +37,7 @@ namespace PQuery
 
         public static PhysicsShape CreateShape(PhysicsShapeType type)
         {
-            PhysicsShapePair templateItem = _template.Find(x => x._type == type) ??
+            PhysicsShapeTuple templateItem = _template.Find(x => x._type == type) ??
                  throw new NotImplementedException(MissingTemplateMessage(type.ToString()));
             
             Type definition = templateItem.ShapeClassType;
@@ -49,7 +49,7 @@ namespace PQuery
         public void SetShape(PhysicsShape shape)
         {
             Type intendedShapeType = shape.GetType();
-            PhysicsShapePair templateItem = _template.Find(x => x.ShapeClassType == intendedShapeType) ??
+            PhysicsShapeTuple templateItem = _template.Find(x => x.ShapeClassType == intendedShapeType) ??
                 throw new NotImplementedException(MissingTemplateMessage(intendedShapeType.Name));
 
             _type = templateItem._type;
@@ -57,7 +57,7 @@ namespace PQuery
         }
         private static string MissingTemplateMessage(string itemName)
         {
-            return $"{itemName} does not exist in the {nameof(PhysicsShapePair)} template";
+            return $"{itemName} does not exist in the {nameof(PhysicsShapeTuple)} template";
         }
 
         public bool Cast(PhysicsQuery query, Ray worldRay, out RaycastHit hit)
@@ -75,6 +75,15 @@ namespace PQuery
         public int OverlapNonAlloc(PhysicsQuery query, Vector3 worldOrigin, Collider[] cache)
         {
             return _shape.OverlapNonAlloc(query, worldOrigin, cache);
+        }
+
+        public void DrawOverlapGizmo(PhysicsQuery query)
+        {
+            _shape.DrawOverlapGizmo(query);
+        }
+        public void DrawGizmo(PhysicsQuery query, Vector3 center)
+        {
+            _shape.DrawGizmo(query, center);
         }
     }
 }

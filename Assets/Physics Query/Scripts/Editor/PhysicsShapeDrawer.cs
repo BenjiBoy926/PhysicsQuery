@@ -53,7 +53,10 @@ namespace PQuery.Editor
             for (int i = 0; i < subProperties.Count; i++)
             {
                 height += EditorGUI.GetPropertyHeight(subProperties[i]);
-                height += EditorGUIUtility.standardVerticalSpacing;
+                if (i < subProperties.Count - 1)
+                {
+                    height += EditorGUIUtility.standardVerticalSpacing;
+                }
             }
             return height;
         }
@@ -83,13 +86,19 @@ namespace PQuery.Editor
             List<SerializedProperty> subProperties = GetSubProperties(property);
             for (int i = 0; i < subProperties.Count; i++)
             {
-                SerializedProperty subProperty = subProperties[i];
-                position.height = EditorGUI.GetPropertyHeight(subProperty, true);
-                EditorGUI.PropertyField(position, subProperty, true);
-                position.y += position.height;
-                position.y += EditorGUIUtility.standardVerticalSpacing;
+                position = PropertyField(position, subProperties[i], null);
             }
         }
+        private static Rect PropertyField(Rect position, SerializedProperty property, GUIContent label)
+        {
+            label ??= new(property.displayName);
+            position.height = EditorGUI.GetPropertyHeight(property, true);
+            EditorGUI.PropertyField(position, property, label, true);
+            position.y += position.height;
+            position.y += EditorGUIUtility.standardVerticalSpacing;
+            return position;
+        }
+
         private List<SerializedProperty> GetSubProperties(SerializedProperty parent)
         {
             _subProperties.Clear();
@@ -121,8 +130,8 @@ namespace PQuery.Editor
                 SerializedProperty referenceProperty = serializedTarget.FindProperty(property.propertyPath);
                 referenceProperty.managedReferenceValue = constructor.Invoke(null);
                 serializedTarget.ApplyModifiedProperties();
-                serializedTarget.Update();
             }
+            property.serializedObject.Update();
         }
     }
 }
