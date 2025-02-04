@@ -149,14 +149,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shape:
-    rid: 2234344072898674767
+    rid: 2234344072898674772
   references:
     version: 2
     RefIds:
-    - rid: 2234344072898674767
-      type: {class: PhysicsShape_Sphere, ns: PQuery, asm: PhysicsQuery}
-      data:
-        _radius: 3.53
+    - rid: 2234344072898674772
+      type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
+      data: 
 --- !u!4 &27626474
 Transform:
   m_ObjectHideFlags: 0
@@ -460,14 +459,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shape:
-    rid: 2234344072898674766
+    rid: 2234344072898674771
   references:
     version: 2
     RefIds:
-    - rid: 2234344072898674766
-      type: {class: PhysicsShape_Sphere, ns: PQuery, asm: PhysicsQuery}
-      data:
-        _radius: 3.53
+    - rid: 2234344072898674771
+      type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
+      data: 
 --- !u!4 &413213413
 Transform:
   m_ObjectHideFlags: 0

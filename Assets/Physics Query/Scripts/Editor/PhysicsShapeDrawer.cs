@@ -30,18 +30,19 @@ namespace PQuery.Editor
             {
                 SetIndex(property, 0);
             }
-            position.height = EditorGUIUtility.singleLineHeight;
-            DrawPopup(position, property, label);
-            position.y += position.height;
-            position.y += EditorGUIUtility.standardVerticalSpacing;
-            if (!IsEachReferenceTheSameType(property))
+
+            bool oldShowMixedValue = EditorGUI.showMixedValue;
+            EditorGUI.showMixedValue = !IsEachReferenceTheSameType(property);
+
+            position = DrawPopup(position, property, label);
+            if (!EditorGUI.showMixedValue)
             {
-                return;
-            }
-            using (new EditorGUI.IndentLevelScope())
-            {
+                EditorGUI.indentLevel++;
                 DrawSubProperties(position, property);
+                EditorGUI.indentLevel--;
             }
+
+            EditorGUI.showMixedValue = oldShowMixedValue;
         }
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -73,14 +74,19 @@ namespace PQuery.Editor
             }
             return labels;
         }
-        private void DrawPopup(Rect position, SerializedProperty property, GUIContent label)
+        private Rect DrawPopup(Rect position, SerializedProperty property, GUIContent label)
         {
+            position.height = EditorGUIUtility.singleLineHeight;
+
             int oldIndex = GetIndex(property);
             int newIndex = EditorGUI.Popup(position, label, oldIndex, Labels);
             if (oldIndex != newIndex)
             {
                 SetIndex(property, newIndex);
             }
+
+            position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
+            return position;
         }
         private void DrawSubProperties(Rect position, SerializedProperty property)
         {
