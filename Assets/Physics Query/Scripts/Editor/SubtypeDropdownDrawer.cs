@@ -1,31 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Unity.Plastic.Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace PQuery.Editor
 {
-    [CustomPropertyDrawer(typeof(PhysicsShape))]
-    public class PhysicsShapeDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(SubtypeDropdownAttribute))]
+    public class SubtypeDropdownDrawer : PropertyDrawer
     {
-        private static GUIContent[] Labels => _labels ??= CreateShapeLabels();
+        private GUIContent[] Labels => _labels ??= CreateShapeLabels();
 
-        private readonly static List<Type> _shapes = new()
-        {
-            typeof(PhysicsShape_Box), 
-            typeof(PhysicsShape_Capsule), 
-            typeof(PhysicsShape_Ray), 
-            typeof(PhysicsShape_Sphere)
-        };
-        private static GUIContent[] _labels;
         private static readonly Type[] _noArgs = new Type[0];
         private static readonly List<SerializedProperty> _subProperties = new(3);
+        private readonly List<Type> _subtypes = new();
+        private GUIContent[] _labels;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            ReadSubtypes();
             if (property.managedReferenceValue == null)
             {
                 SetIndex(property, 0);
@@ -63,14 +57,27 @@ namespace PQuery.Editor
             return height;
         }
 
-        private static GUIContent[] CreateShapeLabels()
+        private void ReadSubtypes()
         {
-            GUIContent[] labels = new GUIContent[_shapes.Count];
+            _subtypes.Clear();
+            Type baseType = fieldInfo.FieldType;
+            Type[] allTypes = baseType.Assembly.GetTypes();
+            for (int i = 0; i < allTypes.Length; i++)
+            {
+                if (allTypes[i].IsSubclassOf(baseType))
+                {
+                    _subtypes.Add(allTypes[i]);
+                }
+            }
+        }
+        private GUIContent[] CreateShapeLabels()
+        {
+            GUIContent[] labels = new GUIContent[_subtypes.Count];
             string prefix = $"{nameof(PhysicsShape)}_";
-            int prefixLength = prefix.Length; 
+            int prefixLength = prefix.Length;
             for (int i = 0; i < labels.Length; i++)
             {
-                labels[i] = new(_shapes[i].Name[prefixLength..]);
+                labels[i] = new(_subtypes[i].Name[prefixLength..]);
             }
             return labels;
         }
@@ -78,11 +85,11 @@ namespace PQuery.Editor
         {
             position.height = EditorGUIUtility.singleLineHeight;
 
-            int oldIndex = GetIndex(property);
-            int newIndex = EditorGUI.Popup(position, label, oldIndex, Labels);
-            if (oldIndex != newIndex)
+            EditorGUI.BeginChangeCheck();
+            int index = EditorGUI.Popup(position, label, GetIndex(property), Labels);
+            if (EditorGUI.EndChangeCheck())
             {
-                SetIndex(property, newIndex);
+                SetIndex(property, index);
             }
 
             position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
@@ -124,11 +131,11 @@ namespace PQuery.Editor
         }
         private int GetIndex(SerializedProperty property)
         {
-            return _shapes.IndexOf(property.managedReferenceValue.GetType());
+            return _subtypes.IndexOf(property.managedReferenceValue.GetType());
         }
         private void SetIndex(SerializedProperty property, int index)
         {
-            ConstructorInfo constructor = _shapes[index].GetConstructor(_noArgs);
+            ConstructorInfo constructor = _subtypes[index].GetConstructor(_noArgs);
             Object[] targets = property.serializedObject.targetObjects;
             // Note: you have to construct a new managed reference for EACH target during multi-editing
             // or else Unity will print an error to the console.

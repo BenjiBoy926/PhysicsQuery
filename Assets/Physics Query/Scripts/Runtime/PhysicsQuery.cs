@@ -60,7 +60,7 @@ namespace PQuery
         private QueryTriggerInteraction _triggerInteraction;
         [SerializeField] 
         private int _cacheCapacity;
-        [SerializeReference, Space]
+        [SerializeReference, SubtypeDropdown]
         private PhysicsShape _shape = new PhysicsShape_Ray();
         private readonly CachedArray<RaycastHit> _hitCache = new();
         private readonly CachedArray<Collider> _colliderCache = new();

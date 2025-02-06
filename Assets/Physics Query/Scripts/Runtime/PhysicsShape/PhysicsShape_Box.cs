@@ -7,7 +7,6 @@ namespace PQuery
     public class PhysicsShape_Box : PhysicsShape
     {
         public Vector3 Size => _size;
-        private Vector3 Extents => _size / 2;
 
         [SerializeField]
         private Vector3 _size = Vector3.one;
@@ -25,23 +24,27 @@ namespace PQuery
 
         public override bool Cast(PhysicsQuery query, RayDistance worldRay, out RaycastHit hit)
         {
+            Vector3 extents = GetWorldExtents(query);
             Quaternion worldOrientation = GetWorldOrientation(query);
-            return Physics.BoxCast(worldRay.Start, Extents, worldRay.Direction, out hit, worldOrientation, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
+            return Physics.BoxCast(worldRay.Start, extents, worldRay.Direction, out hit, worldOrientation, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
         }
         public override int CastNonAlloc(PhysicsQuery query, RayDistance worldRay, RaycastHit[] cache)
         {
+            Vector3 extents = GetWorldExtents(query);
             Quaternion worldOrientation = GetWorldOrientation(query);
-            return Physics.BoxCastNonAlloc(worldRay.Start, Extents, worldRay.Direction, cache, worldOrientation, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
+            return Physics.BoxCastNonAlloc(worldRay.Start, extents, worldRay.Direction, cache, worldOrientation, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
         }
         public override bool Check(PhysicsQuery query, Vector3 worldOrigin)
         {
+            Vector3 extents = GetWorldExtents(query);
             Quaternion worldOrientation = GetWorldOrientation(query);
-            return Physics.CheckBox(worldOrigin, Extents, worldOrientation, query.LayerMask, query.TriggerInteraction);
+            return Physics.CheckBox(worldOrigin, extents, worldOrientation, query.LayerMask, query.TriggerInteraction);
         }
         public override int OverlapNonAlloc(PhysicsQuery query, Vector3 worldOrigin, Collider[] cache)
         {
+            Vector3 extents = GetWorldExtents(query);
             Quaternion worldOrientation = GetWorldOrientation(query);
-            return Physics.OverlapBoxNonAlloc(worldOrigin, Extents, cache, worldOrientation, query.LayerMask, query.TriggerInteraction);
+            return Physics.OverlapBoxNonAlloc(worldOrigin, extents, cache, worldOrientation, query.LayerMask, query.TriggerInteraction);
         }
         public override void DrawOverlapGizmo(PhysicsQuery query)
         {
@@ -58,6 +61,19 @@ namespace PQuery
             Gizmos.matrix = Matrix4x4.identity;
         }
 
+        public Vector3 GetWorldExtents(PhysicsQuery query)
+        {
+            return GetWorldSize(query) * 0.5f;
+        }
+        public Vector3 GetWorldSize(PhysicsQuery query)
+        {
+            if (query.Space == Space.World)
+            {
+                return _size;
+            }
+            Vector3 lossyScale = query.transform.lossyScale;
+            return new(_size.x * lossyScale.x, _size.y * lossyScale.y, _size.z * lossyScale.z);
+        }
         public Quaternion GetWorldOrientation(PhysicsQuery query)
         {
             return query.Space == Space.Self ? query.transform.rotation * _orientation : _orientation;
