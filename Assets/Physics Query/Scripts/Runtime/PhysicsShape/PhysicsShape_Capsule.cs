@@ -37,9 +37,6 @@ namespace PQuery
             }
         }
 
-        private float Extent => _height / 2;
-        public float Radius => _radius;
-
         [SerializeReference, SubtypeDropdown]
         private Axis _axis = new Axis_Y();
         [SerializeField]
@@ -60,22 +57,49 @@ namespace PQuery
         public override bool Cast(PhysicsQuery query, RayDistance worldRay, out RaycastHit hit)
         {
             Parameters parameters = GetParameters(query, worldRay.Start);
-            return Physics.CapsuleCast(parameters.Cap1, parameters.Cap2, parameters.Radius, worldRay.Direction, out hit, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
+            return Physics.CapsuleCast(
+                parameters.Cap1,
+                parameters.Cap2,
+                parameters.Radius,
+                worldRay.Direction,
+                out hit,
+                worldRay.Distance,
+                query.LayerMask,
+                query.TriggerInteraction);
         }
         public override int CastNonAlloc(PhysicsQuery query, RayDistance worldRay, RaycastHit[] cache)
         {
             Parameters parameters = GetParameters(query, worldRay.Start);
-            return Physics.CapsuleCastNonAlloc(parameters.Cap1, parameters.Cap2, parameters.Radius, worldRay.Direction, cache, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
+            return Physics.CapsuleCastNonAlloc(
+                parameters.Cap1,
+                parameters.Cap2,
+                parameters.Radius,
+                worldRay.Direction,
+                cache,
+                worldRay.Distance,
+                query.LayerMask,
+                query.TriggerInteraction);
         }
         public override bool Check(PhysicsQuery query, Vector3 worldOrigin)
         {
             Parameters parameters = GetParameters(query, worldOrigin);
-            return Physics.CheckCapsule(parameters.Cap1, parameters.Cap2, parameters.Radius, query.LayerMask, query.TriggerInteraction);
+            return Physics.CheckCapsule(
+                parameters.Cap1,
+                parameters.Cap2,
+                parameters.Radius,
+                query.LayerMask,
+                query.TriggerInteraction);
         }
         public override int OverlapNonAlloc(PhysicsQuery query, Vector3 worldOrigin, Collider[] cache)
         {
             Parameters parameters = GetParameters(query, worldOrigin);
-            return Physics.OverlapCapsuleNonAlloc(parameters.Cap1, parameters.Cap2, parameters.Radius, cache, query.LayerMask, query.TriggerInteraction);
+            return Physics.OverlapCapsuleNonAlloc(
+                parameters.Cap1,
+                parameters.Cap2,
+                parameters.Radius,
+                cache,
+                query.LayerMask,
+                query.TriggerInteraction);
         }
         public override void DrawOverlapGizmo(PhysicsQuery query)
         {

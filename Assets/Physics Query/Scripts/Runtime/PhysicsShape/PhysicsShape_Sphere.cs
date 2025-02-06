@@ -21,19 +21,40 @@ namespace PQuery
 
         public override bool Cast(PhysicsQuery query, RayDistance worldRay, out RaycastHit hit)
         {
-            return Physics.SphereCast(worldRay.Ray, _radius, out hit, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
+            return Physics.SphereCast(
+                worldRay.Ray,
+                GetWorldRadius(query),
+                out hit,
+                worldRay.Distance,
+                query.LayerMask,
+                query.TriggerInteraction);
         }
         public override int CastNonAlloc(PhysicsQuery query, RayDistance worldRay, RaycastHit[] cache)
         {
-            return Physics.SphereCastNonAlloc(worldRay.Ray, _radius, cache, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
+            return Physics.SphereCastNonAlloc(
+                worldRay.Ray,
+                GetWorldRadius(query),
+                cache,
+                worldRay.Distance,
+                query.LayerMask,
+                query.TriggerInteraction);
         }
         public override bool Check(PhysicsQuery query, Vector3 worldOrigin)
         {
-            return Physics.CheckSphere(worldOrigin, _radius, query.LayerMask, query.TriggerInteraction);
+            return Physics.CheckSphere(
+                worldOrigin,
+                GetWorldRadius(query),
+                query.LayerMask,
+                query.TriggerInteraction);
         }
         public override int OverlapNonAlloc(PhysicsQuery query, Vector3 worldOrigin, Collider[] cache)
         {
-            return Physics.OverlapSphereNonAlloc(worldOrigin, _radius, cache, query.LayerMask, query.TriggerInteraction);
+            return Physics.OverlapSphereNonAlloc(
+                worldOrigin,
+                GetWorldRadius(query),
+                cache,
+                query.LayerMask,
+                query.TriggerInteraction);
         }
         public override void DrawOverlapGizmo(PhysicsQuery query)
         {
@@ -41,7 +62,18 @@ namespace PQuery
         }
         public override void DrawGizmo(PhysicsQuery query, Vector3 center)
         {
-            Gizmos.DrawWireSphere(center, _radius);
+            Gizmos.DrawWireSphere(center, GetWorldRadius(query));
+        }
+
+        public float GetWorldRadius(PhysicsQuery query)
+        {
+            if (query.Space == Space.World)
+            {
+                return _radius;
+            }
+            Vector3 lossyScale = query.transform.lossyScale;
+            float max = Mathf.Max(lossyScale.x, lossyScale.y, lossyScale.z);
+            return _radius * max;
         }
     }
 }

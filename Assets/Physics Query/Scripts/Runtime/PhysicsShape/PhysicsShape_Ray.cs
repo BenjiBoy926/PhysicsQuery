@@ -12,15 +12,29 @@ namespace PQuery
 
         public override bool Cast(PhysicsQuery query, RayDistance worldRay, out RaycastHit hit)
         {
-            return Physics.Raycast(worldRay.Ray, out hit, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
+            return Physics.Raycast(
+                worldRay.Ray,
+                out hit,
+                worldRay.Distance,
+                query.LayerMask,
+                query.TriggerInteraction);
         }
         public override int CastNonAlloc(PhysicsQuery query, RayDistance worldRay, RaycastHit[] cache)
         {
-            return Physics.RaycastNonAlloc(worldRay.Ray, cache, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
+            return Physics.RaycastNonAlloc(
+                worldRay.Ray,
+                cache,
+                worldRay.Distance,
+                query.LayerMask,
+                query.TriggerInteraction);
         }
         public override bool Check(PhysicsQuery query, Vector3 worldOrigin)
         {
-            return Physics.Linecast(worldOrigin, query.GetWorldEnd(), query.LayerMask, query.TriggerInteraction);
+            return Physics.Linecast(
+                worldOrigin,
+                query.GetWorldEnd(),
+                query.LayerMask,
+                query.TriggerInteraction);
         }
         public override int OverlapNonAlloc(PhysicsQuery query, Vector3 worldOrigin, Collider[] cache)
         {
