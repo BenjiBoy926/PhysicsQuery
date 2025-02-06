@@ -632,14 +632,20 @@ MonoBehaviour:
   _triggerInteraction: 0
   _cacheCapacity: 8
   _shape:
-    rid: 2234344121076547669
+    rid: 2234344121076547685
   references:
     version: 2
     RefIds:
-    - rid: 2234344121076547669
-      type: {class: PhysicsShape_Sphere, ns: PQuery, asm: PhysicsQuery}
+    - rid: 2234344121076547685
+      type: {class: PhysicsShape_Capsule, ns: PQuery, asm: PhysicsQuery}
       data:
-        _radius: 0.5
+        _axis:
+          rid: 2234344121076547692
+        _height: 1
+        _radius: 0.3
+    - rid: 2234344121076547692
+      type: {class: Axis_X, ns: PQuery, asm: PhysicsQuery}
+      data: 
 --- !u!4 &609441580
 Transform:
   m_ObjectHideFlags: 0
@@ -649,7 +655,7 @@ Transform:
   m_GameObject: {fileID: 609441578}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.15, z: -0.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1178,14 +1184,13 @@ MonoBehaviour:
   _triggerInteraction: 0
   _cacheCapacity: 8
   _shape:
-    rid: 2234344121076547682
+    rid: 2234344121076547700
   references:
     version: 2
     RefIds:
-    - rid: 2234344121076547682
-      type: {class: PhysicsShape_Sphere, ns: PQuery, asm: PhysicsQuery}
-      data:
-        _radius: 0.5
+    - rid: 2234344121076547700
+      type: {class: PhysicsShape_Ray, ns: PQuery, asm: PhysicsQuery}
+      data: 
 --- !u!4 &2001225513
 Transform:
   m_ObjectHideFlags: 0
@@ -1195,8 +1200,8 @@ Transform:
   m_GameObject: {fileID: 2001225511}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.52, z: 0}
-  m_LocalScale: {x: 1.563, y: 2.1708, z: 3.167}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

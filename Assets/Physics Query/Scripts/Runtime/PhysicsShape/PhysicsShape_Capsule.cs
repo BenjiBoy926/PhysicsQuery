@@ -17,21 +17,27 @@ namespace PQuery
             public Parameters(PhysicsQuery query, Vector3 center, Axis axis, float height, float radius)
             {
                 float extent = height * 0.5f;
-                Vector3 capOffset = axis.Vector * extent;
-                if (query.Space == Space.Self)
+                Vector3 capOffset;
+                if (query.Space == Space.World)
                 {
-                    capOffset = query.transform.TransformPoint(capOffset);
-                    radius = ScaleRadius(query.transform, axis, radius);
+                    capOffset = axis.Vector * extent;
+                }
+                else
+                {
+                    Vector3 lossyScale = query.transform.lossyScale;
+                    Vector3 direction = query.transform.TransformDirection(axis.Vector);
+                    float distance = extent * lossyScale[axis.Dimension];
+                    capOffset = direction * distance;
+                    radius = ScaleRadius(lossyScale, axis, radius);
                 }
                 Cap1 = center + capOffset;
                 Cap2 = center - capOffset;
                 Radius = radius;
             }
-            private static float ScaleRadius(Transform transform, Axis axis, float radius)
+            private static float ScaleRadius(Vector3 lossyScale, Axis heightAxis, float radius)
             {
-                Vector3 lossyScale = transform.lossyScale;
-                float scale1 = lossyScale[axis.CrossDimension1];
-                float scale2 = lossyScale[axis.CrossDimension2];
+                float scale1 = lossyScale[heightAxis.CrossDimension1];
+                float scale2 = lossyScale[heightAxis.CrossDimension2];
                 float largetScale = Mathf.Max(scale1, scale2);
                 return radius * largetScale;
             }
