@@ -20,7 +20,7 @@ namespace PQuery
         private const string MenuName = PackageFolderName + "/" + Name;
 
         public static Space DefaultQuerySpace => GetInstance()._defaultQuerySpace;
-        public static float DefaultMaxDistance => GetInstance()._defaultMaxDistance;
+        public static Vector3 DefaultEnd => GetInstance()._defaultEnd;
         public static LayerMask DefaultLayerMask => GetInstance()._defaultLayerMask;
         public static QueryTriggerInteraction DefaultTriggerInteraction => GetInstance()._defaultTriggerInteraction;
         public static int DefaultCacheCapacity => GetInstance()._defaultCacheCapacity;
@@ -28,7 +28,7 @@ namespace PQuery
         [SerializeField]
         private Space _defaultQuerySpace;
         [SerializeField]
-        private float _defaultMaxDistance;
+        private Vector3 _defaultEnd;
         [SerializeField]
         private LayerMask _defaultLayerMask;
         [SerializeField]
@@ -80,7 +80,7 @@ namespace PQuery
         public void Reset()
         {
             _defaultQuerySpace = Space.Self;
-            _defaultMaxDistance = 10;
+            _defaultEnd = 10 * Vector3.forward;
             _defaultLayerMask = Physics.DefaultRaycastLayers;
             _defaultTriggerInteraction = QueryTriggerInteraction.UseGlobal;
             _defaultCacheCapacity = 8;

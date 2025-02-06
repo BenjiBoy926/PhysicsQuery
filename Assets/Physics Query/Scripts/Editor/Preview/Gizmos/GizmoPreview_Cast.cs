@@ -7,7 +7,7 @@ namespace PQuery.Editor
         public override void DrawGizmos(PhysicsQuery query)
         {
             bool result = query.Cast(out RaycastHit hit);
-            Vector3 start = GetStartPosition(query);
+            Vector3 start = query.GetWorldStart();
             if (result)
             {
                 DrawHit(query, hit);
@@ -19,7 +19,7 @@ namespace PQuery.Editor
             else
             {
                 Gizmos.color = Preferences.MissColor.Value;
-                Vector3 end = GetEndPosition(query);
+                Vector3 end = query.GetWorldEnd();
                 query.DrawGizmo(start);
                 query.DrawGizmo(end);
                 Gizmos.DrawLine(start, end);

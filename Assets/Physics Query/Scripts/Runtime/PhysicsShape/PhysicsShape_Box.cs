@@ -23,15 +23,15 @@ namespace PQuery
             _orientation = orientation;
         }
 
-        public override bool Cast(PhysicsQuery query, Ray worldRay, out RaycastHit hit)
+        public override bool Cast(PhysicsQuery query, RayDistance worldRay, out RaycastHit hit)
         {
             Quaternion worldOrientation = GetWorldOrientation(query);
-            return Physics.BoxCast(worldRay.origin, Extents, worldRay.direction, out hit, worldOrientation, query.MaxDistance, query.LayerMask, query.TriggerInteraction);
+            return Physics.BoxCast(worldRay.Start, Extents, worldRay.Direction, out hit, worldOrientation, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
         }
-        public override int CastNonAlloc(PhysicsQuery query, Ray worldRay, RaycastHit[] cache)
+        public override int CastNonAlloc(PhysicsQuery query, RayDistance worldRay, RaycastHit[] cache)
         {
             Quaternion worldOrientation = GetWorldOrientation(query);
-            return Physics.BoxCastNonAlloc(worldRay.origin, Extents, worldRay.direction, cache, worldOrientation, query.MaxDistance, query.LayerMask, query.TriggerInteraction);
+            return Physics.BoxCastNonAlloc(worldRay.Start, Extents, worldRay.Direction, cache, worldOrientation, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
         }
         public override bool Check(PhysicsQuery query, Vector3 worldOrigin)
         {
@@ -45,7 +45,7 @@ namespace PQuery
         }
         public override void DrawOverlapGizmo(PhysicsQuery query)
         {
-            DrawGizmo(query, query.GetWorldOrigin());
+            DrawGizmo(query, query.GetWorldStart());
         }
         public override void DrawGizmo(PhysicsQuery query, Vector3 center)
         {

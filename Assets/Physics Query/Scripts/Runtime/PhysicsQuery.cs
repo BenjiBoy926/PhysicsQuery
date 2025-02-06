@@ -17,20 +17,15 @@ namespace PQuery
             get => _space;
             set => _space = value;
         }
-        public Vector3 Origin
+        public Vector3 Start
         {
-            get => _origin;
-            set => _origin = value;
+            get => _start;
+            set => _start = value;
         }
-        public Vector3 Direction
+        public Vector3 End
         {
-            get => _direction;
-            set => _direction = value;
-        }
-        public float MaxDistance
-        {
-            get => _maxDistance;
-            set => _maxDistance = Mathf.Max(value, MinNonZeroFloat);
+            get => _end;
+            set => _end = value;
         }
         public LayerMask LayerMask
         {
@@ -56,11 +51,9 @@ namespace PQuery
         [SerializeField] 
         private Space _space;
         [SerializeField] 
-        private Vector3 _origin = Vector3.zero;
+        private Vector3 _start = Vector3.zero;
         [SerializeField] 
-        private Vector3 _direction = Vector3.forward;
-        [SerializeField] 
-        private float _maxDistance;
+        private Vector3 _end;
         [SerializeField] 
         private LayerMask _layerMask;
         [SerializeField] 
@@ -84,7 +77,7 @@ namespace PQuery
         public bool Cast(out RaycastHit hit)
         {
             _castMarker.Begin();
-            Ray worldRay = GetWorldRay();
+            RayDistance worldRay = GetWorldRay();
             bool didHit = _shape.Cast(this, worldRay, out hit);
             _castMarker.End();
             return didHit;
@@ -96,7 +89,7 @@ namespace PQuery
                 throw new ArgumentNullException(nameof(sort));
             }
             _castNonAllocMarker.Begin();
-            Ray worldRay = GetWorldRay();
+            RayDistance worldRay = GetWorldRay();
             RaycastHit[] hits = GetHitCache();
             int count = _shape.CastNonAlloc(this, worldRay, hits);
             sort.Sort(hits, count);
@@ -106,32 +99,32 @@ namespace PQuery
         public bool Check()
         {
             _checkMarker.Begin();
-            Vector3 origin = GetWorldOrigin();
-            bool check = _shape.Check(this, origin);
+            Vector3 center = GetWorldStart();
+            bool check = _shape.Check(this, center);
             _checkMarker.End();
             return check;
         }
         public Result<Collider> OverlapNonAlloc()
         {
             _overlapNonAllocMarker.Begin();
-            Vector3 origin = GetWorldOrigin();
+            Vector3 center = GetWorldStart();
             Collider[] overlaps = GetColliderCache();
-            int count = _shape.OverlapNonAlloc(this, origin, overlaps);
+            int count = _shape.OverlapNonAlloc(this, center, overlaps);
             _overlapNonAllocMarker.End();
             return new(overlaps, count);
         }
 
-        public Ray GetWorldRay()
+        public RayDistance GetWorldRay()
         {
-            return new(GetWorldOrigin(), GetWorldDirection());
+            return new(GetWorldStart(), GetWorldEnd());
         }
-        public Vector3 GetWorldOrigin()
+        public Vector3 GetWorldStart()
         {
-            return _space == Space.Self ? transform.TransformPoint(_origin) : _origin;
+            return _space == Space.Self ? transform.TransformPoint(_start) : _start;
         }
-        public Vector3 GetWorldDirection()
+        public Vector3 GetWorldEnd()
         {
-            return _space == Space.Self ? transform.TransformDirection(_direction) : _direction;
+            return _space == Space.Self ? transform.TransformPoint(_end) : _end;
         }
         public void RefreshCache()
         {
@@ -158,14 +151,13 @@ namespace PQuery
         protected virtual void Reset()
         {
             _space = Settings.DefaultQuerySpace;
-            _maxDistance = Settings.DefaultMaxDistance;
+            _end = Settings.DefaultEnd;
             _layerMask = Settings.DefaultLayerMask;
             _triggerInteraction = Settings.DefaultTriggerInteraction;
             _cacheCapacity = Settings.DefaultCacheCapacity;
         }
         protected virtual void OnValidate()
         {
-            _maxDistance = Mathf.Max(0, _maxDistance);
             _cacheCapacity = Mathf.Max(0, _cacheCapacity);
         }
         private void OnDrawGizmos()

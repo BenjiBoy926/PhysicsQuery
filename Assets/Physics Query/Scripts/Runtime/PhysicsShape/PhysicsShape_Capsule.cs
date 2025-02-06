@@ -26,15 +26,15 @@ namespace PQuery
             _radius = radius;
         }
 
-        public override bool Cast(PhysicsQuery query, Ray worldRay, out RaycastHit hit)
+        public override bool Cast(PhysicsQuery query, RayDistance worldRay, out RaycastHit hit)
         {
-            var (cap1, cap2) = GetCapPositions(query, worldRay.origin);
-            return Physics.CapsuleCast(cap1, cap2, _radius, worldRay.direction, out hit, query.MaxDistance, query.LayerMask, query.TriggerInteraction);
+            var (cap1, cap2) = GetCapPositions(query, worldRay.Start);
+            return Physics.CapsuleCast(cap1, cap2, _radius, worldRay.Direction, out hit, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
         }
-        public override int CastNonAlloc(PhysicsQuery query, Ray worldRay, RaycastHit[] cache)
+        public override int CastNonAlloc(PhysicsQuery query, RayDistance worldRay, RaycastHit[] cache)
         {
-            var (cap1, cap2) = GetCapPositions(query, worldRay.origin);
-            return Physics.CapsuleCastNonAlloc(cap1, cap2, _radius, worldRay.direction, cache, query.MaxDistance, query.LayerMask, query.TriggerInteraction);
+            var (cap1, cap2) = GetCapPositions(query, worldRay.Start);
+            return Physics.CapsuleCastNonAlloc(cap1, cap2, _radius, worldRay.Direction, cache, worldRay.Distance, query.LayerMask, query.TriggerInteraction);
         }
         public override bool Check(PhysicsQuery query, Vector3 worldOrigin)
         {
@@ -48,7 +48,7 @@ namespace PQuery
         }
         public override void DrawOverlapGizmo(PhysicsQuery query)
         {
-            DrawGizmo(query, query.GetWorldOrigin());
+            DrawGizmo(query, query.GetWorldStart());
         }
         public override void DrawGizmo(PhysicsQuery query, Vector3 center)
         {

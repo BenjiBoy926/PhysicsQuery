@@ -9,7 +9,7 @@ namespace PQuery.Editor
             var result = query.CastNonAlloc(ResultSort.Distance);
 
             Gizmos.color = Preferences.GetColorForResult(result);
-            query.DrawGizmo(GetStartPosition(query));
+            query.DrawGizmo(query.GetWorldStart());
 
             // Note: we draw each hit and the collider first before the shapes so that the shapes show up on top
             DrawEachHit(query, result);
@@ -17,7 +17,7 @@ namespace PQuery.Editor
             DrawShapeAtEachHit(query, result); 
 
             Gizmos.color = Preferences.MissColor.Value;
-            query.DrawGizmo(GetEndPosition(query));
+            query.DrawGizmo(query.GetWorldEnd());
         }
         private void DrawShapeAtEachHit(PhysicsQuery query, Result<RaycastHit> result)
         {
@@ -37,8 +37,8 @@ namespace PQuery.Editor
         }
         private void DrawResultLine(PhysicsQuery query, Result<RaycastHit> result)
         {
-            Vector3 start = GetStartPosition(query);
-            Vector3 end = GetEndPosition(query);
+            Vector3 start = query.GetWorldStart();
+            Vector3 end = query.GetWorldEnd();
 
             if (result.IsFull)
             {
@@ -52,7 +52,7 @@ namespace PQuery.Editor
             }
             else
             {
-                Vector3 midpoint = GetWorldRay(query).GetPoint(result.Last.distance);
+                Vector3 midpoint = query.GetWorldRay().GetPoint(result.Last.distance);
                 Gizmos.color = Preferences.HitColor.Value;
                 Gizmos.DrawLine(start, midpoint);
                 Gizmos.color = Preferences.MissColor.Value;

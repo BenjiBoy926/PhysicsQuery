@@ -4,8 +4,6 @@ namespace PQuery.Editor
 {
     public abstract class GizmoPreview
     {
-        protected const float MaxDistance = 1000;
-
         protected void DrawShapeAtHit(PhysicsQuery query, RaycastHit hit)
         {
             Vector3 center = GetShapeCenter(query, hit);
@@ -24,25 +22,9 @@ namespace PQuery.Editor
             Gizmos.DrawSphere(normal.origin, Preferences.HitSphereRadius.Value);
         }
 
-        protected Vector3 GetStartPosition(PhysicsQuery query)
-        {
-            return GetWorldRay(query).origin;
-        }
-        protected Vector3 GetEndPosition(PhysicsQuery query)
-        {
-            return GetWorldRay(query).GetPoint(GetMaxDistance(query));
-        }
-        private float GetMaxDistance(PhysicsQuery query)
-        {
-            return Mathf.Min(MaxDistance, query.MaxDistance);
-        }
         protected Vector3 GetShapeCenter(PhysicsQuery query, RaycastHit hit)
         {
-            return GetWorldRay(query).GetPoint(hit.distance);
-        }
-        protected Ray GetWorldRay(PhysicsQuery query)
-        {
-            return query.GetWorldRay();
+            return query.GetWorldRay().GetPoint(hit.distance);
         }
 
         public abstract void DrawGizmos(PhysicsQuery query);
