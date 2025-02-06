@@ -6,8 +6,6 @@ namespace PQuery
     [Serializable]
     public class PhysicsShape_Box : PhysicsShape
     {
-        public Vector3 Size => _size;
-
         [SerializeField]
         private Vector3 _size = Vector3.one;
         [SerializeField]
@@ -57,7 +55,7 @@ namespace PQuery
             center = rotationMatrix.inverse.MultiplyVector(center);
 
             Gizmos.matrix = rotationMatrix;
-            Gizmos.DrawWireCube(center, _size);
+            Gizmos.DrawWireCube(center, GetWorldSize(query));
             Gizmos.matrix = Matrix4x4.identity;
         }
 

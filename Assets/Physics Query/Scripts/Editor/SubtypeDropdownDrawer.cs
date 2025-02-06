@@ -14,13 +14,12 @@ namespace PQuery.Editor
         private GUIContent[] Labels => _labels ??= CreateShapeLabels();
 
         private static readonly Type[] _noArgs = new Type[0];
-        private static readonly List<SerializedProperty> _subProperties = new(3);
+        private readonly List<SerializedProperty> _subProperties = new(3);
         private List<Type> _subtypes;
         private GUIContent[] _labels;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            CreateSubtypeList();
             if (property.managedReferenceValue == null)
             {
                 SetIndex(property, 0);
@@ -75,11 +74,12 @@ namespace PQuery.Editor
         private GUIContent[] CreateShapeLabels()
         {
             GUIContent[] labels = new GUIContent[Subtypes.Count];
-            string prefix = $"{nameof(PhysicsShape)}_";
-            int prefixLength = prefix.Length;
+            string prefix = $"{fieldInfo.FieldType.Name}_";
             for (int i = 0; i < labels.Length; i++)
             {
-                labels[i] = new(Subtypes[i].Name[prefixLength..]);
+                string subtypeName = Subtypes[i].Name;
+                string labelText = subtypeName.Replace(prefix, string.Empty);
+                labels[i] = new(labelText);
             }
             return labels;
         }
