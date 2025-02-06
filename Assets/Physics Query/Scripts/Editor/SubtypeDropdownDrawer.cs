@@ -10,16 +10,17 @@ namespace PQuery.Editor
     [CustomPropertyDrawer(typeof(SubtypeDropdownAttribute))]
     public class SubtypeDropdownDrawer : PropertyDrawer
     {
+        private List<Type> Subtypes => _subtypes ??= CreateSubtypeList();
         private GUIContent[] Labels => _labels ??= CreateShapeLabels();
 
         private static readonly Type[] _noArgs = new Type[0];
         private static readonly List<SerializedProperty> _subProperties = new(3);
-        private readonly List<Type> _subtypes = new();
+        private List<Type> _subtypes;
         private GUIContent[] _labels;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            ReadSubtypes();
+            CreateSubtypeList();
             if (property.managedReferenceValue == null)
             {
                 SetIndex(property, 0);
@@ -57,27 +58,28 @@ namespace PQuery.Editor
             return height;
         }
 
-        private void ReadSubtypes()
+        private List<Type> CreateSubtypeList()
         {
-            _subtypes.Clear();
+            List<Type> subtypes = new();
             Type baseType = fieldInfo.FieldType;
             Type[] allTypes = baseType.Assembly.GetTypes();
             for (int i = 0; i < allTypes.Length; i++)
             {
                 if (allTypes[i].IsSubclassOf(baseType))
                 {
-                    _subtypes.Add(allTypes[i]);
+                    subtypes.Add(allTypes[i]);
                 }
             }
+            return subtypes;
         }
         private GUIContent[] CreateShapeLabels()
         {
-            GUIContent[] labels = new GUIContent[_subtypes.Count];
+            GUIContent[] labels = new GUIContent[Subtypes.Count];
             string prefix = $"{nameof(PhysicsShape)}_";
             int prefixLength = prefix.Length;
             for (int i = 0; i < labels.Length; i++)
             {
-                labels[i] = new(_subtypes[i].Name[prefixLength..]);
+                labels[i] = new(Subtypes[i].Name[prefixLength..]);
             }
             return labels;
         }
@@ -131,11 +133,11 @@ namespace PQuery.Editor
         }
         private int GetIndex(SerializedProperty property)
         {
-            return _subtypes.IndexOf(property.managedReferenceValue.GetType());
+            return Subtypes.IndexOf(property.managedReferenceValue.GetType());
         }
         private void SetIndex(SerializedProperty property, int index)
         {
-            ConstructorInfo constructor = _subtypes[index].GetConstructor(_noArgs);
+            ConstructorInfo constructor = Subtypes[index].GetConstructor(_noArgs);
             Object[] targets = property.serializedObject.targetObjects;
             // Note: you have to construct a new managed reference for EACH target during multi-editing
             // or else Unity will print an error to the console.

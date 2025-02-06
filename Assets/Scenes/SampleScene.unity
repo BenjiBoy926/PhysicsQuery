@@ -632,15 +632,14 @@ MonoBehaviour:
   _triggerInteraction: 0
   _cacheCapacity: 8
   _shape:
-    rid: 2234344121076547665
+    rid: 2234344121076547669
   references:
     version: 2
     RefIds:
-    - rid: 2234344121076547665
-      type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
+    - rid: 2234344121076547669
+      type: {class: PhysicsShape_Sphere, ns: PQuery, asm: PhysicsQuery}
       data:
-        _size: {x: 1, y: 1, z: 1}
-        _orientation: {x: 0, y: 0, z: 0, w: 1}
+        _radius: 0.5
 --- !u!4 &609441580
 Transform:
   m_ObjectHideFlags: 0
@@ -1179,15 +1178,14 @@ MonoBehaviour:
   _triggerInteraction: 0
   _cacheCapacity: 8
   _shape:
-    rid: 2234344121076547666
+    rid: 2234344121076547670
   references:
     version: 2
     RefIds:
-    - rid: 2234344121076547666
-      type: {class: PhysicsShape_Box, ns: PQuery, asm: PhysicsQuery}
+    - rid: 2234344121076547670
+      type: {class: PhysicsShape_Sphere, ns: PQuery, asm: PhysicsQuery}
       data:
-        _size: {x: 1, y: 1, z: 1}
-        _orientation: {x: 0, y: 0, z: 0, w: 1}
+        _radius: 0.5
 --- !u!4 &2001225513
 Transform:
   m_ObjectHideFlags: 0
