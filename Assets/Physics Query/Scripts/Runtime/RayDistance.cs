@@ -17,6 +17,11 @@ namespace PQuery
             Ray = new Ray(start, offset);
             Distance = offset.magnitude;
         }
+        public RayDistance(Ray ray, float distance)
+        {
+            Ray = ray;
+            Distance = distance;
+        }
 
         public Vector3 GetPoint(float distance)
         {
