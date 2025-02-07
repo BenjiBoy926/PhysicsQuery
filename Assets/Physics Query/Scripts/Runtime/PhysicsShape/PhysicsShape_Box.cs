@@ -69,16 +69,16 @@ namespace PQuery
         }
         public override void DrawOverlapGizmo(PhysicsParameters parameters)
         {
-            DrawGizmo(parameters, parameters.GetWorldStart());
+            DrawGizmo(parameters, new(parameters.GetWorldStart()));
         }
-        public override void DrawGizmo(PhysicsParameters parameters, Vector3 center)
+        public override void DrawGizmo(PhysicsParameters parameters, Vector3D center)
         {
             Quaternion worldOrientation = GetWorldOrientation(parameters);
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
-            center = rotationMatrix.inverse.MultiplyVector(center);
+            Vector3 invertedCenter = rotationMatrix.inverse.MultiplyVector(center.ToUnity());
 
             Gizmos.matrix = rotationMatrix;
-            Gizmos.DrawWireCube(center, GetWorldSize(parameters));
+            Gizmos.DrawWireCube(invertedCenter, GetWorldSize(parameters));
             Gizmos.matrix = Matrix4x4.identity;
         }
 

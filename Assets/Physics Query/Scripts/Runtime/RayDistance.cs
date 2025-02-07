@@ -2,14 +2,14 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public readonly struct RayDistance
+    public struct RayDistance : IRayDistance<Vector3D>
     {
         public Vector3 Start => Ray.origin;
         public Vector3 End => Ray.GetPoint(Distance);
         public Vector3 Direction => Ray.direction;
 
-        public readonly Ray Ray;
-        public readonly float Distance;
+        public Ray Ray;
+        public float Distance;
 
         public RayDistance(Vector3 start, Vector3 end)
         {
@@ -23,6 +23,12 @@ namespace PQuery
             Distance = distance;
         }
 
+        public void SetStartAndEnd(Vector3D start, Vector3D end)
+        {
+            RayDistance copy = new(start.ToUnity(), end.ToUnity());
+            Ray = copy.Ray;
+            Distance = copy.Distance;
+        }
         public Vector3 GetPoint(float distance)
         {
             return Ray.GetPoint(distance);

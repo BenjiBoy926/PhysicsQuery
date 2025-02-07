@@ -8,8 +8,8 @@ namespace PQuery
         where TVector : IVector<TVector>
         where TPhysicsShape : IPhysicsShape<TPhysicsParameters, TRaycastHit, TCollider, TVector>
         where TResultSort : IResultSort<TRaycastHit>
-        where TRayDistance : IRayDistance<TVector>
         where TPhysicsParameters : IPhysicsParameters
+        where TRayDistance : IRayDistance<TVector>
     {
         public TVector Start
         {

@@ -2,45 +2,28 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public readonly struct PhysicsParameters
+    public struct PhysicsParameters : IPhysicsParameters
     {
         public readonly Vector3 LossyScale => Space.lossyScale;
 
-        public readonly Matrix4x4 Space;
-        public readonly Vector3 Start;
-        public readonly Vector3 End;
-        public readonly LayerMask LayerMask;
-        public readonly QueryTriggerInteraction TriggerInteraction;
-        public readonly RaycastHit[] HitCache;
-        public readonly Collider[] ColliderCache;
+        public Matrix4x4 Space;
+        public LayerMask LayerMask;
+        public QueryTriggerInteraction TriggerInteraction;
+        public Vector3 Start;
+        public Vector3 End;
+        public RaycastHit[] HitCache;
+        public Collider[] ColliderCache;
 
-        public static PhysicsParameters Snapshot(PhysicsQuery3D query)
+        public void Snapshot(PhysicsQuery query)
         {
-            return new(
-                query.GetTransformationMatrix(),
-                query.Start,
-                query.End,
-                query.LayerMask,
-                query.TriggerInteraction,
-                query.GetHitCache(),
-                query.GetColliderCache());
-        }
-        public PhysicsParameters(
-            Matrix4x4 space,
-            Vector3 start,
-            Vector3 end,
-            LayerMask layerMask,
-            QueryTriggerInteraction triggerInteraction,
-            RaycastHit[] hitCache,
-            Collider[] colliderCache)
-        {
-            Space = space;
-            Start = start;
-            End = end;
-            LayerMask = layerMask;
-            TriggerInteraction = triggerInteraction;
-            HitCache = hitCache;
-            ColliderCache = colliderCache;
+            PhysicsQuery3D query3D = (PhysicsQuery3D)query;
+            Space = query3D.GetTransformationMatrix();
+            LayerMask = query3D.LayerMask;
+            TriggerInteraction = query3D.TriggerInteraction;
+            Start = query3D.Start.ToUnity();
+            End = query3D.End.ToUnity();
+            HitCache = query3D.GetHitCache();
+            ColliderCache = query3D.GetColliderCache();
         }
 
         public RayDistance GetWorldRay()

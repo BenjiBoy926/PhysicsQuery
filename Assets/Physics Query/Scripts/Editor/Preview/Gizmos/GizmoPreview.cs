@@ -7,7 +7,7 @@ namespace PQuery.Editor
         protected void DrawShapeAtHit(PhysicsQuery3D query, RaycastHit hit)
         {
             Vector3 center = GetShapeCenter(query, hit);
-            query.DrawGizmo(center);
+            query.DrawGizmo(center.ToPQuery());
         }
         protected void DrawHit(RaycastHit hit)
         {

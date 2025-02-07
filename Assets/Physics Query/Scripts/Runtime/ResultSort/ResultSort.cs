@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public abstract class ResultSort
+    public abstract class ResultSort : IResultSort<RaycastHit>
     {
         protected virtual bool WillSort => true;
         private Comparison<RaycastHit> Comparison => _comparison ??= Compare;
