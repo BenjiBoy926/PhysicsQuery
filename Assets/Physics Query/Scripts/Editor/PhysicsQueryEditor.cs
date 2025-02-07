@@ -54,8 +54,8 @@ namespace PQuery.Editor
         private static void Initialize()
         {
             SceneView.duringSceneGui += OnDuringSceneGUI;
-            PhysicsQuery3D.DrawGizmos += OnDrawGizmos;
-            PhysicsQuery3D.DrawGizmosSelected += OnDrawGizmosSelected;
+            PhysicsQuery.DrawGizmos += OnDrawGizmos;
+            PhysicsQuery.DrawGizmosSelected += OnDrawGizmosSelected;
         }
         private static void OnDuringSceneGUI(SceneView view)
         {
@@ -69,18 +69,18 @@ namespace PQuery.Editor
                 Preview.DrawSceneGUI(queries[i]);
             }
         }
-        private static void OnDrawGizmos(PhysicsQuery3D obj)
+        private static void OnDrawGizmos(PhysicsQuery obj)
         {
-            if (Preferences.AlwaysDrawGizmos.Value)
+            if (Preferences.AlwaysDrawGizmos.Value && obj is PhysicsQuery3D query3D)
             {
-                Preview.DrawGizmos(obj);
+                Preview.DrawGizmos(query3D);
             }
         }
-        private static void OnDrawGizmosSelected(PhysicsQuery3D obj)
+        private static void OnDrawGizmosSelected(PhysicsQuery obj)
         {
-            if (!Preferences.AlwaysDrawGizmos.Value)
+            if (!Preferences.AlwaysDrawGizmos.Value && obj is PhysicsQuery3D query3D)
             {
-                Preview.DrawGizmos(obj);
+                Preview.DrawGizmos(query3D);
             }
         }
     }
