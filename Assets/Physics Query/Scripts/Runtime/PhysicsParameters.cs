@@ -14,17 +14,6 @@ namespace PQuery
         public readonly RaycastHit[] HitCache;
         public readonly Collider[] ColliderCache;
 
-        public static PhysicsParameters Snapshot(PhysicsQuery query)
-        {
-            return new(
-                query.GetTransformationMatrix(),
-                query.Start,
-                query.End,
-                query.LayerMask,
-                query.TriggerInteraction,
-                query.GetHitCache(),
-                query.GetColliderCache());
-        }
         public PhysicsParameters(
             Matrix4x4 space,
             Vector3 start,
