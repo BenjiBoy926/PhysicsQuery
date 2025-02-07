@@ -65,8 +65,5 @@ namespace PQuery
         {
             DrawGizmosSelected(this);
         }
-
-        public abstract void DrawOverlapGizmo();
-        public abstract void DrawGizmo(Vector3 center);
     }
 }

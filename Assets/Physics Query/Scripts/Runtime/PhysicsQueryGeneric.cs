@@ -1,36 +1,41 @@
 using System;
-using UnityEngine;
 using Unity.Profiling;
+using UnityEngine;
 
 namespace PQuery
 {
-    public class PhysicsQuery3D : PhysicsQuery
+    public abstract class PhysicsQueryGeneric<TVector, TPhysicsShape, TRaycastHit, TCollider, TResultSort, TPhysicsParameters, TRayDistance> : PhysicsQuery
+        where TVector : IVector<TVector>
+        where TPhysicsShape : IPhysicsShape<TPhysicsParameters, TRaycastHit, TCollider, TVector>
+        where TResultSort : IResultSort<TRaycastHit>
+        where TRayDistance : IRayDistance<TVector>
+        where TPhysicsParameters : IPhysicsParameters
     {
-        public Vector3 Start
+        public TVector Start
         {
             get => _start;
             set => _start = value;
         }
-        public Vector3 End
+        public TVector End
         {
             get => _end;
             set => _end = value;
         }
-        public PhysicsShape Shape
+        public TPhysicsShape Shape
         {
             get => _shape;
             set => _shape = value;
         }
 
         [Space]
-        [SerializeField] 
-        private Vector3 _start = Vector3.zero;
-        [SerializeField] 
-        private Vector3 _end;
+        [SerializeField]
+        private TVector _start;
+        [SerializeField]
+        private TVector _end;
         [SerializeReference, SubtypeDropdown]
-        private PhysicsShape _shape = new PhysicsShape_Ray();
-        private readonly CachedArray<RaycastHit> _hitCache = new();
-        private readonly CachedArray<Collider> _colliderCache = new();
+        private TPhysicsShape _shape;
+        private readonly CachedArray<TRaycastHit> _hitCache = new();
+        private readonly CachedArray<TCollider> _colliderCache = new();
 
         private readonly ProfilerMarker _castMarker = new($"{nameof(PhysicsQuery3D)}.{nameof(Cast)}");
         private readonly ProfilerMarker _castNonAllocMarker = new($"{nameof(PhysicsQuery3D)}.{nameof(CastNonAlloc)}");
@@ -41,21 +46,21 @@ namespace PQuery
         {
             return Cast(out _);
         }
-        public bool Cast(out RaycastHit hit)
+        public bool Cast(out TRaycastHit hit)
         {
             _castMarker.Begin();
             bool didHit = _shape.Cast(GetParameters(), out hit);
             _castMarker.End();
             return didHit;
         }
-        public Result<RaycastHit> CastNonAlloc(ResultSort sort)
+        public Result<TRaycastHit> CastNonAlloc(TResultSort sort)
         {
             if (sort == null)
             {
                 throw new ArgumentNullException(nameof(sort));
             }
             _castNonAllocMarker.Begin();
-            Result<RaycastHit> result = _shape.CastNonAlloc(GetParameters());
+            Result<TRaycastHit> result = _shape.CastNonAlloc(GetParameters());
             sort.Sort(result._cache, result.Count);
             _castNonAllocMarker.End();
             return result;
@@ -67,29 +72,33 @@ namespace PQuery
             _checkMarker.End();
             return check;
         }
-        public Result<Collider> OverlapNonAlloc()
+        public Result<TCollider> OverlapNonAlloc()
         {
             _overlapNonAllocMarker.Begin();
-            Result<Collider> result = _shape.OverlapNonAlloc(GetParameters());
+            Result<TCollider> result = _shape.OverlapNonAlloc(GetParameters());
             _overlapNonAllocMarker.End();
             return result;
         }
 
-        public PhysicsParameters GetParameters()
+        public TPhysicsParameters GetParameters()
         {
-            return PhysicsParameters.Snapshot(this);
+            TPhysicsParameters result = default;
+            result.Snapshot(this);
+            return result;
         }
-        public RayDistance GetWorldRay()
+        public TRayDistance GetWorldRay()
         {
-            return new(GetWorldStart(), GetWorldEnd());
+            TRayDistance result = default;
+            result.SetStartAndEnd(GetWorldStart(), GetWorldEnd());
+            return result;
         }
-        public Vector3 GetWorldStart()
+        public TVector GetWorldStart()
         {
-            return GetTransformationMatrix().MultiplyPoint3x4(_start);
+            return _start.TransformAsPointBy(GetTransformationMatrix());
         }
-        public Vector3 GetWorldEnd()
+        public TVector GetWorldEnd()
         {
-            return GetTransformationMatrix().MultiplyPoint3x4(_end);
+            return _end.TransformAsPointBy(GetTransformationMatrix());
         }
         public void RefreshCache()
         {
@@ -104,24 +113,20 @@ namespace PQuery
         {
             _colliderCache.SetCapacity(CacheCapacity);
         }
-        internal RaycastHit[] GetHitCache()
+        internal TRaycastHit[] GetHitCache()
         {
             return _hitCache.GetArray(CacheCapacity);
         }
-        internal Collider[] GetColliderCache()
+        internal TCollider[] GetColliderCache()
         {
             return _colliderCache.GetArray(CacheCapacity);
         }
 
-        protected override void Reset()
-        {
-            _end = Settings.DefaultEnd;
-        }
         public void DrawOverlapGizmo()
         {
             _shape.DrawOverlapGizmo(GetParameters());
         }
-        public void DrawGizmo(Vector3 center)
+        public void DrawGizmo(TVector center)
         {
             _shape.DrawGizmo(GetParameters(), center);
         }

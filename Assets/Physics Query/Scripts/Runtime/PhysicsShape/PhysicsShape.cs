@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public abstract class PhysicsShape
+    public abstract class PhysicsShape : IPhysicsShape<PhysicsParameters, RaycastHit, Collider, Vector3>
     {
         public abstract bool Cast(PhysicsParameters parameters, out RaycastHit hit);
         public abstract Result<RaycastHit> CastNonAlloc(PhysicsParameters parameters);
