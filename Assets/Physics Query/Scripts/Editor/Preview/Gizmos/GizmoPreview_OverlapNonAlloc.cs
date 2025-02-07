@@ -4,7 +4,7 @@ namespace PQuery.Editor
 {
     public class GizmoPreview_OverlapNonAlloc : GizmoPreview
     {
-        public override void DrawGizmos(PhysicsQuery query)
+        public override void DrawGizmos(PhysicsQuery3D query)
         {
             var result = query.OverlapNonAlloc();
             Gizmos.color = Preferences.GetColorForResult(result);

@@ -4,13 +4,13 @@ using Unity.Profiling;
 
 namespace PQuery
 {
-    public class PhysicsQuery : MonoBehaviour
+    public class PhysicsQuery3D : MonoBehaviour
     {
         protected const float MinNonZeroFloat = 1E-5f;
         private const int MinCacheCapacity = 1;
 
-        public static event Action<PhysicsQuery> DrawGizmos = delegate { };
-        public static event Action<PhysicsQuery> DrawGizmosSelected = delegate { };
+        public static event Action<PhysicsQuery3D> DrawGizmos = delegate { };
+        public static event Action<PhysicsQuery3D> DrawGizmosSelected = delegate { };
 
         public Space Space
         {
@@ -65,10 +65,10 @@ namespace PQuery
         private readonly CachedArray<RaycastHit> _hitCache = new();
         private readonly CachedArray<Collider> _colliderCache = new();
 
-        private readonly ProfilerMarker _castMarker = new($"{nameof(PhysicsQuery)}.{nameof(Cast)}");
-        private readonly ProfilerMarker _castNonAllocMarker = new($"{nameof(PhysicsQuery)}.{nameof(CastNonAlloc)}");
-        private readonly ProfilerMarker _checkMarker = new($"{nameof(PhysicsQuery)}.{nameof(Check)}");
-        private readonly ProfilerMarker _overlapNonAllocMarker = new($"{nameof(PhysicsQuery)}.{nameof(OverlapNonAlloc)}");
+        private readonly ProfilerMarker _castMarker = new($"{nameof(PhysicsQuery3D)}.{nameof(Cast)}");
+        private readonly ProfilerMarker _castNonAllocMarker = new($"{nameof(PhysicsQuery3D)}.{nameof(CastNonAlloc)}");
+        private readonly ProfilerMarker _checkMarker = new($"{nameof(PhysicsQuery3D)}.{nameof(Check)}");
+        private readonly ProfilerMarker _overlapNonAllocMarker = new($"{nameof(PhysicsQuery3D)}.{nameof(OverlapNonAlloc)}");
 
         public bool Cast()
         {

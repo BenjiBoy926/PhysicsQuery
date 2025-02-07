@@ -6,7 +6,7 @@ namespace PQuery.Editor
 {
     public abstract class PreferenceProperty
     {
-        private const string KeyPrefix = nameof(PhysicsQuery) + nameof(Preferences) + ".";
+        private const string KeyPrefix = nameof(PhysicsQuery3D) + nameof(Preferences) + ".";
         private string Key => $"{KeyPrefix}{_name}";
         public string Name => _name;
         public abstract Type PropertyType { get; }

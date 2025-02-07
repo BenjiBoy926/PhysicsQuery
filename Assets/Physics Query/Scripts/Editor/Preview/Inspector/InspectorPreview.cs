@@ -7,7 +7,7 @@ namespace PQuery.Editor
 {
     public abstract class InspectorPreview
     {
-        public abstract void DrawInspectorGUI(PhysicsQuery query);
+        public abstract void DrawInspectorGUI(PhysicsQuery3D query);
 
         protected void DrawEachPropertyInspectorGUI(RaycastHit hit)
         {

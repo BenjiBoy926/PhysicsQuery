@@ -42,43 +42,43 @@ namespace PQuery.Editor
             }
         }
 
-        public static int GetPreviewIndex(PhysicsQuery query)
+        public static int GetPreviewIndex(PhysicsQuery3D query)
         {
             string name = GetPreviewIndexPropertyName(query);
             int value = _previewIndices.GetValue(name);
             return ClampPreviewIndex(value);
         }
-        public static void SetPreviewIndex(PhysicsQuery query, int index)
+        public static void SetPreviewIndex(PhysicsQuery3D query, int index)
         {
             string name = GetPreviewIndexPropertyName(query);
             _previewIndices.SetValue(name, ClampPreviewIndex(index));
         }
 
-        public static void ExpandRaycastHitFoldout(PhysicsQuery query, Collider collider)
+        public static void ExpandRaycastHitFoldout(PhysicsQuery3D query, Collider collider)
         {
             SetRaycastHitFoldout(query, collider, true);
         }
-        public static void CollapseAllRaycastHitFoldouts(PhysicsQuery query)
+        public static void CollapseAllRaycastHitFoldouts(PhysicsQuery3D query)
         {
             string token = query.GetInstanceID().ToString();
             _raycastHitFoldout.SetValuesWhereNameContains(token, false);
         }
-        public static bool GetRaycastHitFoldout(PhysicsQuery query, Collider collider)
+        public static bool GetRaycastHitFoldout(PhysicsQuery3D query, Collider collider)
         {
             string name = GetRaycastHitFoldoutPropertyName(query, collider);
             return _raycastHitFoldout.GetValue(name);
         }
-        public static void SetRaycastHitFoldout(PhysicsQuery query, Collider collider, bool foldout)
+        public static void SetRaycastHitFoldout(PhysicsQuery3D query, Collider collider, bool foldout)
         {
             string name = GetRaycastHitFoldoutPropertyName(query, collider);
             _raycastHitFoldout.SetValue(name, foldout);
         }
 
-        private static string GetRaycastHitFoldoutPropertyName(PhysicsQuery query, Collider collider)
+        private static string GetRaycastHitFoldoutPropertyName(PhysicsQuery3D query, Collider collider)
         {
             return $"RaycastHitFoldout-{query.GetInstanceID()}-{collider.GetInstanceID()}";
         }
-        private static string GetPreviewIndexPropertyName(PhysicsQuery query)
+        private static string GetPreviewIndexPropertyName(PhysicsQuery3D query)
         {
             return $"PreviewIndex-{query.GetInstanceID()}";
         }

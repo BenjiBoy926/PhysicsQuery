@@ -12,7 +12,7 @@ namespace PQuery.Editor
             _button = GetSceneButtonStrategy();
         }
 
-        public override void DrawSceneGUI(PhysicsQuery query)
+        public override void DrawSceneGUI(PhysicsQuery3D query)
         {
             Result<TElement> result = GetResult(query);
             Handles.BeginGUI();
@@ -44,7 +44,7 @@ namespace PQuery.Editor
             }
         }
 
-        protected abstract Result<TElement> GetResult(PhysicsQuery query);
+        protected abstract Result<TElement> GetResult(PhysicsQuery3D query);
         protected abstract string GetLabel(TElement element, int index);
         protected abstract Collider GetCollider(TElement element);
         protected abstract SceneButtonStrategy<TElement> GetSceneButtonStrategy();

@@ -5,7 +5,7 @@ namespace PQuery.Editor
 {
     public class InspectorPreview_Cast : InspectorPreview
     {
-        public override void DrawInspectorGUI(PhysicsQuery query)
+        public override void DrawInspectorGUI(PhysicsQuery3D query)
         {
             bool result = query.Cast(out RaycastHit hit);
             if (result)

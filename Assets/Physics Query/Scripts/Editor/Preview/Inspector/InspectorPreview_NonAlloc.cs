@@ -10,7 +10,7 @@ namespace PQuery.Editor
             "or increase the query's cache capacity " +
             "to ensure correct results";
 
-        public override void DrawInspectorGUI(PhysicsQuery query)
+        public override void DrawInspectorGUI(PhysicsQuery3D query)
         {
             Result<TElement> result = GetResult(query);
             DrawEachElementInspectorGUI(query, result);
@@ -20,7 +20,7 @@ namespace PQuery.Editor
             }
         }
 
-        private void DrawEachElementInspectorGUI(PhysicsQuery query, Result<TElement> result)
+        private void DrawEachElementInspectorGUI(PhysicsQuery3D query, Result<TElement> result)
         {
             GUI.enabled = false;
             for (int i = 0; i < result.Count; i++)
@@ -30,7 +30,7 @@ namespace PQuery.Editor
             GUI.enabled = true;
         }
 
-        protected abstract Result<TElement> GetResult(PhysicsQuery query);
-        protected abstract void DrawElementInspectorGUI(PhysicsQuery query, TElement element, int index);
+        protected abstract Result<TElement> GetResult(PhysicsQuery3D query);
+        protected abstract void DrawElementInspectorGUI(PhysicsQuery3D query, TElement element, int index);
     }
 }

@@ -4,7 +4,7 @@ using UnityEditor;
 namespace PQuery.Editor
 {
     [CanEditMultipleObjects]
-    [CustomEditor(typeof(PhysicsQuery), true)]
+    [CustomEditor(typeof(PhysicsQuery3D), true)]
     public class PhysicsQueryEditor : UnityEditor.Editor
     {
         private void OnEnable()
@@ -27,15 +27,15 @@ namespace PQuery.Editor
             Object[] targets = serializedObject.targetObjects;
             for (int i = 0; i < targets.Length; i++)
             {
-                DrawInspectorPreview((PhysicsQuery)targets[i]);
+                DrawInspectorPreview((PhysicsQuery3D)targets[i]);
             }
         }
         private void OnSceneGUI()
         {
-            Preview.DrawSceneGUI((PhysicsQuery)target);
+            Preview.DrawSceneGUI((PhysicsQuery3D)target);
         }
 
-        private void DrawInspectorPreview(PhysicsQuery query)
+        private void DrawInspectorPreview(PhysicsQuery3D query)
         {
             EditorGUILayout.Space();
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -54,8 +54,8 @@ namespace PQuery.Editor
         private static void Initialize()
         {
             SceneView.duringSceneGui += OnDuringSceneGUI;
-            PhysicsQuery.DrawGizmos += OnDrawGizmos;
-            PhysicsQuery.DrawGizmosSelected += OnDrawGizmosSelected;
+            PhysicsQuery3D.DrawGizmos += OnDrawGizmos;
+            PhysicsQuery3D.DrawGizmosSelected += OnDrawGizmosSelected;
         }
         private static void OnDuringSceneGUI(SceneView view)
         {
@@ -63,20 +63,20 @@ namespace PQuery.Editor
             {
                 return;
             }
-            PhysicsQuery[] queries = FindObjectsByType<PhysicsQuery>(FindObjectsSortMode.None);
+            PhysicsQuery3D[] queries = FindObjectsByType<PhysicsQuery3D>(FindObjectsSortMode.None);
             for (int i = 0; i < queries.Length; i++)
             {
                 Preview.DrawSceneGUI(queries[i]);
             }
         }
-        private static void OnDrawGizmos(PhysicsQuery obj)
+        private static void OnDrawGizmos(PhysicsQuery3D obj)
         {
             if (Preferences.AlwaysDrawGizmos.Value)
             {
                 Preview.DrawGizmos(obj);
             }
         }
-        private static void OnDrawGizmosSelected(PhysicsQuery obj)
+        private static void OnDrawGizmosSelected(PhysicsQuery3D obj)
         {
             if (!Preferences.AlwaysDrawGizmos.Value)
             {

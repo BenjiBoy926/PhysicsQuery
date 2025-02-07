@@ -4,7 +4,7 @@ namespace PQuery.Editor
 {
     public class GizmoPreview_Cast : GizmoPreview
     {
-        public override void DrawGizmos(PhysicsQuery query)
+        public override void DrawGizmos(PhysicsQuery3D query)
         {
             bool result = query.Cast(out RaycastHit hit);
             Vector3 start = query.GetWorldStart();

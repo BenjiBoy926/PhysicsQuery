@@ -3,7 +3,7 @@ using UnityEngine;
 public class CastTest : MonoBehaviour
 {
     [SerializeField]
-    private PhysicsQuery _query;
+    private PhysicsQuery3D _query;
     private void Update()
     {
         _query.CastNonAlloc(ResultSort.Distance);
@@ -11,6 +11,6 @@ public class CastTest : MonoBehaviour
     }
     private void Reset()
     {
-        _query = GetComponent<PhysicsQuery>();
+        _query = GetComponent<PhysicsQuery3D>();
     }
 }

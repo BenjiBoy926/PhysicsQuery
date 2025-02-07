@@ -5,7 +5,7 @@ namespace PQuery.Editor
 {
     public class ScenePreview_CastNonAlloc : ScenePreview_NonAlloc<RaycastHit>
     {
-        protected override Result<RaycastHit> GetResult(PhysicsQuery query)
+        protected override Result<RaycastHit> GetResult(PhysicsQuery3D query)
         {
             return query.CastNonAlloc(ResultSort.Distance);
         }

@@ -12,10 +12,10 @@ namespace PQuery.Editor
 
         private static readonly Preview[] _previews = new Preview[]
         {
-            new(nameof(PhysicsQuery.Cast), new GizmoPreview_Cast(), new InspectorPreview_Cast(), new ScenePreview_Cast()),
-            new(nameof(PhysicsQuery.CastNonAlloc), new GizmoPreview_CastNonAlloc(), new InspectorPreview_CastNonAlloc(), new ScenePreview_CastNonAlloc()),
-            new(nameof(PhysicsQuery.Check), new GizmoPreview_Check(), new InspectorPreview_Check(), new ScenePreview_Check()),
-            new(nameof(PhysicsQuery.OverlapNonAlloc), new GizmoPreview_OverlapNonAlloc(), new InspectorPreview_OverlapNonAlloc(), new ScenePreview_OverlapNonAlloc()),
+            new(nameof(PhysicsQuery3D.Cast), new GizmoPreview_Cast(), new InspectorPreview_Cast(), new ScenePreview_Cast()),
+            new(nameof(PhysicsQuery3D.CastNonAlloc), new GizmoPreview_CastNonAlloc(), new InspectorPreview_CastNonAlloc(), new ScenePreview_CastNonAlloc()),
+            new(nameof(PhysicsQuery3D.Check), new GizmoPreview_Check(), new InspectorPreview_Check(), new ScenePreview_Check()),
+            new(nameof(PhysicsQuery3D.OverlapNonAlloc), new GizmoPreview_OverlapNonAlloc(), new InspectorPreview_OverlapNonAlloc(), new ScenePreview_OverlapNonAlloc()),
         };
         private static string[] _labels;
 
@@ -32,19 +32,19 @@ namespace PQuery.Editor
             _scene = scene;
         }
 
-        public static void DrawGizmos(PhysicsQuery query)
+        public static void DrawGizmos(PhysicsQuery3D query)
         {
             Get(query).DrawThisGizmo(query);
         }
-        public static void DrawInspectorGUI(PhysicsQuery query)
+        public static void DrawInspectorGUI(PhysicsQuery3D query)
         {
             Get(query).DrawThisInspectorGUI(query);
         }
-        public static void DrawSceneGUI(PhysicsQuery query)
+        public static void DrawSceneGUI(PhysicsQuery3D query)
         {
             Get(query).DrawThisSceneGUI(query);
         }
-        public static Preview Get(PhysicsQuery query)
+        public static Preview Get(PhysicsQuery3D query)
         {
             int index = Preferences.GetPreviewIndex(query);
             return Get(index);
@@ -58,15 +58,15 @@ namespace PQuery.Editor
             return _previews.Select(x => x.Label).ToArray();
         }
 
-        public void DrawThisGizmo(PhysicsQuery query)
+        public void DrawThisGizmo(PhysicsQuery3D query)
         {
             _gizmo.DrawGizmos(query);
         }
-        public void DrawThisInspectorGUI(PhysicsQuery query)
+        public void DrawThisInspectorGUI(PhysicsQuery3D query)
         {
             _inspector.DrawInspectorGUI(query);
         }
-        public void DrawThisSceneGUI(PhysicsQuery query)
+        public void DrawThisSceneGUI(PhysicsQuery3D query)
         {
             _scene.DrawSceneGUI(query);
         }

@@ -5,7 +5,7 @@ namespace PQuery.Editor
 {
     public class ScenePreview_OverlapNonAlloc : ScenePreview_NonAlloc<Collider>
     {
-        protected override Result<Collider> GetResult(PhysicsQuery query)
+        protected override Result<Collider> GetResult(PhysicsQuery3D query)
         {
             return query.OverlapNonAlloc();
         }

@@ -4,7 +4,7 @@ namespace PQuery.Editor
 {
     public class GizmoPreview_CastNonAlloc : GizmoPreview
     {
-        public override void DrawGizmos(PhysicsQuery query)
+        public override void DrawGizmos(PhysicsQuery3D query)
         {
             var result = query.CastNonAlloc(ResultSort.Distance);
 
@@ -19,7 +19,7 @@ namespace PQuery.Editor
             Gizmos.color = Preferences.MissColor.Value;
             query.DrawGizmo(query.GetWorldEnd());
         }
-        private void DrawShapeAtEachHit(PhysicsQuery query, Result<RaycastHit> result)
+        private void DrawShapeAtEachHit(PhysicsQuery3D query, Result<RaycastHit> result)
         {
             Gizmos.color = result.IsFull ? Preferences.CacheFullColor.Value : Preferences.HitColor.Value;
             for (int i = 0; i < result.Count; i++)
@@ -35,7 +35,7 @@ namespace PQuery.Editor
                 DrawHit(result[i]);
             }
         }
-        private void DrawResultLine(PhysicsQuery query, Result<RaycastHit> result)
+        private void DrawResultLine(PhysicsQuery3D query, Result<RaycastHit> result)
         {
             Vector3 start = query.GetWorldStart();
             Vector3 end = query.GetWorldEnd();

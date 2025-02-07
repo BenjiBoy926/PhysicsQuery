@@ -9,7 +9,7 @@ namespace PQuery.Editor
         public delegate void ColliderClickHandler(Collider collider);
         public static event ColliderClickHandler ColliderClicked = delegate { };
 
-        private static readonly List<PhysicsQuery> _selectedQueries = new();
+        private static readonly List<PhysicsQuery3D> _selectedQueries = new();
 
         protected static void ClickCollider(Collider collider)
         {
@@ -19,14 +19,14 @@ namespace PQuery.Editor
         }
         private static void ExpandRaycastHitsWithCollider(Collider collider)
         {
-            List<PhysicsQuery> queries = GetSelectedQueries();
+            List<PhysicsQuery3D> queries = GetSelectedQueries();
             for (int i = 0; i < queries.Count; i++)
             {
                 Preferences.CollapseAllRaycastHitFoldouts(queries[i]);
                 Preferences.ExpandRaycastHitFoldout(queries[i], collider);
             }
         }
-        private static List<PhysicsQuery> GetSelectedQueries()
+        private static List<PhysicsQuery3D> GetSelectedQueries()
         {
             Transform[] selected = Selection.transforms;
             _selectedQueries.Clear();
@@ -36,14 +36,14 @@ namespace PQuery.Editor
             }
             return _selectedQueries;
         }
-        private static void AddQuery(Transform transform, List<PhysicsQuery> queries)
+        private static void AddQuery(Transform transform, List<PhysicsQuery3D> queries)
         {
-            if (transform.TryGetComponent(out PhysicsQuery query))
+            if (transform.TryGetComponent(out PhysicsQuery3D query))
             {
                 queries.Add(query);
             }
         }
 
-        public abstract void DrawSceneGUI(PhysicsQuery query);
+        public abstract void DrawSceneGUI(PhysicsQuery3D query);
     }
 }
