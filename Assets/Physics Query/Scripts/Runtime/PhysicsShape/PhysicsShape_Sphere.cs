@@ -19,59 +19,59 @@ namespace PQuery
             _radius = radius;
         }
 
-        public override bool Cast(PhysicsQuery query, RayDistance worldRay, out RaycastHit hit)
+        public override bool Cast(PhysicsParameters parameters, out RaycastHit hit)
         {
+            RayDistance worldRay = parameters.GetWorldRay();
             return Physics.SphereCast(
                 worldRay.Ray,
-                GetWorldRadius(query),
+                GetWorldRadius(parameters),
                 out hit,
                 worldRay.Distance,
-                query.LayerMask,
-                query.TriggerInteraction);
+                parameters.LayerMask,
+                parameters.TriggerInteraction);
         }
-        public override int CastNonAlloc(PhysicsQuery query, RayDistance worldRay, RaycastHit[] cache)
+        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters parameters)
         {
-            return Physics.SphereCastNonAlloc(
+            RayDistance worldRay = parameters.GetWorldRay();
+            int count = Physics.SphereCastNonAlloc(
                 worldRay.Ray,
-                GetWorldRadius(query),
-                cache,
+                GetWorldRadius(parameters),
+                parameters.HitCache,
                 worldRay.Distance,
-                query.LayerMask,
-                query.TriggerInteraction);
+                parameters.LayerMask,
+                parameters.TriggerInteraction);
+            return new(parameters.HitCache, count);
         }
-        public override bool Check(PhysicsQuery query, Vector3 worldOrigin)
+        public override bool Check(PhysicsParameters parameters)
         {
             return Physics.CheckSphere(
-                worldOrigin,
-                GetWorldRadius(query),
-                query.LayerMask,
-                query.TriggerInteraction);
+                parameters.GetWorldStart(),
+                GetWorldRadius(parameters),
+                parameters.LayerMask,
+                parameters.TriggerInteraction);
         }
-        public override int OverlapNonAlloc(PhysicsQuery query, Vector3 worldOrigin, Collider[] cache)
+        public override Result<Collider> OverlapNonAlloc(PhysicsParameters parameters)
         {
-            return Physics.OverlapSphereNonAlloc(
-                worldOrigin,
-                GetWorldRadius(query),
-                cache,
-                query.LayerMask,
-                query.TriggerInteraction);
+            int count = Physics.OverlapSphereNonAlloc(
+                parameters.GetWorldStart(),
+                GetWorldRadius(parameters),
+                parameters.ColliderCache,
+                parameters.LayerMask,
+                parameters.TriggerInteraction);
+            return new(parameters.ColliderCache, count);
         }
-        public override void DrawOverlapGizmo(PhysicsQuery query)
+        public override void DrawOverlapGizmo(PhysicsParameters parameters)
         {
-            DrawGizmo(query, query.GetWorldStart());
+            DrawGizmo(parameters, parameters.GetWorldStart());
         }
-        public override void DrawGizmo(PhysicsQuery query, Vector3 center)
+        public override void DrawGizmo(PhysicsParameters parameters, Vector3 center)
         {
-            Gizmos.DrawWireSphere(center, GetWorldRadius(query));
+            Gizmos.DrawWireSphere(center, GetWorldRadius(parameters));
         }
 
-        public float GetWorldRadius(PhysicsQuery query)
+        public float GetWorldRadius(PhysicsParameters parameters)
         {
-            if (query.Space == Space.World)
-            {
-                return _radius;
-            }
-            Vector3 lossyScale = query.transform.lossyScale;
+            Vector3 lossyScale = parameters.LossyScale;
             float max = Mathf.Max(lossyScale.x, lossyScale.y, lossyScale.z);
             return _radius * max;
         }

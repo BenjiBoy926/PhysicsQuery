@@ -14,7 +14,7 @@ namespace PQuery
         public TElement First => Get(0);
         public TElement Last => Get(_count - 1);
 
-        private readonly TElement[] _cache;
+        internal readonly TElement[] _cache;
         private readonly int _count;
 
         public Result(TElement[] cache, int count)

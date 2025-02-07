@@ -12,7 +12,7 @@ namespace PQuery.Editor
             query.DrawGizmo(query.GetWorldStart());
 
             // Note: we draw each hit and the collider first before the shapes so that the shapes show up on top
-            DrawEachHit(query, result);
+            DrawEachHit(result);
             DrawResultLine(query, result);
             DrawShapeAtEachHit(query, result); 
 
@@ -28,11 +28,11 @@ namespace PQuery.Editor
                 DrawShapeAtHit(query, hit);
             }
         }
-        private void DrawEachHit(PhysicsQuery query, Result<RaycastHit> result)
+        private void DrawEachHit(Result<RaycastHit> result)
         {
             for (int i = 0; i < result.Count; i++)
             {
-                DrawHit(query, result[i]);
+                DrawHit(result[i]);
             }
         }
         private void DrawResultLine(PhysicsQuery query, Result<RaycastHit> result)

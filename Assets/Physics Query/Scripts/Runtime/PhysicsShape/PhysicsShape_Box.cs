@@ -20,80 +20,79 @@ namespace PQuery
             _orientation = orientation;
         }
 
-        public override bool Cast(PhysicsQuery query, RayDistance worldRay, out RaycastHit hit)
+        public override bool Cast(PhysicsParameters parameters, out RaycastHit hit)
         {
+            RayDistance worldRay = parameters.GetWorldRay();
             return Physics.BoxCast(
                 worldRay.Start,
-                GetWorldExtents(query),
+                GetWorldExtents(parameters),
                 worldRay.Direction,
                 out hit,
-                GetWorldOrientation(query),
+                GetWorldOrientation(parameters),
                 worldRay.Distance,
-                query.LayerMask,
-                query.TriggerInteraction);
+                parameters.LayerMask,
+                parameters.TriggerInteraction);
         }
-        public override int CastNonAlloc(PhysicsQuery query, RayDistance worldRay, RaycastHit[] cache)
+        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters parameters)
         {
-            return Physics.BoxCastNonAlloc(
+            RayDistance worldRay = parameters.GetWorldRay();
+            int count = Physics.BoxCastNonAlloc(
                 worldRay.Start,
-                GetWorldExtents(query),
+                GetWorldExtents(parameters),
                 worldRay.Direction,
-                cache,
-                GetWorldOrientation(query),
+                parameters.HitCache,
+                GetWorldOrientation(parameters),
                 worldRay.Distance,
-                query.LayerMask,
-                query.TriggerInteraction);
+                parameters.LayerMask,
+                parameters.TriggerInteraction);
+            return new(parameters.HitCache, count);
         }
-        public override bool Check(PhysicsQuery query, Vector3 worldOrigin)
+        public override bool Check(PhysicsParameters parameters)
         {
             return Physics.CheckBox(
-                worldOrigin,
-                GetWorldExtents(query),
-                GetWorldOrientation(query),
-                query.LayerMask,
-                query.TriggerInteraction);
+                parameters.GetWorldStart(),
+                GetWorldExtents(parameters),
+                GetWorldOrientation(parameters),
+                parameters.LayerMask,
+                parameters.TriggerInteraction);
         }
-        public override int OverlapNonAlloc(PhysicsQuery query, Vector3 worldOrigin, Collider[] cache)
+        public override Result<Collider> OverlapNonAlloc(PhysicsParameters parameters)
         {
-            return Physics.OverlapBoxNonAlloc(
-                worldOrigin,
-                GetWorldExtents(query),
-                cache,
-                GetWorldOrientation(query),
-                query.LayerMask,
-                query.TriggerInteraction);
+            int count = Physics.OverlapBoxNonAlloc(
+                parameters.GetWorldStart(),
+                GetWorldExtents(parameters),
+                parameters.ColliderCache,
+                GetWorldOrientation(parameters),
+                parameters.LayerMask,
+                parameters.TriggerInteraction);
+            return new(parameters.ColliderCache, count);
         }
-        public override void DrawOverlapGizmo(PhysicsQuery query)
+        public override void DrawOverlapGizmo(PhysicsParameters parameters)
         {
-            DrawGizmo(query, query.GetWorldStart());
+            DrawGizmo(parameters, parameters.GetWorldStart());
         }
-        public override void DrawGizmo(PhysicsQuery query, Vector3 center)
+        public override void DrawGizmo(PhysicsParameters parameters, Vector3 center)
         {
-            Quaternion worldOrientation = GetWorldOrientation(query);
+            Quaternion worldOrientation = GetWorldOrientation(parameters);
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
             center = rotationMatrix.inverse.MultiplyVector(center);
 
             Gizmos.matrix = rotationMatrix;
-            Gizmos.DrawWireCube(center, GetWorldSize(query));
+            Gizmos.DrawWireCube(center, GetWorldSize(parameters));
             Gizmos.matrix = Matrix4x4.identity;
         }
 
-        public Vector3 GetWorldExtents(PhysicsQuery query)
+        public Vector3 GetWorldExtents(PhysicsParameters parameters)
         {
-            return GetWorldSize(query) * 0.5f;
+            return GetWorldSize(parameters) * 0.5f;
         }
-        public Vector3 GetWorldSize(PhysicsQuery query)
+        public Vector3 GetWorldSize(PhysicsParameters parameters)
         {
-            if (query.Space == Space.World)
-            {
-                return _size;
-            }
-            Vector3 lossyScale = query.transform.lossyScale;
-            return new(_size.x * lossyScale.x, _size.y * lossyScale.y, _size.z * lossyScale.z);
+            return parameters.TransformScale(_size);
         }
-        public Quaternion GetWorldOrientation(PhysicsQuery query)
+        public Quaternion GetWorldOrientation(PhysicsParameters parameters)
         {
-            return query.Space == Space.Self ? query.transform.rotation * _orientation : _orientation;
+            return parameters.TransformRotation(_orientation);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace PQuery
     [Serializable]
     public class PhysicsShape_Capsule : PhysicsShape
     {
-        public readonly struct Parameters
+        public readonly struct Position
         {
             public Vector3 Axis => (Cap2 - Cap1) * 0.5f;
 
@@ -14,22 +14,17 @@ namespace PQuery
             public readonly Vector3 Cap2;
             public readonly float Radius;
 
-            public Parameters(PhysicsQuery query, Vector3 center, Axis axis, float height, float radius)
+            public Position(PhysicsParameters parameters, Axis axis, float height, float radius)
             {
                 float extent = height * 0.5f;
-                Vector3 capOffset;
-                if (query.Space == Space.World)
-                {
-                    capOffset = axis.Vector * extent;
-                }
-                else
-                {
-                    Vector3 lossyScale = query.transform.lossyScale;
-                    Vector3 direction = query.transform.TransformDirection(axis.Vector);
-                    float distance = extent * lossyScale[axis.Dimension];
-                    capOffset = direction * distance;
-                    radius = ScaleRadius(lossyScale, axis, radius);
-                }
+                Vector3 center = parameters.GetWorldStart();
+                Vector3 direction = parameters.TransformDirection(axis.Vector);
+
+                Vector3 lossyScale = parameters.LossyScale;
+                float distance = extent * lossyScale[axis.Dimension];                
+                Vector3 capOffset = direction * distance;
+                radius = ScaleRadius(lossyScale, axis, radius);
+
                 Cap1 = center + capOffset;
                 Cap2 = center - capOffset;
                 Radius = radius;
@@ -60,66 +55,70 @@ namespace PQuery
             _radius = radius;
         }
 
-        public override bool Cast(PhysicsQuery query, RayDistance worldRay, out RaycastHit hit)
+        public override bool Cast(PhysicsParameters parameters, out RaycastHit hit)
         {
-            Parameters parameters = GetParameters(query, worldRay.Start);
+            RayDistance worldRay = parameters.GetWorldRay();
+            Position position = GetPosition(parameters);
             return Physics.CapsuleCast(
-                parameters.Cap1,
-                parameters.Cap2,
-                parameters.Radius,
+                position.Cap1,
+                position.Cap2,
+                position.Radius,
                 worldRay.Direction,
                 out hit,
                 worldRay.Distance,
-                query.LayerMask,
-                query.TriggerInteraction);
+                parameters.LayerMask,
+                parameters.TriggerInteraction);
         }
-        public override int CastNonAlloc(PhysicsQuery query, RayDistance worldRay, RaycastHit[] cache)
+        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters parameters)
         {
-            Parameters parameters = GetParameters(query, worldRay.Start);
-            return Physics.CapsuleCastNonAlloc(
-                parameters.Cap1,
-                parameters.Cap2,
-                parameters.Radius,
+            RayDistance worldRay = parameters.GetWorldRay();
+            Position position = GetPosition(parameters);
+            int count = Physics.CapsuleCastNonAlloc(
+                position.Cap1,
+                position.Cap2,
+                position.Radius,
                 worldRay.Direction,
-                cache,
+                parameters.HitCache,
                 worldRay.Distance,
-                query.LayerMask,
-                query.TriggerInteraction);
+                parameters.LayerMask,
+                parameters.TriggerInteraction);
+            return new(parameters.HitCache, count);
         }
-        public override bool Check(PhysicsQuery query, Vector3 worldOrigin)
+        public override bool Check(PhysicsParameters parameters)
         {
-            Parameters parameters = GetParameters(query, worldOrigin);
+            Position position = GetPosition(parameters);
             return Physics.CheckCapsule(
-                parameters.Cap1,
-                parameters.Cap2,
-                parameters.Radius,
-                query.LayerMask,
-                query.TriggerInteraction);
+                position.Cap1,
+                position.Cap2,
+                position.Radius,
+                parameters.LayerMask,
+                parameters.TriggerInteraction);
         }
-        public override int OverlapNonAlloc(PhysicsQuery query, Vector3 worldOrigin, Collider[] cache)
+        public override Result<Collider> OverlapNonAlloc(PhysicsParameters parameters)
         {
-            Parameters parameters = GetParameters(query, worldOrigin);
-            return Physics.OverlapCapsuleNonAlloc(
-                parameters.Cap1,
-                parameters.Cap2,
-                parameters.Radius,
-                cache,
-                query.LayerMask,
-                query.TriggerInteraction);
+            Position position = GetPosition(parameters);
+            int count = Physics.OverlapCapsuleNonAlloc(
+                position.Cap1,
+                position.Cap2,
+                position.Radius,
+                parameters.ColliderCache,
+                parameters.LayerMask,
+                parameters.TriggerInteraction);
+            return new(parameters.ColliderCache, count);
         }
-        public override void DrawOverlapGizmo(PhysicsQuery query)
+        public override void DrawOverlapGizmo(PhysicsParameters parameters)
         {
-            DrawGizmo(query, query.GetWorldStart());
+            DrawGizmo(parameters, parameters.GetWorldStart());
         }
-        public override void DrawGizmo(PhysicsQuery query, Vector3 center)
+        public override void DrawGizmo(PhysicsParameters parameters, Vector3 center)
         {
-            Parameters parameters = GetParameters(query, center);
-            CapsuleGizmo.Draw(center, parameters.Axis, parameters.Radius);
+            Position position = GetPosition(parameters);
+            CapsuleGizmo.Draw(center, position.Axis, position.Radius);
         }
 
-        public Parameters GetParameters(PhysicsQuery query, Vector3 center)
+        public Position GetPosition(PhysicsParameters parameters)
         {
-            return new(query, center, _axis, _height, _radius);
+            return new(parameters, _axis, _height, _radius);
         }
     }
 }

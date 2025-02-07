@@ -10,7 +10,7 @@ namespace PQuery.Editor
             Vector3 start = query.GetWorldStart();
             if (result)
             {
-                DrawHit(query, hit);
+                DrawHit(hit);
                 Gizmos.color = Preferences.HitColor.Value;
                 Gizmos.DrawLine(start, GetShapeCenter(query, hit));
                 query.DrawGizmo(start);

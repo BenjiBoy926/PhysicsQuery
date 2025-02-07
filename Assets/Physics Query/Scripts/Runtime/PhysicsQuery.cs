@@ -77,8 +77,7 @@ namespace PQuery
         public bool Cast(out RaycastHit hit)
         {
             _castMarker.Begin();
-            RayDistance worldRay = GetWorldRay();
-            bool didHit = _shape.Cast(this, worldRay, out hit);
+            bool didHit = _shape.Cast(GetParameters(), out hit);
             _castMarker.End();
             return didHit;
         }
@@ -89,42 +88,45 @@ namespace PQuery
                 throw new ArgumentNullException(nameof(sort));
             }
             _castNonAllocMarker.Begin();
-            RayDistance worldRay = GetWorldRay();
-            RaycastHit[] hits = GetHitCache();
-            int count = _shape.CastNonAlloc(this, worldRay, hits);
-            sort.Sort(hits, count);
+            Result<RaycastHit> result = _shape.CastNonAlloc(GetParameters());
+            sort.Sort(result._cache, result.Count);
             _castNonAllocMarker.End();
-            return new(hits, count);
+            return result;
         }
         public bool Check()
         {
             _checkMarker.Begin();
-            Vector3 center = GetWorldStart();
-            bool check = _shape.Check(this, center);
+            bool check = _shape.Check(GetParameters());
             _checkMarker.End();
             return check;
         }
         public Result<Collider> OverlapNonAlloc()
         {
             _overlapNonAllocMarker.Begin();
-            Vector3 center = GetWorldStart();
-            Collider[] overlaps = GetColliderCache();
-            int count = _shape.OverlapNonAlloc(this, center, overlaps);
+            Result<Collider> result = _shape.OverlapNonAlloc(GetParameters());
             _overlapNonAllocMarker.End();
-            return new(overlaps, count);
+            return result;
         }
 
+        public PhysicsParameters GetParameters()
+        {
+            return PhysicsParameters.Snapshot(this);
+        }
         public RayDistance GetWorldRay()
         {
             return new(GetWorldStart(), GetWorldEnd());
         }
         public Vector3 GetWorldStart()
         {
-            return _space == Space.Self ? transform.TransformPoint(_start) : _start;
+            return GetTransformationMatrix().MultiplyPoint3x4(_start);
         }
         public Vector3 GetWorldEnd()
         {
-            return _space == Space.Self ? transform.TransformPoint(_end) : _end;
+            return GetTransformationMatrix().MultiplyPoint3x4(_end);
+        }
+        public Matrix4x4 GetTransformationMatrix()
+        {
+            return _space == Space.World ? Matrix4x4.identity : transform.localToWorldMatrix;
         }
         public void RefreshCache()
         {
@@ -170,11 +172,11 @@ namespace PQuery
         }
         public void DrawOverlapGizmo()
         {
-            _shape.DrawOverlapGizmo(this);
+            _shape.DrawOverlapGizmo(GetParameters());
         }
         public void DrawGizmo(Vector3 center)
         {
-            _shape.DrawGizmo(this, center);
+            _shape.DrawGizmo(GetParameters(), center);
         }
     }
 }

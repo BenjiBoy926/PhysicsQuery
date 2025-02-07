@@ -9,7 +9,7 @@ namespace PQuery.Editor
             Vector3 center = GetShapeCenter(query, hit);
             query.DrawGizmo(center);
         }
-        protected void DrawHit(PhysicsQuery query, RaycastHit hit)
+        protected void DrawHit(RaycastHit hit)
         {
             Gizmos.color = Preferences.ResultItemColor.Value;
             DrawHitPointNormal(hit);
