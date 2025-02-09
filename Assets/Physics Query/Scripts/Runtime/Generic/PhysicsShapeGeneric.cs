@@ -1,16 +1,14 @@
-﻿using System.Collections;
-using UnityEngine;
-
-namespace PQuery
+﻿namespace PQuery
 {
-    public abstract class PhysicsShapeGeneric<TVector, TCollider, TRaycastHit, TPhysicsParameters>
+    public abstract class PhysicsShapeGeneric<TVector, TRay, TRaycastHit, TCollider>
         where TVector : IVector<TVector>
+        where TRay : IRay<TVector>
     {
-        public abstract bool Cast(TPhysicsParameters parameters, out TRaycastHit hit);
-        public abstract Result<TRaycastHit> CastNonAlloc(TPhysicsParameters parameters);
-        public abstract bool Check(TPhysicsParameters parameters);
-        public abstract Result<TCollider> OverlapNonAlloc(TPhysicsParameters parameters);
-        public abstract void DrawOverlapGizmo(TPhysicsParameters parameters);
-        public abstract void DrawGizmo(TPhysicsParameters parameters, TVector center);
+        public abstract bool Cast(PhysicsParameters<TVector, TRay, TRaycastHit, TCollider> parameters, out TRaycastHit hit);
+        public abstract Result<TRaycastHit> CastNonAlloc(PhysicsParameters<TVector, TRay, TRaycastHit, TCollider> parameters);
+        public abstract bool Check(PhysicsParameters<TVector, TRay, TRaycastHit, TCollider> parameters);
+        public abstract Result<TCollider> OverlapNonAlloc(PhysicsParameters<TVector, TRay, TRaycastHit, TCollider> parameters);
+        public abstract void DrawOverlapGizmo(PhysicsParameters<TVector, TRay, TRaycastHit, TCollider> parameters);
+        public abstract void DrawGizmo(PhysicsParameters<TVector, TRay, TRaycastHit, TCollider> parameters, TVector center);
     }
 }

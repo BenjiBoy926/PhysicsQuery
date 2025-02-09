@@ -14,7 +14,7 @@ namespace PQuery
             public readonly Vector3 Cap2;
             public readonly float Radius;
 
-            public Position(PhysicsParameters3D parameters, Axis3D axis, float height, float radius)
+            public Position(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters, Axis3D axis, float height, float radius)
             {
                 float extent = height * 0.5f;
                 Vector3 center = parameters.GetWorldStart().Unwrap();
@@ -55,9 +55,9 @@ namespace PQuery
             _radius = radius;
         }
 
-        public override bool Cast(PhysicsParameters3D parameters, out RaycastHit hit)
+        public override bool Cast(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters, out RaycastHit hit)
         {
-            RayDistance3D worldRay = parameters.GetWorldRay();
+            RayDistance<VectorWrapper3D, RayWrapper3D> worldRay = parameters.GetWorldRay();
             Position position = GetPosition(parameters);
             return Physics.CapsuleCast(
                 position.Cap1,
@@ -69,9 +69,9 @@ namespace PQuery
                 parameters.LayerMask,
                 parameters.TriggerInteraction);
         }
-        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters3D parameters)
+        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
-            RayDistance3D worldRay = parameters.GetWorldRay();
+            RayDistance<VectorWrapper3D, RayWrapper3D> worldRay = parameters.GetWorldRay();
             Position position = GetPosition(parameters);
             int count = Physics.CapsuleCastNonAlloc(
                 position.Cap1,
@@ -84,7 +84,7 @@ namespace PQuery
                 parameters.TriggerInteraction);
             return new(parameters.HitCache, count);
         }
-        public override bool Check(PhysicsParameters3D parameters)
+        public override bool Check(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             Position position = GetPosition(parameters);
             return Physics.CheckCapsule(
@@ -94,7 +94,7 @@ namespace PQuery
                 parameters.LayerMask,
                 parameters.TriggerInteraction);
         }
-        public override Result<Collider> OverlapNonAlloc(PhysicsParameters3D parameters)
+        public override Result<Collider> OverlapNonAlloc(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             Position position = GetPosition(parameters);
             int count = Physics.OverlapCapsuleNonAlloc(
@@ -106,17 +106,17 @@ namespace PQuery
                 parameters.TriggerInteraction);
             return new(parameters.ColliderCache, count);
         }
-        public override void DrawOverlapGizmo(PhysicsParameters3D parameters)
+        public override void DrawOverlapGizmo(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             DrawGizmo(parameters, parameters.GetWorldStart());
         }
-        public override void DrawGizmo(PhysicsParameters3D parameters, VectorWrapper3D center)
+        public override void DrawGizmo(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters, VectorWrapper3D center)
         {
             Position position = GetPosition(parameters);
             CapsuleGizmo3D.Draw(center.Unwrap(), position.Axis, position.Radius);
         }
 
-        public Position GetPosition(PhysicsParameters3D parameters)
+        public Position GetPosition(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             return new(parameters, _axis, _height, _radius);
         }

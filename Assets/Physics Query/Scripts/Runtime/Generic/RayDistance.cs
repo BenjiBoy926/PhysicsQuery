@@ -1,6 +1,6 @@
 namespace PQuery
 {
-    public class RayDistanceGeneric<TVector, TRay>
+    public struct RayDistance<TVector, TRay>
         where TVector : IVector<TVector>
         where TRay : IRay<TVector>
     {
@@ -11,7 +11,7 @@ namespace PQuery
         public TRay Ray;
         public float Distance;
 
-        public void SetStartAndEnd(TVector start, TVector end)
+        public RayDistance(TVector start, TVector end)
         {
             TVector offset = end.Minus(start);
             Ray = default;

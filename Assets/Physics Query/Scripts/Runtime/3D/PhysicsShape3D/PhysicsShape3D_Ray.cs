@@ -11,9 +11,9 @@ namespace PQuery
         {
         }
 
-        public override bool Cast(PhysicsParameters3D parameters, out RaycastHit hit)
+        public override bool Cast(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters, out RaycastHit hit)
         {
-            RayDistance3D worldRay = parameters.GetWorldRay();
+            RayDistance<VectorWrapper3D, RayWrapper3D> worldRay = parameters.GetWorldRay();
             return Physics.Raycast(
                 worldRay.Ray.Unwrap(),
                 out hit,
@@ -21,9 +21,9 @@ namespace PQuery
                 parameters.LayerMask,
                 parameters.TriggerInteraction);
         }
-        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters3D parameters)
+        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
-            RayDistance3D worldRay = parameters.GetWorldRay();
+            RayDistance<VectorWrapper3D, RayWrapper3D> worldRay = parameters.GetWorldRay();
             int count = Physics.RaycastNonAlloc(
                 worldRay.Ray.Unwrap(),
                 parameters.HitCache,
@@ -32,7 +32,7 @@ namespace PQuery
                 parameters.TriggerInteraction);
             return new(parameters.HitCache, count);
         }
-        public override bool Check(PhysicsParameters3D parameters)
+        public override bool Check(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             return Physics.Linecast(
                 parameters.GetWorldStart().Unwrap(),
@@ -40,7 +40,7 @@ namespace PQuery
                 parameters.LayerMask,
                 parameters.TriggerInteraction);
         }
-        public override Result<Collider> OverlapNonAlloc(PhysicsParameters3D parameters)
+        public override Result<Collider> OverlapNonAlloc(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             Result<RaycastHit> result = CastNonAlloc(parameters);
             for (int i = 0; i < result.Count; i++)
@@ -49,13 +49,13 @@ namespace PQuery
             }
             return new(parameters.ColliderCache, result.Count);
         }
-        public override void DrawOverlapGizmo(PhysicsParameters3D parameters)
+        public override void DrawOverlapGizmo(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             Vector3 start = parameters.GetWorldStart().Unwrap();
             Vector3 end = parameters.GetWorldEnd().Unwrap();
             Gizmos.DrawLine(start, end);
         }
-        public override void DrawGizmo(PhysicsParameters3D parameters, VectorWrapper3D center)
+        public override void DrawGizmo(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters, VectorWrapper3D center)
         {
             // No shapes to draw for raycasting
         }

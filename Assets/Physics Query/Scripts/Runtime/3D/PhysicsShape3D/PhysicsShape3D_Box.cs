@@ -20,9 +20,9 @@ namespace PQuery
             _orientation = orientation;
         }
 
-        public override bool Cast(PhysicsParameters3D parameters, out RaycastHit hit)
+        public override bool Cast(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters, out RaycastHit hit)
         {
-            RayDistance3D worldRay = parameters.GetWorldRay();
+            RayDistance<VectorWrapper3D, RayWrapper3D> worldRay = parameters.GetWorldRay();
             return Physics.BoxCast(
                 worldRay.Start.Unwrap(),
                 GetWorldExtents(parameters),
@@ -33,9 +33,9 @@ namespace PQuery
                 parameters.LayerMask,
                 parameters.TriggerInteraction);
         }
-        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters3D parameters)
+        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
-            RayDistance3D worldRay = parameters.GetWorldRay();
+            RayDistance<VectorWrapper3D, RayWrapper3D> worldRay = parameters.GetWorldRay();
             int count = Physics.BoxCastNonAlloc(
                 worldRay.Start.Unwrap(),
                 GetWorldExtents(parameters),
@@ -47,7 +47,7 @@ namespace PQuery
                 parameters.TriggerInteraction);
             return new(parameters.HitCache, count);
         }
-        public override bool Check(PhysicsParameters3D parameters)
+        public override bool Check(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             return Physics.CheckBox(
                 parameters.GetWorldStart().Unwrap(),
@@ -56,7 +56,7 @@ namespace PQuery
                 parameters.LayerMask,
                 parameters.TriggerInteraction);
         }
-        public override Result<Collider> OverlapNonAlloc(PhysicsParameters3D parameters)
+        public override Result<Collider> OverlapNonAlloc(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             int count = Physics.OverlapBoxNonAlloc(
                 parameters.GetWorldStart().Unwrap(),
@@ -67,11 +67,11 @@ namespace PQuery
                 parameters.TriggerInteraction);
             return new(parameters.ColliderCache, count);
         }
-        public override void DrawOverlapGizmo(PhysicsParameters3D parameters)
+        public override void DrawOverlapGizmo(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             DrawGizmo(parameters, parameters.GetWorldStart());
         }
-        public override void DrawGizmo(PhysicsParameters3D parameters, VectorWrapper3D center)
+        public override void DrawGizmo(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters, VectorWrapper3D center)
         {
             Quaternion worldOrientation = GetWorldOrientation(parameters);
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
@@ -82,15 +82,15 @@ namespace PQuery
             Gizmos.matrix = Matrix4x4.identity;
         }
 
-        public Vector3 GetWorldExtents(PhysicsParameters3D parameters)
+        public Vector3 GetWorldExtents(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             return GetWorldSize(parameters) * 0.5f;
         }
-        public Vector3 GetWorldSize(PhysicsParameters3D parameters)
+        public Vector3 GetWorldSize(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             return parameters.TransformScale(_size.Wrap()).Unwrap();
         }
-        public Quaternion GetWorldOrientation(PhysicsParameters3D parameters)
+        public Quaternion GetWorldOrientation(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
         {
             return parameters.TransformRotation(_orientation);
         }

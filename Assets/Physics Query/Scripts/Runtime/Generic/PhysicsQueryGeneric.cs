@@ -4,13 +4,11 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public abstract class PhysicsQueryGeneric<TVector, TRay, TRaycastHit, TCollider, TPhysicsParameters, TRayDistance, TResultSort, TPhysicsShape> : PhysicsQuery
+    public abstract class PhysicsQueryGeneric<TVector, TRay, TRaycastHit, TCollider, TResultSort, TPhysicsShape> : PhysicsQuery
         where TVector : IVector<TVector>
         where TRay : IRay<TVector>
-        where TPhysicsParameters : PhysicsParametersGeneric<TVector, TRay, TRayDistance, TRaycastHit, TCollider>, new()
-        where TRayDistance : RayDistanceGeneric<TVector, TRay>, new()
         where TResultSort : ResultSortGeneric<TRaycastHit>
-        where TPhysicsShape : PhysicsShapeGeneric<TVector, TCollider, TRaycastHit, TPhysicsParameters>
+        where TPhysicsShape : PhysicsShapeGeneric<TVector, TRay, TRaycastHit, TCollider>
     {
         public TVector Start
         {
@@ -35,7 +33,6 @@ namespace PQuery
         private TVector _end;
         [SerializeReference, SubtypeDropdown]
         private TPhysicsShape _shape;
-        private readonly TPhysicsParameters _parameters = new();
         private readonly CachedArray<TRaycastHit> _hitCache = new();
         private readonly CachedArray<TCollider> _colliderCache = new();
 
@@ -83,7 +80,7 @@ namespace PQuery
         }
 
         
-        public TRayDistance GetWorldRay()
+        public RayDistance<TVector, TRay> GetWorldRay()
         {
             return GetParameters().GetWorldRay();
         }
@@ -95,16 +92,9 @@ namespace PQuery
         {
             return GetParameters().GetWorldEnd();
         }
-        public TPhysicsParameters GetParameters()
+        public PhysicsParameters<TVector, TRay, TRaycastHit, TCollider> GetParameters()
         {
-            _parameters.Space = GetTransformationMatrix();
-            _parameters.LayerMask = LayerMask;
-            _parameters.TriggerInteraction = TriggerInteraction;
-            _parameters.Start = Start;
-            _parameters.End = End;
-            _parameters.HitCache = GetHitCache();
-            _parameters.ColliderCache = GetColliderCache();
-            return _parameters;
+            return new(GetTransformationMatrix(), LayerMask, TriggerInteraction, Start, End, GetHitCache(), GetColliderCache());
         }
         public void RefreshCache()
         {
