@@ -82,6 +82,19 @@ namespace PQuery
             return result;
         }
 
+        
+        public TRayDistance GetWorldRay()
+        {
+            return GetParameters().GetWorldRay();
+        }
+        public TVector GetWorldStart()
+        {
+            return GetParameters().GetWorldStart();
+        }
+        public TVector GetWorldEnd()
+        {
+            return GetParameters().GetWorldEnd();
+        }
         public TPhysicsParameters GetParameters()
         {
             _parameters.Space = GetTransformationMatrix();
@@ -92,18 +105,6 @@ namespace PQuery
             _parameters.HitCache = GetHitCache();
             _parameters.ColliderCache = GetColliderCache();
             return _parameters;
-        }
-        public TRayDistance GetWorldRay()
-        {
-            return (TRayDistance)GetParameters().GetWorldRay();
-        }
-        public TVector GetWorldStart()
-        {
-            return _start.TransformAsPoint(GetTransformationMatrix());
-        }
-        public TVector GetWorldEnd()
-        {
-            return _end.TransformAsPoint(GetTransformationMatrix());
         }
         public void RefreshCache()
         {

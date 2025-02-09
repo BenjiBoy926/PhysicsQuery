@@ -14,7 +14,6 @@ namespace PQuery.Editor
         private GUIContent[] Labels => _labels ??= CreateShapeLabels();
 
         private static readonly Type[] _noArgs = new Type[0];
-        private readonly List<SerializedProperty> _subProperties = new(3);
         private List<Type> _subtypes;
         private GUIContent[] _labels;
 
@@ -40,20 +39,12 @@ namespace PQuery.Editor
         }
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            float height = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+            float height = EditorGUIUtility.singleLineHeight;
             if (!IsEachReferenceTheSameType(property))
             {
                 return height;
             }
-            List<SerializedProperty> subProperties = GetSubProperties(property);
-            for (int i = 0; i < subProperties.Count; i++)
-            {
-                height += EditorGUI.GetPropertyHeight(subProperties[i]);
-                if (i < subProperties.Count - 1)
-                {
-                    height += EditorGUIUtility.standardVerticalSpacing;
-                }
-            }
+            height += property.GetChildrenHeight();
             return height;
         }
 
@@ -99,10 +90,9 @@ namespace PQuery.Editor
         }
         private void DrawSubProperties(Rect position, SerializedProperty property)
         {
-            List<SerializedProperty> subProperties = GetSubProperties(property);
-            for (int i = 0; i < subProperties.Count; i++)
+            foreach (SerializedProperty child in property.GetImmediateChildren())
             {
-                position = PropertyField(position, subProperties[i], null);
+                position = PropertyField(position, child, null);
             }
         }
         private static Rect PropertyField(Rect position, SerializedProperty property, GUIContent label)
@@ -115,22 +105,6 @@ namespace PQuery.Editor
             return position;
         }
 
-        private List<SerializedProperty> GetSubProperties(SerializedProperty parent)
-        {
-            _subProperties.Clear();
-            SerializedProperty iterator = parent.Copy();
-            SerializedProperty end = parent.GetEndProperty();
-            if (!iterator.NextVisible(true))
-            {
-                return _subProperties;
-            }
-            while (!SerializedProperty.EqualContents(iterator, end))
-            {
-                _subProperties.Add(iterator.Copy());
-                iterator.NextVisible(false);
-            }
-            return _subProperties;
-        }
         private int GetIndex(SerializedProperty property)
         {
             return Subtypes.IndexOf(property.managedReferenceValue.GetType());

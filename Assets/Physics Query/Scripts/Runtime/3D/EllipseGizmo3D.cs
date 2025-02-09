@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public readonly struct EllipseGizmo
+    public readonly struct EllipseGizmo3D
     {
         private const int SegmentsPerArc = 32;
 
@@ -10,7 +10,7 @@ namespace PQuery
         private readonly Vector3 _xAxis;
         private readonly Vector3 _yAxis;
 
-        public EllipseGizmo(Vector3 center, Vector3 xAxis, Vector3 yAxis)
+        public EllipseGizmo3D(Vector3 center, Vector3 xAxis, Vector3 yAxis)
         {
             _center = center;
             _xAxis = xAxis;

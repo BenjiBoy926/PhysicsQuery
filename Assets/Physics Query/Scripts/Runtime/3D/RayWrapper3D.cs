@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public struct RayWrapper : IRay<Vector3Wrapper>
+    public struct RayWrapper3D : IRay<VectorWrapper3D>
     {
-        public Vector3Wrapper Origin
+        public VectorWrapper3D Origin
         {
             get => _value.origin.Wrap();
             set => _value.origin = value.Unwrap();
         }
-        public Vector3Wrapper Direction
+        public VectorWrapper3D Direction
         {
             get => _value.direction.Wrap();
             set => _value.direction = value.Unwrap();
@@ -18,12 +18,12 @@ namespace PQuery
 
         private Ray _value;
 
-        public RayWrapper(Ray value)
+        public RayWrapper3D(Ray value)
         {
             _value = value;
         }
 
-        public Vector3Wrapper GetPoint(float distance)
+        public VectorWrapper3D GetPoint(float distance)
         {
             return _value.GetPoint(distance).Wrap();
         }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public static class CapsuleGizmo
+    public static class CapsuleGizmo3D
     {
         public static void Draw(Vector3 center, Vector3 axis, float radius)
         {
@@ -28,9 +28,9 @@ namespace PQuery
         }
         private static void DrawHemisphere(Vector3 center, Vector3 right, Vector3 up, Vector3 forward)
         {
-            new EllipseGizmo(center, forward, right).Draw();
-            new EllipseGizmo(center, forward, up).DrawHalf();
-            new EllipseGizmo(center, right, up).DrawHalf();
+            new EllipseGizmo3D(center, forward, right).Draw();
+            new EllipseGizmo3D(center, forward, up).DrawHalf();
+            new EllipseGizmo3D(center, right, up).DrawHalf();
         }
         private static void GetBasisVectors(Vector3 up, out Vector3 right, out Vector3 forward)
         {

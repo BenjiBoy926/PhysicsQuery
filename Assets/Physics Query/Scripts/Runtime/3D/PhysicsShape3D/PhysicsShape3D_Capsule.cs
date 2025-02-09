@@ -14,7 +14,7 @@ namespace PQuery
             public readonly Vector3 Cap2;
             public readonly float Radius;
 
-            public Position(PhysicsParameters3D parameters, Axis axis, float height, float radius)
+            public Position(PhysicsParameters3D parameters, Axis3D axis, float height, float radius)
             {
                 float extent = height * 0.5f;
                 Vector3 center = parameters.GetWorldStart().Unwrap();
@@ -29,7 +29,7 @@ namespace PQuery
                 Cap2 = center - capOffset;
                 Radius = radius;
             }
-            private static float ScaleRadius(Vector3 lossyScale, Axis heightAxis, float radius)
+            private static float ScaleRadius(Vector3 lossyScale, Axis3D heightAxis, float radius)
             {
                 float scale1 = lossyScale[heightAxis.CrossDimension1];
                 float scale2 = lossyScale[heightAxis.CrossDimension2];
@@ -39,7 +39,7 @@ namespace PQuery
         }
 
         [SerializeReference, SubtypeDropdown]
-        private Axis _axis = new Axis_Y();
+        private Axis3D _axis = new Axis_Y();
         [SerializeField]
         private float _height = 1;
         [SerializeField]
@@ -48,7 +48,7 @@ namespace PQuery
         public PhysicsShape3D_Capsule()
         {
         }
-        public PhysicsShape3D_Capsule(Axis axis, float height, float radius)
+        public PhysicsShape3D_Capsule(Axis3D axis, float height, float radius)
         {
             _axis = axis;
             _height = height;
@@ -110,10 +110,10 @@ namespace PQuery
         {
             DrawGizmo(parameters, parameters.GetWorldStart());
         }
-        public override void DrawGizmo(PhysicsParameters3D parameters, Vector3Wrapper center)
+        public override void DrawGizmo(PhysicsParameters3D parameters, VectorWrapper3D center)
         {
             Position position = GetPosition(parameters);
-            CapsuleGizmo.Draw(center.Unwrap(), position.Axis, position.Radius);
+            CapsuleGizmo3D.Draw(center.Unwrap(), position.Axis, position.Radius);
         }
 
         public Position GetPosition(PhysicsParameters3D parameters)

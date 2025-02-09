@@ -71,7 +71,7 @@ namespace PQuery
         {
             DrawGizmo(parameters, parameters.GetWorldStart());
         }
-        public override void DrawGizmo(PhysicsParameters3D parameters, Vector3Wrapper center)
+        public override void DrawGizmo(PhysicsParameters3D parameters, VectorWrapper3D center)
         {
             Quaternion worldOrientation = GetWorldOrientation(parameters);
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);

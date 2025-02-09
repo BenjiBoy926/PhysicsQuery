@@ -64,7 +64,7 @@ namespace PQuery
         {
             DrawGizmo(parameters, parameters.GetWorldStart());
         }
-        public override void DrawGizmo(PhysicsParameters3D parameters, Vector3Wrapper center)
+        public override void DrawGizmo(PhysicsParameters3D parameters, VectorWrapper3D center)
         {
             Gizmos.DrawWireSphere(center.Unwrap(), GetWorldRadius(parameters));
         }

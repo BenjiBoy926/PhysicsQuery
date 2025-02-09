@@ -9,13 +9,13 @@ namespace PQuery
     {
         public Vector3 LossyScale => Space.lossyScale;
 
-        public Matrix4x4 Space;
-        public LayerMask LayerMask;
-        public QueryTriggerInteraction TriggerInteraction;
-        public TVector Start;
-        public TVector End;
-        public TRaycastHit[] HitCache;
-        public TCollider[] ColliderCache;
+        public Matrix4x4 Space { get; internal set; }
+        public LayerMask LayerMask { get; internal set; }
+        public QueryTriggerInteraction TriggerInteraction { get; internal set; }
+        public TVector Start { get; internal set; }
+        public TVector End { get; internal set; }
+        public TRaycastHit[] HitCache { get; internal set; }
+        public TCollider[] ColliderCache { get; internal set; }
 
         private readonly TRayDistance _rayDistance = new();
 

@@ -55,7 +55,7 @@ namespace PQuery
             Vector3 end = parameters.GetWorldEnd().Unwrap();
             Gizmos.DrawLine(start, end);
         }
-        public override void DrawGizmo(PhysicsParameters3D parameters, Vector3Wrapper center)
+        public override void DrawGizmo(PhysicsParameters3D parameters, VectorWrapper3D center)
         {
             // No shapes to draw for raycasting
         }

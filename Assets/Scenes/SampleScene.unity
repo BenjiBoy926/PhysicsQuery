@@ -537,14 +537,17 @@ MonoBehaviour:
   _start:
     _value: {x: 0, y: 0, z: 0}
   _end:
-    _value: {x: 0, y: 0, z: 0}
+    _value: {x: 0, y: 0, z: 9.99}
   _shape:
-    rid: -2
+    rid: 4639093752822497299
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 4639093752822497299
+      type: {class: PhysicsShape3D_Box, ns: PQuery, asm: PhysicsQuery}
+      data:
+        _size: {x: 1, y: 1, z: 1}
+        _orientation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,11 +742,11 @@ MonoBehaviour:
   _end:
     _value: {x: 0, y: 0, z: 50.28}
   _shape:
-    rid: 4639093752822497281
+    rid: 4639093752822497297
   references:
     version: 2
     RefIds:
-    - rid: 4639093752822497281
+    - rid: 4639093752822497297
       type: {class: PhysicsShape3D_Box, ns: PQuery, asm: PhysicsQuery}
       data:
         _size: {x: 1, y: 1, z: 1}
@@ -758,7 +761,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.13, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.0636, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

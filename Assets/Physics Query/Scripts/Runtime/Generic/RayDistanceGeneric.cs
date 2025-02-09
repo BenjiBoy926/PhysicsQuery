@@ -13,7 +13,7 @@ namespace PQuery
 
         public void SetStartAndEnd(TVector start, TVector end)
         {
-            TVector offset = end.Subtract(start);
+            TVector offset = end.Minus(start);
             Ray = default;
             Ray.Origin = start;
             Ray.Direction = offset;

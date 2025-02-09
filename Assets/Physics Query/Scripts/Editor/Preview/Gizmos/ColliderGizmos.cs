@@ -52,7 +52,7 @@ namespace PQuery.Editor
             }
             else
             {
-                CapsuleGizmo.Draw(center, axis, radius);
+                CapsuleGizmo3D.Draw(center, axis, radius);
             }
         }
         private static void DrawMeshColliderGizmo(MeshCollider collider)

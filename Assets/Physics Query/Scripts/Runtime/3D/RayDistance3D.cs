@@ -1,6 +1,6 @@
 ﻿namespace PQuery
 {
-    public class RayDistance3D : RayDistanceGeneric<Vector3Wrapper, RayWrapper>
+    public class RayDistance3D : RayDistanceGeneric<VectorWrapper3D, RayWrapper3D>
     {
         public RayDistance3D()
         {
