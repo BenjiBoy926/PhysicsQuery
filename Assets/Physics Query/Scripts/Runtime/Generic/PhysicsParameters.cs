@@ -2,19 +2,26 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public struct PhysicsParameters<TVector, TRay, TRaycastHit, TCollider>
+    public readonly struct PhysicsParameters<TVector, TRay, TRaycastHit, TCollider>
         where TVector : IVector<TVector>
         where TRay : IRay<TVector>
     {
-        public Vector3 LossyScale => Space.lossyScale;
+        public Matrix4x4 Space => _space;
+        public LayerMask LayerMask => _layerMask;
+        public QueryTriggerInteraction TriggerInteraction => _triggerInteraction;
+        public TVector Start => _start;
+        public TVector End => _end;
+        public TRaycastHit[] HitCache => _hitCache;
+        public TCollider[] ColliderCache => _colliderCache;
+        public Vector3 LossyScale => _space.lossyScale;
 
-        public Matrix4x4 Space { get; private set; }
-        public LayerMask LayerMask { get; private set; }
-        public QueryTriggerInteraction TriggerInteraction { get; private set; }
-        public TVector Start { get; private set; }
-        public TVector End { get; private set; }
-        public TRaycastHit[] HitCache { get; private set; }
-        public TCollider[] ColliderCache { get; private set; }
+        private readonly Matrix4x4 _space;
+        private readonly LayerMask _layerMask;
+        private readonly QueryTriggerInteraction _triggerInteraction;
+        private readonly TVector _start;
+        private readonly TVector _end;
+        private readonly TRaycastHit[] _hitCache;
+        private readonly TCollider[] _colliderCache;
 
         public PhysicsParameters(
             Matrix4x4 space,
@@ -25,13 +32,13 @@ namespace PQuery
             TRaycastHit[] hitCache,
             TCollider[] colliderCache)
         {
-            Space = space;
-            LayerMask = layerMask;
-            TriggerInteraction = triggerInteraction;
-            Start = start;
-            End = end;
-            HitCache = hitCache;
-            ColliderCache = colliderCache;
+            _space = space;
+            _layerMask = layerMask;
+            _triggerInteraction = triggerInteraction;
+            _start = start;
+            _end = end;
+            _hitCache = hitCache;
+            _colliderCache = colliderCache;
         }
 
         public RayDistance<TVector, TRay> GetWorldRay()

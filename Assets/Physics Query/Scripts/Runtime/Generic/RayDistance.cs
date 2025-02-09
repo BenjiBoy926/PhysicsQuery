@@ -1,6 +1,6 @@
 namespace PQuery
 {
-    public struct RayDistance<TVector, TRay>
+    public readonly struct RayDistance<TVector, TRay>
         where TVector : IVector<TVector>
         where TRay : IRay<TVector>
     {
@@ -8,8 +8,8 @@ namespace PQuery
         public TVector End => Ray.GetPoint(Distance);
         public TVector Direction => Ray.Direction;
 
-        public TRay Ray;
-        public float Distance;
+        public readonly TRay Ray;
+        public readonly float Distance;
 
         public RayDistance(TVector start, TVector end)
         {
