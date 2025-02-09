@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public abstract class PhysicsQueryGeneric<TVector, TPhysicsShape, TRaycastHit, TCollider, TResultSort, TPhysicsParameters, TRayDistance> : PhysicsQuery
+    public abstract class PhysicsQueryGeneric<TVector, TRay, TRaycastHit, TCollider, TPhysicsParameters, TRayDistance, TResultSort, TPhysicsShape> : PhysicsQuery
         where TVector : IVector<TVector>
-        where TPhysicsShape : IPhysicsShape<TPhysicsParameters, TRaycastHit, TCollider, TVector>
-        where TResultSort : IResultSort<TRaycastHit>
-        where TPhysicsParameters : IPhysicsParameters
-        where TRayDistance : IRayDistance<TVector>
+        where TRay : IRay<TVector>
+        where TPhysicsParameters : PhysicsParametersGeneric<TVector, TRay, TRayDistance, TRaycastHit, TCollider>, new()
+        where TRayDistance : RayDistanceGeneric<TVector, TRay>, new()
+        where TResultSort : ResultSortGeneric<TRaycastHit>
+        where TPhysicsShape : PhysicsShapeGeneric<TVector, TCollider, TRaycastHit, TPhysicsParameters>
     {
         public TVector Start
         {
@@ -34,6 +35,7 @@ namespace PQuery
         private TVector _end;
         [SerializeReference, SubtypeDropdown]
         private TPhysicsShape _shape;
+        private readonly TPhysicsParameters _parameters = new();
         private readonly CachedArray<TRaycastHit> _hitCache = new();
         private readonly CachedArray<TCollider> _colliderCache = new();
 
@@ -82,15 +84,18 @@ namespace PQuery
 
         public TPhysicsParameters GetParameters()
         {
-            TPhysicsParameters result = default;
-            result.Snapshot(this);
-            return result;
+            _parameters.Space = GetTransformationMatrix();
+            _parameters.LayerMask = LayerMask;
+            _parameters.TriggerInteraction = TriggerInteraction;
+            _parameters.Start = Start;
+            _parameters.End = End;
+            _parameters.HitCache = GetHitCache();
+            _parameters.ColliderCache = GetColliderCache();
+            return _parameters;
         }
         public TRayDistance GetWorldRay()
         {
-            TRayDistance result = default;
-            result.SetStartAndEnd(GetWorldStart(), GetWorldEnd());
-            return result;
+            return (TRayDistance)GetParameters().GetWorldRay();
         }
         public TVector GetWorldStart()
         {

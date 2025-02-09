@@ -6,7 +6,7 @@ namespace PQuery.Editor
     {
         public override void DrawGizmos(PhysicsQuery3D query)
         {
-            var result = query.CastNonAlloc(ResultSort.Distance);
+            var result = query.CastNonAlloc(ResultSort3D.Distance);
 
             Gizmos.color = Preferences.GetColorForResult(result);
             query.DrawGizmo(query.GetWorldStart());
@@ -52,7 +52,7 @@ namespace PQuery.Editor
             }
             else
             {
-                Vector3 midpoint = query.GetWorldRay().GetPoint(result.Last.distance);
+                Vector3 midpoint = query.GetWorldRay().GetPoint(result.Last.distance).Unwrap();
                 Gizmos.color = Preferences.HitColor.Value;
                 Gizmos.DrawLine(start, midpoint);
                 Gizmos.color = Preferences.MissColor.Value;

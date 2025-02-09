@@ -24,7 +24,7 @@ namespace PQuery.Editor
 
         protected Vector3 GetShapeCenter(PhysicsQuery3D query, RaycastHit hit)
         {
-            return query.GetWorldRay().GetPoint(hit.distance);
+            return query.GetWorldRay().GetPoint(hit.distance).Unwrap();
         }
 
         public abstract void DrawGizmos(PhysicsQuery3D query);

@@ -7,7 +7,7 @@ namespace PQuery.Editor
     {
         protected override Result<RaycastHit> GetResult(PhysicsQuery3D query)
         {
-            return query.CastNonAlloc(ResultSort.Distance);
+            return query.CastNonAlloc(ResultSort3D.Distance);
         }
         protected override string GetLabel(RaycastHit element, int index)
         {

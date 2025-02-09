@@ -4,7 +4,7 @@ using UnityEngine;
 namespace PQuery
 {
     [Serializable]
-    public class PhysicsShape_Capsule : PhysicsShape
+    public class PhysicsShape3D_Capsule : PhysicsShape3D
     {
         public readonly struct Position
         {
@@ -14,11 +14,11 @@ namespace PQuery
             public readonly Vector3 Cap2;
             public readonly float Radius;
 
-            public Position(PhysicsParameters parameters, Axis axis, float height, float radius)
+            public Position(PhysicsParameters3D parameters, Axis axis, float height, float radius)
             {
                 float extent = height * 0.5f;
-                Vector3 center = parameters.GetWorldStart();
-                Vector3 direction = parameters.TransformDirection(axis.Vector);
+                Vector3 center = parameters.GetWorldStart().Unwrap();
+                Vector3 direction = parameters.TransformDirection(axis.Vector.Wrap()).Unwrap();
 
                 Vector3 lossyScale = parameters.LossyScale;
                 float distance = extent * lossyScale[axis.Dimension];                
@@ -45,46 +45,46 @@ namespace PQuery
         [SerializeField]
         private float _radius = 0.5f;
 
-        public PhysicsShape_Capsule()
+        public PhysicsShape3D_Capsule()
         {
         }
-        public PhysicsShape_Capsule(Axis axis, float height, float radius)
+        public PhysicsShape3D_Capsule(Axis axis, float height, float radius)
         {
             _axis = axis;
             _height = height;
             _radius = radius;
         }
 
-        public override bool Cast(PhysicsParameters parameters, out RaycastHit hit)
+        public override bool Cast(PhysicsParameters3D parameters, out RaycastHit hit)
         {
-            RayDistance worldRay = parameters.GetWorldRay();
+            RayDistance3D worldRay = parameters.GetWorldRay();
             Position position = GetPosition(parameters);
             return Physics.CapsuleCast(
                 position.Cap1,
                 position.Cap2,
                 position.Radius,
-                worldRay.Direction,
+                worldRay.Direction.Unwrap(),
                 out hit,
                 worldRay.Distance,
                 parameters.LayerMask,
                 parameters.TriggerInteraction);
         }
-        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters parameters)
+        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters3D parameters)
         {
-            RayDistance worldRay = parameters.GetWorldRay();
+            RayDistance3D worldRay = parameters.GetWorldRay();
             Position position = GetPosition(parameters);
             int count = Physics.CapsuleCastNonAlloc(
                 position.Cap1,
                 position.Cap2,
                 position.Radius,
-                worldRay.Direction,
+                worldRay.Direction.Unwrap(),
                 parameters.HitCache,
                 worldRay.Distance,
                 parameters.LayerMask,
                 parameters.TriggerInteraction);
             return new(parameters.HitCache, count);
         }
-        public override bool Check(PhysicsParameters parameters)
+        public override bool Check(PhysicsParameters3D parameters)
         {
             Position position = GetPosition(parameters);
             return Physics.CheckCapsule(
@@ -94,7 +94,7 @@ namespace PQuery
                 parameters.LayerMask,
                 parameters.TriggerInteraction);
         }
-        public override Result<Collider> OverlapNonAlloc(PhysicsParameters parameters)
+        public override Result<Collider> OverlapNonAlloc(PhysicsParameters3D parameters)
         {
             Position position = GetPosition(parameters);
             int count = Physics.OverlapCapsuleNonAlloc(
@@ -106,17 +106,17 @@ namespace PQuery
                 parameters.TriggerInteraction);
             return new(parameters.ColliderCache, count);
         }
-        public override void DrawOverlapGizmo(PhysicsParameters parameters)
+        public override void DrawOverlapGizmo(PhysicsParameters3D parameters)
         {
-            DrawGizmo(parameters, new(parameters.GetWorldStart()));
+            DrawGizmo(parameters, parameters.GetWorldStart());
         }
-        public override void DrawGizmo(PhysicsParameters parameters, Vector3Wrapper center)
+        public override void DrawGizmo(PhysicsParameters3D parameters, Vector3Wrapper center)
         {
             Position position = GetPosition(parameters);
             CapsuleGizmo.Draw(center.Unwrap(), position.Axis, position.Radius);
         }
 
-        public Position GetPosition(PhysicsParameters parameters)
+        public Position GetPosition(PhysicsParameters3D parameters)
         {
             return new(parameters, _axis, _height, _radius);
         }

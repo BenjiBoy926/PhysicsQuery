@@ -6,6 +6,8 @@ namespace PQuery
     [Serializable]
     public struct Vector3Wrapper : IVector<Vector3Wrapper>
     {
+        public readonly float Magnitude => _value.magnitude;
+
         [SerializeField]
         private Vector3 _value;
 
@@ -34,6 +36,10 @@ namespace PQuery
             vector.y *= lossyScale.y;
             vector.z *= lossyScale.z;
             return vector.Wrap();
+        }
+        public Vector3Wrapper Subtract(Vector3Wrapper other)
+        {
+            return (Unwrap() - other.Unwrap()).Wrap();
         }
         public readonly Vector3 Unwrap()
         {

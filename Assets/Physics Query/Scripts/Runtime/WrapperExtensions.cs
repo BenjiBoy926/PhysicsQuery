@@ -8,5 +8,9 @@ namespace PQuery
         {
             return new(vector);
         }
+        public static RayWrapper Wrap(this Ray ray)
+        {
+            return new(ray);
+        }
     }
 }

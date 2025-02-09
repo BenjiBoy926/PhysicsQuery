@@ -4,5 +4,5 @@ using UnityEngine;
 public class PhysicsShapeDrawerTest : MonoBehaviour
 {
     [SerializeReference]
-    private PhysicsShape _shape;
+    private PhysicsShape3D _shape;
 }
