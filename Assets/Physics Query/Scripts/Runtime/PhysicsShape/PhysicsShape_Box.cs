@@ -71,11 +71,11 @@ namespace PQuery
         {
             DrawGizmo(parameters, new(parameters.GetWorldStart()));
         }
-        public override void DrawGizmo(PhysicsParameters parameters, Vector3D center)
+        public override void DrawGizmo(PhysicsParameters parameters, Vector3Wrapper center)
         {
             Quaternion worldOrientation = GetWorldOrientation(parameters);
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
-            Vector3 invertedCenter = rotationMatrix.inverse.MultiplyVector(center.ToUnity());
+            Vector3 invertedCenter = rotationMatrix.inverse.MultiplyVector(center.Unwrap());
 
             Gizmos.matrix = rotationMatrix;
             Gizmos.DrawWireCube(invertedCenter, GetWorldSize(parameters));

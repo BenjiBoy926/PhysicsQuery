@@ -94,11 +94,11 @@ namespace PQuery
         }
         public TVector GetWorldStart()
         {
-            return _start.TransformAsPointBy(GetTransformationMatrix());
+            return _start.TransformAsPoint(GetTransformationMatrix());
         }
         public TVector GetWorldEnd()
         {
-            return _end.TransformAsPointBy(GetTransformationMatrix());
+            return _end.TransformAsPoint(GetTransformationMatrix());
         }
         public void RefreshCache()
         {

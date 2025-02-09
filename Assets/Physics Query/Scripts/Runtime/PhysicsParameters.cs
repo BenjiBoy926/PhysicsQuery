@@ -20,8 +20,8 @@ namespace PQuery
             Space = query3D.GetTransformationMatrix();
             LayerMask = query3D.LayerMask;
             TriggerInteraction = query3D.TriggerInteraction;
-            Start = query3D.Start.ToUnity();
-            End = query3D.End.ToUnity();
+            Start = query3D.Start.Unwrap();
+            End = query3D.End.Unwrap();
             HitCache = query3D.GetHitCache();
             ColliderCache = query3D.GetColliderCache();
         }

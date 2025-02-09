@@ -4,6 +4,6 @@ namespace PQuery
 {
     public interface IVector<TSelf> where TSelf : IVector<TSelf>
     {
-        TSelf TransformAsPointBy(Matrix4x4 matrix);
+        TSelf TransformAsPoint(Matrix4x4 matrix);
     }
 }

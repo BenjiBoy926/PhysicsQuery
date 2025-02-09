@@ -110,10 +110,10 @@ namespace PQuery
         {
             DrawGizmo(parameters, new(parameters.GetWorldStart()));
         }
-        public override void DrawGizmo(PhysicsParameters parameters, Vector3D center)
+        public override void DrawGizmo(PhysicsParameters parameters, Vector3Wrapper center)
         {
             Position position = GetPosition(parameters);
-            CapsuleGizmo.Draw(center.ToUnity(), position.Axis, position.Radius);
+            CapsuleGizmo.Draw(center.Unwrap(), position.Axis, position.Radius);
         }
 
         public Position GetPosition(PhysicsParameters parameters)

@@ -37,8 +37,8 @@ namespace PQuery.Editor
         }
         private void DrawResultLine(PhysicsQuery3D query, Result<RaycastHit> result)
         {
-            Vector3 start = query.GetWorldStart().ToUnity();
-            Vector3 end = query.GetWorldEnd().ToUnity();
+            Vector3 start = query.GetWorldStart().Unwrap();
+            Vector3 end = query.GetWorldEnd().Unwrap();
 
             if (result.IsFull)
             {

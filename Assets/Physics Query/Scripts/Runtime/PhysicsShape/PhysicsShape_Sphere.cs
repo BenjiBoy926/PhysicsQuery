@@ -62,11 +62,11 @@ namespace PQuery
         }
         public override void DrawOverlapGizmo(PhysicsParameters parameters)
         {
-            DrawGizmo(parameters, parameters.GetWorldStart().ToPQuery());
+            DrawGizmo(parameters, parameters.GetWorldStart().Wrap());
         }
-        public override void DrawGizmo(PhysicsParameters parameters, Vector3D center)
+        public override void DrawGizmo(PhysicsParameters parameters, Vector3Wrapper center)
         {
-            Gizmos.DrawWireSphere(center.ToUnity(), GetWorldRadius(parameters));
+            Gizmos.DrawWireSphere(center.Unwrap(), GetWorldRadius(parameters));
         }
 
         public float GetWorldRadius(PhysicsParameters parameters)
