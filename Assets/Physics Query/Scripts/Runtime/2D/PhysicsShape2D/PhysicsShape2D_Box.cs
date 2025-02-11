@@ -12,19 +12,46 @@ namespace PQuery
 
         public override bool Cast(PhysicsParameters<VectorWrapper2D, RayWrapper2D, RaycastHit2D, Collider2D> parameters, out RaycastHit2D hit)
         {
-            throw new NotImplementedException();
+            RayDistance<VectorWrapper2D, RayWrapper2D> rayDistance = parameters.GetWorldRay();
+            hit = Physics2D.BoxCast(
+                rayDistance.Start.Unwrap(),
+                GetWorldSize(parameters),
+                GetWorldAngle(parameters),
+                rayDistance.Direction.Unwrap(),
+                rayDistance.Distance,
+                parameters.LayerMask);
+            return hit.collider;
         }
         public override Result<RaycastHit2D> CastNonAlloc(PhysicsParameters<VectorWrapper2D, RayWrapper2D, RaycastHit2D, Collider2D> parameters)
         {
-            throw new NotImplementedException();
+            RayDistance<VectorWrapper2D, RayWrapper2D> rayDistance = parameters.GetWorldRay();
+            int count = Physics2D.BoxCastNonAlloc(
+                rayDistance.Start.Unwrap(),
+                GetWorldSize(parameters),
+                GetWorldAngle(parameters),
+                rayDistance.Direction.Unwrap(),
+                parameters.HitCache,
+                rayDistance.Distance,
+                parameters.LayerMask);
+            return new(parameters.HitCache, count);
         }
         public override bool Check(PhysicsParameters<VectorWrapper2D, RayWrapper2D, RaycastHit2D, Collider2D> parameters)
         {
-            throw new NotImplementedException();
+            return Physics2D.OverlapBox(
+                parameters.GetWorldStart().Unwrap(),
+                GetWorldSize(parameters),
+                GetWorldAngle(parameters),
+                parameters.LayerMask);
         }
         public override Result<Collider2D> OverlapNonAlloc(PhysicsParameters<VectorWrapper2D, RayWrapper2D, RaycastHit2D, Collider2D> parameters)
         {
-            throw new NotImplementedException();
+            int count = Physics2D.OverlapBoxNonAlloc(
+                parameters.GetWorldStart().Unwrap(),
+                GetWorldSize(parameters),
+                GetWorldAngle(parameters),
+                parameters.ColliderCache,
+                parameters.LayerMask);
+            return new(parameters.ColliderCache, count);
         }
 
         public override void DrawOverlapGizmo(PhysicsParameters<VectorWrapper2D, RayWrapper2D, RaycastHit2D, Collider2D> parameters)
