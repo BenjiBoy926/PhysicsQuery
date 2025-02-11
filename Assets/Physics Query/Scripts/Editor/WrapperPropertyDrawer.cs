@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace PQuery.Editor
 {
+    [CustomPropertyDrawer(typeof(VectorWrapper2D))]
     [CustomPropertyDrawer(typeof(VectorWrapper3D))]
     public class WrapperPropertyDrawer : PropertyDrawer
     {
