@@ -8,7 +8,15 @@ namespace PQuery
         {
             return new(vector);
         }
+        public static VectorWrapper3D Wrap3D(this Vector2 vector)
+        {
+            return new(vector);
+        }
         public static VectorWrapper3D Wrap(this Vector3 vector)
+        {
+            return new(vector);
+        }
+        public static VectorWrapper2D Wrap2D(this Vector3 vector)
         {
             return new(vector);
         }

@@ -57,11 +57,11 @@ namespace PQuery
         {
             _cacheCapacity = Mathf.Max(0, _cacheCapacity);
         }
-        private void OnDrawGizmos()
+        protected virtual void OnDrawGizmos()
         {
             DrawGizmos(this);
         }
-        private void OnDrawGizmosSelected()
+        protected virtual void OnDrawGizmosSelected()
         {
             DrawGizmosSelected(this);
         }

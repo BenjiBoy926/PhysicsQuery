@@ -401,14 +401,15 @@ MonoBehaviour:
   _end:
     _value: {x: 0, y: -1}
   _shape:
-    rid: 2234344237437812738
+    rid: 2234344237437812741
   references:
     version: 2
     RefIds:
-    - rid: 2234344237437812738
-      type: {class: PhysicsShape2D_Circle, ns: PQuery, asm: PhysicsQuery}
+    - rid: 2234344237437812741
+      type: {class: PhysicsShape2D_Capsule, ns: PQuery, asm: PhysicsQuery}
       data:
-        _radius: 0.5
+        _size: {x: 1, y: 2}
+        _direction: 0
 --- !u!114 &740925317
 MonoBehaviour:
   m_ObjectHideFlags: 0
