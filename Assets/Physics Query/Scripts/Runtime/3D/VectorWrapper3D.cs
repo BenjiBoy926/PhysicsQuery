@@ -4,7 +4,7 @@ using UnityEngine;
 namespace PQuery
 {
     [Serializable]
-    public struct VectorWrapper3D : IVector<VectorWrapper3D>
+    public struct VectorWrapper3D : IVector<VectorWrapper3D>, IWrapper<Vector3>
     {
         public readonly float Magnitude => _value.magnitude;
 
@@ -18,15 +18,11 @@ namespace PQuery
 
         public readonly VectorWrapper3D TransformAsPoint(Matrix4x4 matrix)
         {
-            Vector3 vector = Unwrap();
-            vector = matrix.MultiplyPoint3x4(vector);
-            return vector.Wrap();
+            return new(matrix.MultiplyPoint3x4(_value));
         }
         public readonly VectorWrapper3D TransformAsDirection(Matrix4x4 matrix)
         {
-            Vector3 vector = Unwrap();
-            vector = matrix.MultiplyVector(vector);
-            return vector.Wrap();
+            return new(matrix.MultiplyVector(_value));
         }
         public readonly VectorWrapper3D TransformAsScale(Matrix4x4 matrix)
         {
@@ -37,9 +33,9 @@ namespace PQuery
             vector.z *= lossyScale.z;
             return vector.Wrap();
         }
-        public VectorWrapper3D Minus(VectorWrapper3D other)
+        public readonly VectorWrapper3D Minus(VectorWrapper3D other)
         {
-            return (Unwrap() - other.Unwrap()).Wrap();
+            return new(_value - other._value);
         }
         public readonly Vector3 Unwrap()
         {

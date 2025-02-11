@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public struct RayWrapper3D : IRay<VectorWrapper3D>
+    public struct RayWrapper3D : IRay<VectorWrapper3D>, IWrapper<Ray>
     {
         public VectorWrapper3D Origin
         {
@@ -27,7 +27,7 @@ namespace PQuery
         {
             return _value.GetPoint(distance).Wrap();
         }
-        public Ray Unwrap()
+        public readonly Ray Unwrap()
         {
             return _value;
         }
