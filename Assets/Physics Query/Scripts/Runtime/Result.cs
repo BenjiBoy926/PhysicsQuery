@@ -23,6 +23,15 @@ namespace PQuery
             _count = count;
         }
 
+        public Result<TSelected> Select<TSelected>(Func<TElement, TSelected> selector)
+        {
+            TSelected[] result = new TSelected[_count];
+            for (int i = 0; i < _count; i++)
+            {
+                result[i] = selector.Invoke(Get(i));
+            }
+            return new(result, _count);
+        }
         private TElement Get(int i)
         {
             ValidateIndex(i);

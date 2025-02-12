@@ -5,6 +5,7 @@ using UnityEngine;
 namespace PQuery
 {
     public abstract class PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TResultSort, TPhysicsShape> : PhysicsQuery
+        where TCollider : Component
         where TResultSort : ResultSortGeneric<TRaycastHit>
         where TPhysicsShape : PhysicsShapeGeneric<TVector, TRaycastHit, TCollider>
     {
@@ -62,7 +63,7 @@ namespace PQuery
             _castNonAllocMarker.End();
             return result;
         }
-        public bool Check()
+        public override bool Check()
         {
             _checkMarker.Begin();
             bool check = _shape.Check(GetParameters());
@@ -125,6 +126,28 @@ namespace PQuery
             _shape.DrawGizmo(GetParameters(), center);
         }
 
+        public override bool MinimalCast(out MinimalRaycastHit hit)
+        {
+            bool didHit = Cast(out TRaycastHit genericHit);
+            hit = Minimize(genericHit);
+            return didHit;
+        }
+        public override Result<MinimalRaycastHit> MinimalCastNonAlloc(ResultSortType sortType)
+        {
+            return CastNonAlloc(GetSort(sortType)).Select(Minimize);
+        }
+        public override Result<Component> MinimalOverlapNonAlloc()
+        {
+            return OverlapNonAlloc().Select(ColliderAsComponent);
+        }
+
+        public Component ColliderAsComponent(TCollider collider)
+        {
+            return collider;
+        }
+
+        public abstract TResultSort GetSort(ResultSortType sortType);
+        public abstract MinimalRaycastHit Minimize(TRaycastHit raycastHit);
         public abstract float Magnitude(TVector vector);
         public abstract TVector Normalize(TVector vector);
         public abstract TVector Subtract(TVector minuend, TVector subtrahend);
