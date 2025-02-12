@@ -71,12 +71,8 @@ namespace PQuery
         }
         public override void DrawGizmo(PhysicsParameters<Vector3, RaycastHit, Collider> parameters, Vector3 center)
         {
-            Quaternion worldOrientation = GetWorldOrientation(parameters);
-            Matrix4x4 rotationMatrix = Matrix4x4.Rotate(worldOrientation);
-            Vector3 invertedCenter = rotationMatrix.inverse.MultiplyVector(center);
-
-            Gizmos.matrix = rotationMatrix;
-            Gizmos.DrawWireCube(invertedCenter, GetWorldSize(parameters));
+            Gizmos.matrix = Matrix4x4.TRS(center, GetWorldOrientation(parameters), parameters.LossyScale);
+            Gizmos.DrawWireCube(Vector3.zero, _size);
             Gizmos.matrix = Matrix4x4.identity;
         }
 
