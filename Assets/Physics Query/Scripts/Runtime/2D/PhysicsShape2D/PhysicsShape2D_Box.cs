@@ -58,7 +58,15 @@ namespace PQuery
         }
         public override void DrawGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters, Vector2 center)
         {
-
+            Vector2 extents = _size * 0.5f;
+            ReadOnlySpan<Vector3> corners = stackalloc Vector3[]
+            {
+                extents, new(extents.x, -extents.y, 0), -extents, new(-extents.x, extents.y, 0)
+            };
+            Quaternion rotation = Quaternion.Euler(0, 0, GetWorldAngle(parameters));
+            Gizmos.matrix = Matrix4x4.TRS(center, rotation, parameters.LossyScale);
+            Gizmos.DrawLineStrip(corners, true);
+            Gizmos.matrix = Matrix4x4.identity;
         }
 
         public Vector2 GetWorldSize(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
@@ -67,7 +75,11 @@ namespace PQuery
         }
         public float GetWorldAngle(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
         {
-            return _angle + parameters.Space.rotation.eulerAngles.z;
+            return _angle + GetTransformAngle(parameters);
+        }
+        public float GetTransformAngle(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
+        {
+            return parameters.Space.rotation.eulerAngles.z;
         }
     }
 }
