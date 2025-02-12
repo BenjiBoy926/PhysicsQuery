@@ -46,14 +46,7 @@ namespace PQuery.Editor
             Vector3 center = collider.transform.TransformPoint(collider.center);
             Vector3 axis = GetWorldAxis(collider);
             float radius = GetWorldRadius(collider);
-            if (axis.sqrMagnitude < 1E-6f)
-            {
-                Gizmos.DrawWireSphere(center, radius);
-            }
-            else
-            {
-                CapsuleGizmo3D.Draw(center, axis, radius);
-            }
+            CapsuleGizmo3D.Draw(center, axis, radius);
         }
         private static void DrawMeshColliderGizmo(MeshCollider collider)
         {

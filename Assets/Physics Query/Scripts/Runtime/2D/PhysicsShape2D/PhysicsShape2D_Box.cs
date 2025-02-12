@@ -63,8 +63,7 @@ namespace PQuery
             {
                 extents, new(extents.x, -extents.y, 0), -extents, new(-extents.x, extents.y, 0)
             };
-            Quaternion rotation = Quaternion.Euler(0, 0, GetWorldAngle(parameters));
-            Gizmos.matrix = Matrix4x4.TRS(center, rotation, parameters.LossyScale);
+            Gizmos.matrix = GetGizmoTransformMatrix(parameters, center, _angle);
             Gizmos.DrawLineStrip(corners, true);
             Gizmos.matrix = Matrix4x4.identity;
         }
@@ -76,12 +75,6 @@ namespace PQuery
         public float GetWorldAngle(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
         {
             return _angle + GetTransformAngle(parameters);
-        }
-        public float GetTransformAngle(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
-        {
-            Vector3 worldUp = parameters.Space.GetColumn(1);
-            Vector3 projectedUp = new(worldUp.x, worldUp.y, 0);
-            return Vector3.SignedAngle(projectedUp, Vector3.up, Vector3.back);
         }
     }
 }

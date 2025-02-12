@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 namespace PQuery
 {
@@ -55,13 +56,15 @@ namespace PQuery
             return new(parameters.ColliderCache, count);
         }
 
-        public override void DrawGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters, Vector2 center)
-        {
-            throw new System.NotImplementedException();
-        }
         public override void DrawOverlapGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
         {
-            throw new System.NotImplementedException();
+            DrawGizmo(parameters, parameters.Origin);
+        }
+        public override void DrawGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters, Vector2 center)
+        {
+            Gizmos.matrix = GetGizmoTransformMatrix(parameters, center, 0);
+            CapsuleGizmo2D.Draw(Vector2.zero, _size, _direction);
+            Gizmos.matrix = Matrix4x4.identity;
         }
 
         public Vector2 GetWorldSize(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
@@ -70,7 +73,7 @@ namespace PQuery
         }
         public float GetWorldAngle(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
         {
-            return parameters.Space.rotation.eulerAngles.z;
+            return GetTransformAngle(parameters);
         }
     }
 }

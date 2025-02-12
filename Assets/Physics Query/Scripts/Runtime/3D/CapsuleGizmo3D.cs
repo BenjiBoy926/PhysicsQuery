@@ -6,6 +6,12 @@ namespace PQuery
     {
         public static void Draw(Vector3 center, Vector3 axis, float radius)
         {
+            if (axis.sqrMagnitude < 1E-6f)
+            {
+                Gizmos.DrawWireSphere(center, radius);
+                return;
+            }
+
             Vector3 topCapCenter = center + axis;
             Vector3 bottomCapCenter = center - axis;
 
