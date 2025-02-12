@@ -125,9 +125,9 @@ namespace PQuery
             _shape.DrawGizmo(GetParameters(), center);
         }
 
-        public abstract TVector TransformAsPoint(TVector point);
-        public abstract TVector Subtract(TVector minuend, TVector subtrahend);
-        public abstract TVector Normalize(TVector vector);
         public abstract float Magnitude(TVector vector);
+        public abstract TVector Normalize(TVector vector);
+        public abstract TVector Subtract(TVector minuend, TVector subtrahend);
+        public abstract TVector TransformAsPoint(TVector point);
     }
 }
