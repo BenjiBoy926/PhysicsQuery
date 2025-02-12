@@ -40,13 +40,15 @@ namespace PQuery
             return new(parameters.ColliderCache, result.Count);
         }
 
-        public override void DrawGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters, Vector2 center)
-        {
-            throw new System.NotImplementedException();
-        }
         public override void DrawOverlapGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
         {
-            throw new System.NotImplementedException();
+            Vector2 start = parameters.Origin;
+            Vector2 end = GetEnd(parameters);
+            Gizmos.DrawLine(start, end);
+        }
+        public override void DrawGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters, Vector2 center)
+        {
+
         }
 
         public Vector2 GetEnd(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
