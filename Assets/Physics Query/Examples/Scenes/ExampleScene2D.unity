@@ -491,13 +491,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 740925314}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.0074518104, y: 0.0025022638, z: 0.31831533, w: 0.9479523}
   m_LocalPosition: {x: -2.07, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0.718, y: 0.544, z: 37.127}
 --- !u!114 &740925316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -526,7 +526,7 @@ MonoBehaviour:
     - rid: 2234344259723198465
       type: {class: PhysicsShape2D_Capsule, ns: PQuery, asm: PhysicsQuery}
       data:
-        _size: {x: 1.58, y: 0.74}
+        _size: {x: 2.83, y: 1.08}
         _direction: 1
 --- !u!114 &740925317
 MonoBehaviour:

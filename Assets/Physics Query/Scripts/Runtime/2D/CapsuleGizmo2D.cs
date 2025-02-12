@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace PQuery
@@ -33,6 +34,15 @@ namespace PQuery
             Vector2 left = -right;
             Vector2 hemisphereUp = axis.normalized * radius;
             Vector2 hemisphereDown = -hemisphereUp;
+
+            ReadOnlySpan<Vector3> linePoints = stackalloc Vector3[]
+            {
+                center + axis + right,
+                center + down + right,
+                center + axis + left,
+                center + down + left
+            };
+            Gizmos.DrawLineList(linePoints);
 
             new EllipseGizmo(topCapCenter, right, hemisphereUp).DrawHalf();
             new EllipseGizmo(bottomCapCenter, right, hemisphereDown).DrawHalf();
