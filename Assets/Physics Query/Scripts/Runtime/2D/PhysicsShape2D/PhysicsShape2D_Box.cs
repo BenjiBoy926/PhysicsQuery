@@ -79,7 +79,9 @@ namespace PQuery
         }
         public float GetTransformAngle(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
         {
-            return parameters.Space.rotation.eulerAngles.z;
+            Vector3 worldUp = parameters.Space.GetColumn(1);
+            Vector3 projectedUp = new(worldUp.x, worldUp.y, 0);
+            return Vector3.SignedAngle(projectedUp, Vector3.up, Vector3.back);
         }
     }
 }
