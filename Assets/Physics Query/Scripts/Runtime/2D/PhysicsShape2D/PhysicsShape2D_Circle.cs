@@ -45,13 +45,17 @@ namespace PQuery
             return new(parameters.ColliderCache, count);
         }
 
-        public override void DrawGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters, Vector2 center)
-        {
-            throw new System.NotImplementedException();
-        }
         public override void DrawOverlapGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
         {
-            throw new System.NotImplementedException();
+            DrawGizmo(parameters, parameters.Origin);
+        }
+        public override void DrawGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters, Vector2 center)
+        {
+            float radius = GetWorldRadius(parameters);
+            Vector2 up = Vector2.up * radius;
+            Vector2 right = Vector2.right * radius;
+            EllipseGizmo gizmo = new(center, up, right);
+            gizmo.Draw();
         }
 
         public float GetWorldRadius(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
