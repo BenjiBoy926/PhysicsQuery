@@ -14,11 +14,11 @@ namespace PQuery
             public readonly Vector3 Cap2;
             public readonly float Radius;
 
-            public Position(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters, Axis3D axis, float height, float radius)
+            public Position(PhysicsParameters<Vector3, RaycastHit, Collider> parameters, Axis3D axis, float height, float radius)
             {
                 float extent = height * 0.5f;
-                Vector3 center = parameters.GetWorldStart().Unwrap();
-                Vector3 direction = parameters.TransformDirection(axis.Vector.Wrap()).Unwrap();
+                Vector3 center = parameters.Origin;
+                Vector3 direction = parameters.TransformDirection(axis.Vector);
 
                 Vector3 lossyScale = parameters.LossyScale;
                 float distance = extent * lossyScale[axis.Dimension];                
@@ -55,36 +55,34 @@ namespace PQuery
             _radius = radius;
         }
 
-        public override bool Cast(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters, out RaycastHit hit)
+        public override bool Cast(PhysicsParameters<Vector3, RaycastHit, Collider> parameters, out RaycastHit hit)
         {
-            RayDistance<VectorWrapper3D, RayWrapper3D> worldRay = parameters.GetWorldRay();
             Position position = GetPosition(parameters);
             return Physics.CapsuleCast(
                 position.Cap1,
                 position.Cap2,
                 position.Radius,
-                worldRay.Direction.Unwrap(),
+                parameters.Direction,
                 out hit,
-                worldRay.Distance,
+                parameters.Distance,
                 parameters.LayerMask,
                 parameters.TriggerInteraction);
         }
-        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
+        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters<Vector3, RaycastHit, Collider> parameters)
         {
-            RayDistance<VectorWrapper3D, RayWrapper3D> worldRay = parameters.GetWorldRay();
             Position position = GetPosition(parameters);
             int count = Physics.CapsuleCastNonAlloc(
                 position.Cap1,
                 position.Cap2,
                 position.Radius,
-                worldRay.Direction.Unwrap(),
+                parameters.Direction,
                 parameters.HitCache,
-                worldRay.Distance,
+                parameters.Distance,
                 parameters.LayerMask,
                 parameters.TriggerInteraction);
             return new(parameters.HitCache, count);
         }
-        public override bool Check(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
+        public override bool Check(PhysicsParameters<Vector3, RaycastHit, Collider> parameters)
         {
             Position position = GetPosition(parameters);
             return Physics.CheckCapsule(
@@ -94,7 +92,7 @@ namespace PQuery
                 parameters.LayerMask,
                 parameters.TriggerInteraction);
         }
-        public override Result<Collider> OverlapNonAlloc(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
+        public override Result<Collider> OverlapNonAlloc(PhysicsParameters<Vector3, RaycastHit, Collider> parameters)
         {
             Position position = GetPosition(parameters);
             int count = Physics.OverlapCapsuleNonAlloc(
@@ -106,17 +104,17 @@ namespace PQuery
                 parameters.TriggerInteraction);
             return new(parameters.ColliderCache, count);
         }
-        public override void DrawOverlapGizmo(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
+        public override void DrawOverlapGizmo(PhysicsParameters<Vector3, RaycastHit, Collider> parameters)
         {
-            DrawGizmo(parameters, parameters.GetWorldStart());
+            DrawGizmo(parameters, parameters.Origin);
         }
-        public override void DrawGizmo(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters, VectorWrapper3D center)
+        public override void DrawGizmo(PhysicsParameters<Vector3, RaycastHit, Collider> parameters, Vector3 center)
         {
             Position position = GetPosition(parameters);
-            CapsuleGizmo3D.Draw(center.Unwrap(), position.Axis, position.Radius);
+            CapsuleGizmo3D.Draw(center, position.Axis, position.Radius);
         }
 
-        public Position GetPosition(PhysicsParameters<VectorWrapper3D, RayWrapper3D, RaycastHit, Collider> parameters)
+        public Position GetPosition(PhysicsParameters<Vector3, RaycastHit, Collider> parameters)
         {
             return new(parameters, _axis, _height, _radius);
         }

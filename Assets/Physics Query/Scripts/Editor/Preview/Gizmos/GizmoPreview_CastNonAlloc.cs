@@ -37,8 +37,8 @@ namespace PQuery.Editor
         }
         private void DrawResultLine(PhysicsQuery3D query, Result<RaycastHit> result)
         {
-            Vector3 start = query.GetWorldStart().Unwrap();
-            Vector3 end = query.GetWorldEnd().Unwrap();
+            Vector3 start = query.GetWorldStart();
+            Vector3 end = query.GetWorldEnd();
 
             if (result.IsFull)
             {
@@ -52,7 +52,7 @@ namespace PQuery.Editor
             }
             else
             {
-                Vector3 midpoint = query.GetWorldRay().GetPoint(result.Last.distance).Unwrap();
+                Vector3 midpoint = GetShapeCenter(query, result.Last);
                 Gizmos.color = Preferences.HitColor.Value;
                 Gizmos.DrawLine(start, midpoint);
                 Gizmos.color = Preferences.MissColor.Value;

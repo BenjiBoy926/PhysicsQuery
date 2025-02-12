@@ -4,11 +4,9 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public abstract class PhysicsQueryGeneric<TVector, TRay, TRaycastHit, TCollider, TResultSort, TPhysicsShape> : PhysicsQuery
-        where TVector : IVector<TVector>
-        where TRay : IRay<TVector>
+    public abstract class PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TResultSort, TPhysicsShape> : PhysicsQuery
         where TResultSort : ResultSortGeneric<TRaycastHit>
-        where TPhysicsShape : PhysicsShapeGeneric<TVector, TRay, TRaycastHit, TCollider>
+        where TPhysicsShape : PhysicsShapeGeneric<TVector, TRaycastHit, TCollider>
     {
         public TVector Start
         {
@@ -79,22 +77,22 @@ namespace PQuery
             return result;
         }
 
-        
-        public RayDistance<TVector, TRay> GetWorldRay()
+        public PhysicsParameters<TVector, TRaycastHit, TCollider> GetParameters()
         {
-            return GetParameters().GetWorldRay();
+            Matrix4x4 matrix = GetTransformationMatrix();
+            TVector origin = GetWorldStart();
+            TVector startToEnd = Subtract(GetWorldEnd(), origin);
+            TVector direction = Normalize(startToEnd);
+            float distance = Magnitude(startToEnd);
+            return new(matrix, LayerMask, TriggerInteraction, origin, direction, distance, GetHitCache(), GetColliderCache());
         }
         public TVector GetWorldStart()
         {
-            return GetParameters().GetWorldStart();
+            return Space == Space.Self ? TransformAsPoint(_start) : _start;
         }
         public TVector GetWorldEnd()
         {
-            return GetParameters().GetWorldEnd();
-        }
-        public PhysicsParameters<TVector, TRay, TRaycastHit, TCollider> GetParameters()
-        {
-            return new(GetTransformationMatrix(), LayerMask, TriggerInteraction, Start, End, GetHitCache(), GetColliderCache());
+            return Space == Space.Self ? TransformAsPoint(_end) : _end;
         }
         public void RefreshCache()
         {
@@ -126,5 +124,10 @@ namespace PQuery
         {
             _shape.DrawGizmo(GetParameters(), center);
         }
+
+        public abstract TVector TransformAsPoint(TVector point);
+        public abstract TVector Subtract(TVector minuend, TVector subtrahend);
+        public abstract TVector Normalize(TVector vector);
+        public abstract float Magnitude(TVector vector);
     }
 }

@@ -2,15 +2,14 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public readonly struct PhysicsParameters<TVector, TRay, TRaycastHit, TCollider>
-        where TVector : IVector<TVector>
-        where TRay : IRay<TVector>
+    public readonly struct PhysicsParameters<TVector, TRaycastHit, TCollider>
     {
         public Matrix4x4 Space => _space;
         public LayerMask LayerMask => _layerMask;
         public QueryTriggerInteraction TriggerInteraction => _triggerInteraction;
-        public TVector Start => _start;
-        public TVector End => _end;
+        public TVector Origin => _origin;
+        public TVector Direction => _direction;
+        public float Distance => _distance;
         public TRaycastHit[] HitCache => _hitCache;
         public TCollider[] ColliderCache => _colliderCache;
         public Vector3 LossyScale => _space.lossyScale;
@@ -18,8 +17,9 @@ namespace PQuery
         private readonly Matrix4x4 _space;
         private readonly LayerMask _layerMask;
         private readonly QueryTriggerInteraction _triggerInteraction;
-        private readonly TVector _start;
-        private readonly TVector _end;
+        private readonly TVector _origin;
+        private readonly TVector _direction;
+        private readonly float _distance;
         private readonly TRaycastHit[] _hitCache;
         private readonly TCollider[] _colliderCache;
 
@@ -27,47 +27,52 @@ namespace PQuery
             Matrix4x4 space,
             LayerMask layerMask,
             QueryTriggerInteraction triggerInteraction,
-            TVector start,
-            TVector end,
+            TVector origin,
+            TVector direction,
+            float distance,
             TRaycastHit[] hitCache,
             TCollider[] colliderCache)
         {
             _space = space;
             _layerMask = layerMask;
             _triggerInteraction = triggerInteraction;
-            _start = start;
-            _end = end;
+            _origin = origin;
+            _direction = direction;
+            _distance = distance;
             _hitCache = hitCache;
             _colliderCache = colliderCache;
         }
 
-        public RayDistance<TVector, TRay> GetWorldRay()
+        public Vector3 TransformPoint(Vector3 point)
         {
-            return new(GetWorldStart(), GetWorldEnd());
+            return Space.MultiplyPoint3x4(point);
         }
-        public TVector GetWorldStart()
+        public Vector3 TransformDirection(Vector3 direction)
         {
-            return TransformPoint(Start);
+            return Space.MultiplyVector(direction);
         }
-        public TVector GetWorldEnd()
+        public Vector3 TransformScale(Vector3 scale)
         {
-            return TransformPoint(End);
+            Vector3 transformedScale = Space.lossyScale;
+            return new(transformedScale.x * scale.x, transformedScale.y * scale.y, transformedScale.z * scale.z);
         }
-        public TVector TransformPoint(TVector point)
+
+        public Vector2 TransformPoint(Vector2 point)
         {
-            return point.TransformAsPoint(Space);
+            return Space.MultiplyPoint3x4(point);
         }
-        public TVector TransformDirection(TVector direction)
+        public Vector2 TransformDirection(Vector2 direction)
         {
-            return direction.TransformAsDirection(Space);
+            return Space.MultiplyVector(direction);
         }
+        public Vector2 TransformScale(Vector2 scale)
+        {
+            return Space.lossyScale * scale;
+        }
+
         public Quaternion TransformRotation(Quaternion rotation)
         {
             return Space.rotation * rotation;
-        }
-        public TVector TransformScale(TVector scale)
-        {
-            return scale.TransformAsScale(Space);
         }
     }
 }

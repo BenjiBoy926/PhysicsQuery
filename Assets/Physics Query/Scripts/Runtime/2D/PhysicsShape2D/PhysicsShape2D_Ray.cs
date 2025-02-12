@@ -4,36 +4,33 @@ namespace PQuery
 {
     public class PhysicsShape2D_Ray : PhysicsShape2D
     {
-        public override bool Cast(PhysicsParameters<VectorWrapper2D, RayWrapper2D, RaycastHit2D, Collider2D> parameters, out RaycastHit2D hit)
+        public override bool Cast(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters, out RaycastHit2D hit)
         {
-            RayDistance<VectorWrapper2D, RayWrapper2D> rayDistance = parameters.GetWorldRay();
             hit = Physics2D.Raycast(
-                rayDistance.Start.Unwrap(),
-                rayDistance.Direction.Unwrap(),
-                rayDistance.Distance,
+                parameters.Origin,
+                parameters.Direction,
+                parameters.Distance,
                 parameters.LayerMask);
             return hit.collider;
         }
-        public override Result<RaycastHit2D> CastNonAlloc(PhysicsParameters<VectorWrapper2D, RayWrapper2D, RaycastHit2D, Collider2D> parameters)
+        public override Result<RaycastHit2D> CastNonAlloc(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
         {
-            RayDistance<VectorWrapper2D, RayWrapper2D> rayDistance = parameters.GetWorldRay();
             int count = Physics2D.RaycastNonAlloc(
-                rayDistance.Start.Unwrap(),
-                rayDistance.Direction.Unwrap(),
+                parameters.Origin,
+                parameters.Direction,
                 parameters.HitCache,
-                rayDistance.Distance,
+                parameters.Distance,
                 parameters.LayerMask);
             return new(parameters.HitCache, count);
         }
-        public override bool Check(PhysicsParameters<VectorWrapper2D, RayWrapper2D, RaycastHit2D, Collider2D> parameters)
+        public override bool Check(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
         {
-            RayDistance<VectorWrapper2D, RayWrapper2D> rayDistance = parameters.GetWorldRay();
             return Physics2D.Linecast(
-                rayDistance.Start.Unwrap(),
-                rayDistance.End.Unwrap(),
+                parameters.Origin,
+                GetEnd(parameters),
                 parameters.LayerMask);
         }
-        public override Result<Collider2D> OverlapNonAlloc(PhysicsParameters<VectorWrapper2D, RayWrapper2D, RaycastHit2D, Collider2D> parameters)
+        public override Result<Collider2D> OverlapNonAlloc(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
         {
             Result<RaycastHit2D> result = CastNonAlloc(parameters);
             for (int i = 0; i < result.Count; i++)
@@ -43,13 +40,22 @@ namespace PQuery
             return new(parameters.ColliderCache, result.Count);
         }
 
-        public override void DrawGizmo(PhysicsParameters<VectorWrapper2D, RayWrapper2D, RaycastHit2D, Collider2D> parameters, VectorWrapper2D center)
+        public override void DrawGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters, Vector2 center)
         {
             throw new System.NotImplementedException();
         }
-        public override void DrawOverlapGizmo(PhysicsParameters<VectorWrapper2D, RayWrapper2D, RaycastHit2D, Collider2D> parameters)
+        public override void DrawOverlapGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
         {
             throw new System.NotImplementedException();
+        }
+
+        public Vector2 GetEnd(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
+        {
+            return GetRay(parameters).GetPoint(parameters.Distance);
+        }
+        public Ray2D GetRay(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
+        {
+            return new(parameters.Origin, parameters.Direction);
         }
     }
 }

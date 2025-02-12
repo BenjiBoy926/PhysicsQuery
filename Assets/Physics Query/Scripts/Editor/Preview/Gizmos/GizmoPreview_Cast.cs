@@ -7,22 +7,22 @@ namespace PQuery.Editor
         public override void DrawGizmos(PhysicsQuery3D query)
         {
             bool result = query.Cast(out RaycastHit hit);
-            VectorWrapper3D start = query.GetWorldStart();
+            Vector3 start = query.GetWorldStart();
             if (result)
             {
                 DrawHit(hit);
                 Gizmos.color = Preferences.HitColor.Value;
-                Gizmos.DrawLine(start.Unwrap(), GetShapeCenter(query, hit));
+                Gizmos.DrawLine(start, GetShapeCenter(query, hit));
                 query.DrawGizmo(start);
                 DrawShapeAtHit(query, hit);
             }
             else
             {
                 Gizmos.color = Preferences.MissColor.Value;
-                VectorWrapper3D end = query.GetWorldEnd();
+                Vector3 end = query.GetWorldEnd();
                 query.DrawGizmo(start);
                 query.DrawGizmo(end);
-                Gizmos.DrawLine(start.Unwrap(), end.Unwrap());
+                Gizmos.DrawLine(start, end);
             }
         }
     }
