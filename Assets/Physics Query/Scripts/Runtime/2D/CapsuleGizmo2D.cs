@@ -14,9 +14,7 @@ namespace PQuery
             
             if (axisLength < 1E-6f)
             {
-                Vector2 right = Vector2.right * radius;
-                Vector2 up = Vector2.up * radius;
-                new EllipseGizmo(center, right, up).Draw();
+                CircleGizmo2D.Draw(center, radius);
             }
             else
             {

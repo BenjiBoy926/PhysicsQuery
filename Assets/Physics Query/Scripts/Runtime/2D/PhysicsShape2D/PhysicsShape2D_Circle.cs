@@ -52,10 +52,7 @@ namespace PQuery
         public override void DrawGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters, Vector2 center)
         {
             float radius = GetWorldRadius(parameters);
-            Vector2 up = Vector2.up * radius;
-            Vector2 right = Vector2.right * radius;
-            EllipseGizmo gizmo = new(center, up, right);
-            gizmo.Draw();
+            CircleGizmo2D.Draw(center, radius);
         }
 
         public float GetWorldRadius(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
