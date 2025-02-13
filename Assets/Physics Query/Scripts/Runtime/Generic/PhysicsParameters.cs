@@ -2,45 +2,41 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public readonly struct PhysicsParameters<TVector, TRaycastHit, TCollider>
+    public readonly struct PhysicsParameters<TVector, TRaycastHit, TCollider, TAdvancedOptions>
     {
         public Matrix4x4 Space => _space;
-        public LayerMask LayerMask => _layerMask;
-        public QueryTriggerInteraction TriggerInteraction => _triggerInteraction;
         public TVector Origin => _origin;
         public TVector Direction => _direction;
         public float Distance => _distance;
         public TRaycastHit[] HitCache => _hitCache;
         public TCollider[] ColliderCache => _colliderCache;
+        public TAdvancedOptions Advanced => _advanced;
         public Vector3 LossyScale => _space.lossyScale;
 
         private readonly Matrix4x4 _space;
-        private readonly LayerMask _layerMask;
-        private readonly QueryTriggerInteraction _triggerInteraction;
         private readonly TVector _origin;
         private readonly TVector _direction;
         private readonly float _distance;
         private readonly TRaycastHit[] _hitCache;
         private readonly TCollider[] _colliderCache;
+        private readonly TAdvancedOptions _advanced;
 
         public PhysicsParameters(
             Matrix4x4 space,
-            LayerMask layerMask,
-            QueryTriggerInteraction triggerInteraction,
             TVector origin,
             TVector direction,
             float distance,
             TRaycastHit[] hitCache,
-            TCollider[] colliderCache)
+            TCollider[] colliderCache,
+            TAdvancedOptions advanced)
         {
             _space = space;
-            _layerMask = layerMask;
-            _triggerInteraction = triggerInteraction;
             _origin = origin;
             _direction = direction;
             _distance = distance;
             _hitCache = hitCache;
             _colliderCache = colliderCache;
+            _advanced = advanced;
         }
 
         public Vector3 TransformPoint(Vector3 point)

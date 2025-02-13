@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public abstract class PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TResultSort, TPhysicsShape> : PhysicsQuery
+    public abstract class PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TResultSort, TPhysicsShape, TAdvancedOptions> : PhysicsQuery
         where TCollider : Component
         where TResultSort : ResultSortGeneric<TRaycastHit>
-        where TPhysicsShape : PhysicsShapeGeneric<TVector, TRaycastHit, TCollider>
+        where TPhysicsShape : PhysicsShapeGeneric<TVector, TRaycastHit, TCollider, TAdvancedOptions>
+        where TAdvancedOptions : AdvancedOptions
     {
         public TVector Start
         {
@@ -19,11 +20,17 @@ namespace PQuery
             get => _end;
             set => _end = value;
         }
+        public TAdvancedOptions Advanced
+        {
+            get => _advanced;
+            set => _advanced = value;
+        }
         public TPhysicsShape Shape
         {
             get => _shape;
             set => _shape = value;
         }
+        private int CacheCapacity => _advanced.CacheCapacity;
         private Func<TRaycastHit, MinimalRaycastHit> MinimizeRaycastHitDelegate => _minimizeRaycastHitDelegate ??= MinimizeRaycastHit;
         private Func<TCollider, Component> MinimizeColliderDelegate => _minimizeColliderDelegate ??= MinimizeCollider;
 
@@ -32,6 +39,8 @@ namespace PQuery
         private TVector _start;
         [SerializeField]
         private TVector _end;
+        [SerializeField]
+        private TAdvancedOptions _advanced;
         [SerializeReference, SubtypeDropdown]
         private TPhysicsShape _shape;
         
@@ -86,7 +95,7 @@ namespace PQuery
             return result;
         }
 
-        public PhysicsParameters<TVector, TRaycastHit, TCollider> GetParameters()
+        public PhysicsParameters<TVector, TRaycastHit, TCollider, TAdvancedOptions> GetParameters()
         {
             Matrix4x4 matrix = GetTransformationMatrix();
             TVector origin = GetWorldStart();
@@ -98,13 +107,12 @@ namespace PQuery
             
             return new(
                 matrix,
-                LayerMask,
-                TriggerInteraction,
                 origin,
                 Wrap(direction),
                 distance,
                 _hitCache.GetArray(CacheCapacity),
-                _colliderCache.GetArray(CacheCapacity));
+                _colliderCache.GetArray(CacheCapacity),
+                _advanced);
         }
         public TVector GetWorldStart()
         {

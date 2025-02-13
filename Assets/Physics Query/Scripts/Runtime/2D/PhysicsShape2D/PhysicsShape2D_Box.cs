@@ -10,7 +10,7 @@ namespace PQuery
         [SerializeField]
         private float _angle = 0;
 
-        public override bool Cast(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters, out RaycastHit2D hit)
+        public override bool Cast(PhysicsParameters<Vector2, RaycastHit2D, Collider2D, AdvancedOptions2D> parameters, out RaycastHit2D hit)
         {
             hit = Physics2D.BoxCast(
                 parameters.Origin,
@@ -18,45 +18,49 @@ namespace PQuery
                 GetWorldAngle(parameters),
                 parameters.Direction,
                 parameters.Distance,
-                parameters.LayerMask);
+                parameters.Advanced.LayerMask,
+                parameters.Advanced.MinDepth,
+                parameters.Advanced.MaxDepth);
             return hit.collider;
         }
-        public override Result<RaycastHit2D> CastNonAlloc(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
+        public override Result<RaycastHit2D> CastNonAlloc(PhysicsParameters<Vector2, RaycastHit2D, Collider2D, AdvancedOptions2D> parameters)
         {
-            int count = Physics2D.BoxCastNonAlloc(
+            int count = Physics2D.BoxCast(
                 parameters.Origin,
                 GetWorldSize(parameters),
                 GetWorldAngle(parameters),
                 parameters.Direction,
+                parameters.Advanced.Filter,
                 parameters.HitCache,
-                parameters.Distance,
-                parameters.LayerMask);
+                parameters.Distance);
             return new(parameters.HitCache, count);
         }
-        public override bool Check(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
+        public override bool Check(PhysicsParameters<Vector2, RaycastHit2D, Collider2D, AdvancedOptions2D> parameters)
         {
             return Physics2D.OverlapBox(
                 parameters.Origin,
                 GetWorldSize(parameters),
                 GetWorldAngle(parameters),
-                parameters.LayerMask);
+                parameters.Advanced.LayerMask,
+                parameters.Advanced.MinDepth,
+                parameters.Advanced.MaxDepth);
         }
-        public override Result<Collider2D> OverlapNonAlloc(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
+        public override Result<Collider2D> OverlapNonAlloc(PhysicsParameters<Vector2, RaycastHit2D, Collider2D, AdvancedOptions2D> parameters)
         {
-            int count = Physics2D.OverlapBoxNonAlloc(
+            int count = Physics2D.OverlapBox(
                 parameters.Origin,
                 GetWorldSize(parameters),
                 GetWorldAngle(parameters),
-                parameters.ColliderCache,
-                parameters.LayerMask);
+                parameters.Advanced.Filter,
+                parameters.ColliderCache);
             return new(parameters.ColliderCache, count);
         }
 
-        public override void DrawOverlapGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
+        public override void DrawOverlapGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D, AdvancedOptions2D> parameters)
         {
             DrawGizmo(parameters, parameters.Origin);
         }
-        public override void DrawGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters, Vector2 center)
+        public override void DrawGizmo(PhysicsParameters<Vector2, RaycastHit2D, Collider2D, AdvancedOptions2D> parameters, Vector2 center)
         {
             Vector2 extents = _size * 0.5f;
             ReadOnlySpan<Vector3> corners = stackalloc Vector3[]
@@ -68,11 +72,11 @@ namespace PQuery
             Gizmos.matrix = Matrix4x4.identity;
         }
 
-        public Vector2 GetWorldSize(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
+        public Vector2 GetWorldSize(PhysicsParameters<Vector2, RaycastHit2D, Collider2D, AdvancedOptions2D> parameters)
         {
             return _size * parameters.LossyScale;
         }
-        public float GetWorldAngle(PhysicsParameters<Vector2, RaycastHit2D, Collider2D> parameters)
+        public float GetWorldAngle(PhysicsParameters<Vector2, RaycastHit2D, Collider2D, AdvancedOptions2D> parameters)
         {
             return _angle + GetTransformAngle(parameters);
         }

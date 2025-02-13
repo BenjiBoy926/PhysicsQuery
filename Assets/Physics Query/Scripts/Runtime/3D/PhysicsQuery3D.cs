@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public class PhysicsQuery3D : PhysicsQueryGeneric<Vector3, RaycastHit, Collider, ResultSort3D, PhysicsShape3D>
+    public class PhysicsQuery3D : PhysicsQueryGeneric<Vector3, RaycastHit, Collider, ResultSort3D, PhysicsShape3D, AdvancedOptions3D>
     {
         protected override ResultSort3D GetNoneSort()
         {

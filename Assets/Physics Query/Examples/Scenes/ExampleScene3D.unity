@@ -529,13 +529,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _space: 1
-  _layerMask:
-    serializedVersion: 2
-    m_Bits: 4294967291
-  _triggerInteraction: 0
-  _cacheCapacity: 10
   _start: {x: 0, y: 0, z: 0}
   _end: {x: 0, y: 0, z: 10}
+  _advanced:
+    _layerMask:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    _triggerInteraction: 0
+    _cacheCapacity: 8
   _shape:
     rid: 4639093840108584960
   references:
@@ -728,13 +729,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _space: 1
-  _layerMask:
-    serializedVersion: 2
-    m_Bits: 4294967291
-  _triggerInteraction: 0
-  _cacheCapacity: 8
   _start: {x: 0, y: 0, z: 0}
   _end: {x: 0, y: 0, z: 0}
+  _advanced:
+    _layerMask:
+      serializedVersion: 2
+      m_Bits: 0
+    _triggerInteraction: 0
+    _cacheCapacity: 0
   _shape:
     rid: 4639093752822497297
   references:

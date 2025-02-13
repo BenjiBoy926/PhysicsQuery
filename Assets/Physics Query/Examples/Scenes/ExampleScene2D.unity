@@ -511,13 +511,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _space: 1
-  _layerMask:
-    serializedVersion: 2
-    m_Bits: 51
-  _triggerInteraction: 0
-  _cacheCapacity: 8
   _start: {x: 0, y: 0}
   _end: {x: 0, y: 0}
+  _advanced:
+    _layerMask:
+      serializedVersion: 2
+      m_Bits: 51
+    _triggerInteraction: 0
+    _cacheCapacity: 0
+    _isDepthFilterFlipped: 0
+    _minDepth: 0
+    _maxDepth: 0
+    _isNormalAngleFilterFlipped: 0
+    _minNormalAngle: 0
+    _maxNormalAngle: 0
   _shape:
     rid: 4639093840108584961
   references:

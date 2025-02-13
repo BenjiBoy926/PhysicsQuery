@@ -20,7 +20,7 @@ namespace PQuery
             _orientation = orientation;
         }
 
-        public override bool Cast(PhysicsParameters<Vector3, RaycastHit, Collider> parameters, out RaycastHit hit)
+        public override bool Cast(PhysicsParameters<Vector3, RaycastHit, Collider, AdvancedOptions3D> parameters, out RaycastHit hit)
         {
             return Physics.BoxCast(
                 parameters.Origin,
@@ -29,10 +29,10 @@ namespace PQuery
                 out hit,
                 GetWorldOrientation(parameters),
                 parameters.Distance,
-                parameters.LayerMask,
-                parameters.TriggerInteraction);
+                parameters.Advanced.LayerMask,
+                parameters.Advanced.TriggerInteraction);
         }
-        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters<Vector3, RaycastHit, Collider> parameters)
+        public override Result<RaycastHit> CastNonAlloc(PhysicsParameters<Vector3, RaycastHit, Collider, AdvancedOptions3D> parameters)
         {
             int count = Physics.BoxCastNonAlloc(
                 parameters.Origin,
@@ -41,50 +41,50 @@ namespace PQuery
                 parameters.HitCache,
                 GetWorldOrientation(parameters),
                 parameters.Distance,
-                parameters.LayerMask,
-                parameters.TriggerInteraction);
+                parameters.Advanced.LayerMask,
+                parameters.Advanced.TriggerInteraction);
             return new(parameters.HitCache, count);
         }
-        public override bool Check(PhysicsParameters<Vector3, RaycastHit, Collider> parameters)
+        public override bool Check(PhysicsParameters<Vector3, RaycastHit, Collider, AdvancedOptions3D> parameters)
         {
             return Physics.CheckBox(
                 parameters.Origin,
                 GetWorldExtents(parameters),
                 GetWorldOrientation(parameters),
-                parameters.LayerMask,
-                parameters.TriggerInteraction);
+                parameters.Advanced.LayerMask,
+                parameters.Advanced.TriggerInteraction);
         }
-        public override Result<Collider> OverlapNonAlloc(PhysicsParameters<Vector3, RaycastHit, Collider> parameters)
+        public override Result<Collider> OverlapNonAlloc(PhysicsParameters<Vector3, RaycastHit, Collider, AdvancedOptions3D> parameters)
         {
             int count = Physics.OverlapBoxNonAlloc(
                 parameters.Origin,
                 GetWorldExtents(parameters),
                 parameters.ColliderCache,
                 GetWorldOrientation(parameters),
-                parameters.LayerMask,
-                parameters.TriggerInteraction);
+                parameters.Advanced.LayerMask,
+                parameters.Advanced.TriggerInteraction);
             return new(parameters.ColliderCache, count);
         }
-        public override void DrawOverlapGizmo(PhysicsParameters<Vector3, RaycastHit, Collider> parameters)
+        public override void DrawOverlapGizmo(PhysicsParameters<Vector3, RaycastHit, Collider, AdvancedOptions3D> parameters)
         {
             DrawGizmo(parameters, parameters.Origin);
         }
-        public override void DrawGizmo(PhysicsParameters<Vector3, RaycastHit, Collider> parameters, Vector3 center)
+        public override void DrawGizmo(PhysicsParameters<Vector3, RaycastHit, Collider, AdvancedOptions3D> parameters, Vector3 center)
         {
             Gizmos.matrix = Matrix4x4.TRS(center, GetWorldOrientation(parameters), parameters.LossyScale);
             Gizmos.DrawWireCube(Vector3.zero, _size);
             Gizmos.matrix = Matrix4x4.identity;
         }
 
-        public Vector3 GetWorldExtents(PhysicsParameters<Vector3, RaycastHit, Collider> parameters)
+        public Vector3 GetWorldExtents(PhysicsParameters<Vector3, RaycastHit, Collider, AdvancedOptions3D> parameters)
         {
             return GetWorldSize(parameters) * 0.5f;
         }
-        public Vector3 GetWorldSize(PhysicsParameters<Vector3, RaycastHit, Collider> parameters)
+        public Vector3 GetWorldSize(PhysicsParameters<Vector3, RaycastHit, Collider, AdvancedOptions3D> parameters)
         {
             return parameters.TransformScale(_size);
         }
-        public Quaternion GetWorldOrientation(PhysicsParameters<Vector3, RaycastHit, Collider> parameters)
+        public Quaternion GetWorldOrientation(PhysicsParameters<Vector3, RaycastHit, Collider, AdvancedOptions3D> parameters)
         {
             return parameters.TransformRotation(_orientation);
         }
