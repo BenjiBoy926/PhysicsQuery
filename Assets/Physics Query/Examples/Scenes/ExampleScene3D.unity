@@ -537,14 +537,13 @@ MonoBehaviour:
       m_Bits: 4294967295
     _triggerInteraction: 0
     _cacheCapacity: 8
-  _shape:
-    rid: 4639093840108584960
+  _currentShape:
+    rid: -2
   references:
     version: 2
     RefIds:
-    - rid: 4639093840108584960
-      type: {class: PhysicsShape3D_Ray, ns: PQuery, asm: PhysicsQuery}
-      data: 
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -730,23 +729,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _space: 1
   _start: {x: 0, y: 0, z: 0}
-  _end: {x: 0, y: 0, z: 0}
+  _end: {x: 0, y: 0, z: 10}
   _advanced:
     _layerMask:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 4294967291
     _triggerInteraction: 0
-    _cacheCapacity: 0
-  _shape:
-    rid: 4639093752822497297
+    _cacheCapacity: 8
+  _currentShape:
+    rid: 2234344276833861642
   references:
     version: 2
     RefIds:
-    - rid: 4639093752822497297
-      type: {class: PhysicsShape3D_Box, ns: PQuery, asm: PhysicsQuery}
+    - rid: 2234344276833861642
+      type: {class: PhysicsQuery3D/SphereShape, ns: PQuery, asm: PhysicsQuery}
       data:
-        _size: {x: 1, y: 1, z: 1}
-        _orientation: {x: 0, y: 0, z: 0, w: 1}
+        _radius: 0.5
 --- !u!4 &1270232015
 Transform:
   m_ObjectHideFlags: 0

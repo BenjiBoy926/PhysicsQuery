@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public abstract class PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TResultSort, TPhysicsShape, TAdvancedOptions> : PhysicsQuery
+    public abstract partial class PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TSort, TShape, TAdvancedOptions> : PhysicsQuery
         where TCollider : Component
-        where TResultSort : ResultSortGeneric<TRaycastHit>
-        where TPhysicsShape : PhysicsShapeGeneric<TVector, TRaycastHit, TCollider, TAdvancedOptions>
+        where TSort : ResultSortGeneric<TRaycastHit>
+        where TShape : PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TSort, TShape, TAdvancedOptions>.AbstractShape
         where TAdvancedOptions : AdvancedOptions
     {
         public TVector Start
@@ -25,10 +25,10 @@ namespace PQuery
             get => _advanced;
             set => _advanced = value;
         }
-        public TPhysicsShape Shape
+        public TShape CurrentShape
         {
-            get => _shape;
-            set => _shape = value;
+            get => _currentShape;
+            set => _currentShape = value;
         }
         private int CacheCapacity => _advanced.CacheCapacity;
         private Func<TRaycastHit, MinimalRaycastHit> MinimizeRaycastHitDelegate => _minimizeRaycastHitDelegate ??= MinimizeRaycastHit;
@@ -42,7 +42,7 @@ namespace PQuery
         [SerializeField]
         private TAdvancedOptions _advanced;
         [SerializeReference, SubtypeDropdown]
-        private TPhysicsShape _shape;
+        private TShape _currentShape;
         
         private Func<TRaycastHit, MinimalRaycastHit> _minimizeRaycastHitDelegate;
         private Func<TCollider, Component> _minimizeColliderDelegate;
@@ -64,38 +64,38 @@ namespace PQuery
         public bool Cast(out TRaycastHit hit)
         {
             _castMarker.Begin();
-            bool didHit = _shape.Cast(GetParameters(), out hit);
+            bool didHit = _currentShape.Cast(GetParameters(), out hit);
             _castMarker.End();
             return didHit;
         }
-        public Result<TRaycastHit> CastNonAlloc(TResultSort sort)
+        public Result<TRaycastHit> CastNonAlloc(TSort sort)
         {
             if (sort == null)
             {
                 throw new ArgumentNullException(nameof(sort));
             }
             _castNonAllocMarker.Begin();
-            Result<TRaycastHit> result = _shape.CastNonAlloc(GetParameters());
-            sort.Sort(result._cache, result.Count);
+            Result<TRaycastHit> result = _currentShape.CastNonAlloc(GetParameters());
+            sort.Execute(result._cache, result.Count);
             _castNonAllocMarker.End();
             return result;
         }
         public override bool Check()
         {
             _checkMarker.Begin();
-            bool check = _shape.Check(GetParameters());
+            bool check = _currentShape.Check(GetParameters());
             _checkMarker.End();
             return check;
         }
         public Result<TCollider> OverlapNonAlloc()
         {
             _overlapNonAllocMarker.Begin();
-            Result<TCollider> result = _shape.OverlapNonAlloc(GetParameters());
+            Result<TCollider> result = _currentShape.OverlapNonAlloc(GetParameters());
             _overlapNonAllocMarker.End();
             return result;
         }
 
-        public PhysicsParameters<TVector, TRaycastHit, TCollider, TAdvancedOptions> GetParameters()
+        public Parameters GetParameters()
         {
             Matrix4x4 matrix = GetTransformationMatrix();
             TVector origin = GetWorldStart();
@@ -148,11 +148,11 @@ namespace PQuery
 
         public void DrawOverlapGizmo()
         {
-            _shape.DrawOverlapGizmo(GetParameters());
+            _currentShape.DrawOverlapGizmo(GetParameters());
         }
         public void DrawGizmo(TVector center)
         {
-            _shape.DrawGizmo(GetParameters(), center);
+            _currentShape.DrawGizmo(GetParameters(), center);
         }
 
         public override bool MinimalCast(out MinimalRaycastHit hit)
@@ -163,11 +163,11 @@ namespace PQuery
         }
         public override Result<MinimalRaycastHit> MinimalCastNonAlloc(ResultSortMinimal resultSort)
         {
-            TResultSort none = GetNoneSort();
+            TSort none = GetNoneSort();
             Result<TRaycastHit> result = CastNonAlloc(none);
             MinimalRaycastHit[] cache = _minimalHitCache.GetArray(CacheCapacity);
             result.CopyTo(cache, MinimizeRaycastHitDelegate);
-            resultSort.Sort(cache, result.Count);
+            resultSort.Execute(cache, result.Count);
             return new(cache, result.Count);
         }
         public override Result<Component> MinimalOverlapNonAlloc()
@@ -196,12 +196,12 @@ namespace PQuery
         {
             base.Reset();
             _advanced = GetDefaultOptions();
-            _shape = GetDefaultShape();
+            _currentShape = GetDefaultShape();
         }
 
-        protected abstract TPhysicsShape GetDefaultShape();
+        protected abstract TShape GetDefaultShape();
         protected abstract TAdvancedOptions GetDefaultOptions();
-        protected abstract TResultSort GetNoneSort();
+        protected abstract TSort GetNoneSort();
         protected abstract MinimalRaycastHit MinimizeRaycastHit(TRaycastHit raycastHit);
         protected abstract TVector Wrap(Vector3 vector);
         protected abstract Vector3 Unwrap(TVector vector);

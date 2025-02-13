@@ -14,7 +14,7 @@ namespace PQuery
         private static readonly ProfilerMarker _marker = new("Raycast Hit Sort");
         private Comparison<TRaycastHit> _comparison;
 
-        public void Sort(TRaycastHit[] cache, int count)
+        public void Execute(TRaycastHit[] cache, int count)
         {
             if (!ShouldSort(cache, count))
             {

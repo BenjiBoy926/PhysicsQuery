@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public class PhysicsQuery3D : PhysicsQueryGeneric<Vector3, RaycastHit, Collider, ResultSort3D, PhysicsShape3D, AdvancedOptions3D>
+    public partial class PhysicsQuery3D : PhysicsQueryGeneric<Vector3, RaycastHit, Collider, ResultSort3D, PhysicsQuery3D.Shape, AdvancedOptions3D>
     {
-        protected override PhysicsShape3D GetDefaultShape()
+        protected override Shape GetDefaultShape()
         {
-            return new PhysicsShape3D_Ray();
+            return new RayShape();
         }
         protected override AdvancedOptions3D GetDefaultOptions()
         {

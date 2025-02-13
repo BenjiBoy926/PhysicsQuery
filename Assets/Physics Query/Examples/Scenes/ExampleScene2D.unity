@@ -491,8 +491,8 @@ Transform:
   m_GameObject: {fileID: 740925314}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.79, y: 2.89, z: 0}
-  m_LocalScale: {x: 0.53625, y: 1.225, z: 1}
+  m_LocalPosition: {x: -1.02, y: 2.72, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -524,14 +524,16 @@ MonoBehaviour:
     _isNormalAngleFilterFlipped: 0
     _minNormalAngle: 0
     _maxNormalAngle: 360
-  _shape:
-    rid: 4639093840108584967
+  _currentShape:
+    rid: 2234344276833861636
   references:
     version: 2
     RefIds:
-    - rid: 4639093840108584967
-      type: {class: PhysicsShape2D_Ray, ns: PQuery, asm: PhysicsQuery}
-      data: 
+    - rid: 2234344276833861636
+      type: {class: PhysicsQuery2D/CapsuleShape, ns: PQuery, asm: PhysicsQuery}
+      data:
+        _size: {x: 1, y: 2}
+        _direction: 0
 --- !u!1 &1918110347
 GameObject:
   m_ObjectHideFlags: 0

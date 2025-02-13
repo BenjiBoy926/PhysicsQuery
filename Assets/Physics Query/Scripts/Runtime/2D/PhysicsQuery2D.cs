@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public class PhysicsQuery2D : PhysicsQueryGeneric<Vector2, RaycastHit2D, Collider2D, ResultSort2D, PhysicsShape2D, AdvancedOptions2D>
+    public partial class PhysicsQuery2D : PhysicsQueryGeneric<Vector2, RaycastHit2D, Collider2D, ResultSort2D, PhysicsQuery2D.Shape, AdvancedOptions2D>
     {
-        protected override PhysicsShape2D GetDefaultShape()
+        protected override Shape GetDefaultShape()
         {
-            return new PhysicsShape2D_Ray();
+            return new RayShape();
         }
         protected override AdvancedOptions2D GetDefaultOptions()
         {
@@ -32,7 +32,7 @@ namespace PQuery
         protected override void OnDrawGizmosSelected()
         {
             base.OnDrawGizmosSelected();
-            Shape.DrawGizmo(GetParameters(), transform.position);
+            CurrentShape.DrawGizmo(GetParameters(), transform.position);
         }
     }
 }
