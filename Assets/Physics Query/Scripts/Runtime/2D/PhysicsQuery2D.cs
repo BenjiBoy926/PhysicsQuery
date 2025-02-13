@@ -4,11 +4,11 @@ namespace PQuery
 {
     public class PhysicsQuery2D : PhysicsQueryGeneric<Vector2, RaycastHit2D, Collider2D, ResultSort2D, PhysicsShape2D>
     {
-        protected override ResultSort2D GetSort(ResultSortType sortType)
+        protected override ResultSort2D GetNoneSort()
         {
-            return sortType == ResultSortType.None ? ResultSort2D.None : ResultSort2D.Distance;
+            return ResultSort2D.None;
         }
-        protected override MinimalRaycastHit Minimize(RaycastHit2D raycastHit)
+        protected override MinimalRaycastHit MinimizeRaycastHit(RaycastHit2D raycastHit)
         {
             return new(raycastHit);
         }

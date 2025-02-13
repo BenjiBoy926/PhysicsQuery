@@ -24,6 +24,8 @@ namespace PQuery
             get => _shape;
             set => _shape = value;
         }
+        private Func<TRaycastHit, MinimalRaycastHit> MinimizeRaycastHitDelegate => _minimizeRaycastHitDelegate ??= MinimizeRaycastHit;
+        private Func<TCollider, Component> MinimizeColliderDelegate => _minimizeColliderDelegate ??= MinimizeCollider;
 
         [Space]
         [SerializeField]
@@ -32,8 +34,14 @@ namespace PQuery
         private TVector _end;
         [SerializeReference, SubtypeDropdown]
         private TPhysicsShape _shape;
+        
+        private Func<TRaycastHit, MinimalRaycastHit> _minimizeRaycastHitDelegate;
+        private Func<TCollider, Component> _minimizeColliderDelegate;
+
         private readonly CachedArray<TRaycastHit> _hitCache = new();
         private readonly CachedArray<TCollider> _colliderCache = new();
+        private readonly CachedArray<MinimalRaycastHit> _minimalHitCache = new();
+        private readonly CachedArray<Component> _minimalColliderCache = new();
 
         private readonly ProfilerMarker _castMarker = new($"{nameof(PhysicsQuery3D)}.{nameof(Cast)}");
         private readonly ProfilerMarker _castNonAllocMarker = new($"{nameof(PhysicsQuery3D)}.{nameof(CastNonAlloc)}");
@@ -88,7 +96,15 @@ namespace PQuery
             Vector3 direction = startToEnd.normalized;
             float distance = startToEnd.magnitude;
             
-            return new(matrix, LayerMask, TriggerInteraction, origin, Wrap(direction), distance, GetHitCache(), GetColliderCache());
+            return new(
+                matrix,
+                LayerMask,
+                TriggerInteraction,
+                origin,
+                Wrap(direction),
+                distance,
+                _hitCache.GetArray(CacheCapacity),
+                _colliderCache.GetArray(CacheCapacity));
         }
         public TVector GetWorldStart()
         {
@@ -102,6 +118,8 @@ namespace PQuery
         {
             RefreshHitCache();
             RefreshColliderCache();
+            RefreshMinimalHitCache();
+            RefreshMinimalColliderCache();
         }
         public void RefreshHitCache()
         {
@@ -111,13 +129,13 @@ namespace PQuery
         {
             _colliderCache.SetCapacity(CacheCapacity);
         }
-        internal TRaycastHit[] GetHitCache()
+        public void RefreshMinimalHitCache()
         {
-            return _hitCache.GetArray(CacheCapacity);
+            _minimalHitCache.SetCapacity(CacheCapacity);
         }
-        internal TCollider[] GetColliderCache()
+        public void RefreshMinimalColliderCache()
         {
-            return _colliderCache.GetArray(CacheCapacity);
+            _minimalColliderCache.SetCapacity(CacheCapacity);
         }
 
         public void DrawOverlapGizmo()
@@ -132,19 +150,27 @@ namespace PQuery
         public override bool MinimalCast(out MinimalRaycastHit hit)
         {
             bool didHit = Cast(out TRaycastHit genericHit);
-            hit = Minimize(genericHit);
+            hit = MinimizeRaycastHit(genericHit);
             return didHit;
         }
-        public override Result<MinimalRaycastHit> MinimalCastNonAlloc(ResultSortType sortType)
+        public override Result<MinimalRaycastHit> MinimalCastNonAlloc(ResultSortMinimal resultSort)
         {
-            return CastNonAlloc(GetSort(sortType)).Select(Minimize);
+            TResultSort none = GetNoneSort();
+            Result<TRaycastHit> result = CastNonAlloc(none);
+            MinimalRaycastHit[] cache = _minimalHitCache.GetArray(CacheCapacity);
+            result.CopyTo(cache, MinimizeRaycastHitDelegate);
+            resultSort.Sort(cache, result.Count);
+            return new(cache, result.Count);
         }
         public override Result<Component> MinimalOverlapNonAlloc()
         {
-            return OverlapNonAlloc().Select(ColliderAsComponent);
+            Component[] cache = _minimalColliderCache.GetArray(CacheCapacity);
+            Result<TCollider> result = OverlapNonAlloc();
+            result.CopyTo(cache, MinimizeColliderDelegate);
+            return new(cache, result.Count);
         }
 
-        private Component ColliderAsComponent(TCollider collider)
+        private Component MinimizeCollider(TCollider collider)
         {
             return collider;
         }
@@ -158,8 +184,8 @@ namespace PQuery
             return Wrap(result);
         }
 
-        protected abstract TResultSort GetSort(ResultSortType sortType);
-        protected abstract MinimalRaycastHit Minimize(TRaycastHit raycastHit);
+        protected abstract TResultSort GetNoneSort();
+        protected abstract MinimalRaycastHit MinimizeRaycastHit(TRaycastHit raycastHit);
         protected abstract TVector Wrap(Vector3 vector);
         protected abstract Vector3 Unwrap(TVector vector);
     }

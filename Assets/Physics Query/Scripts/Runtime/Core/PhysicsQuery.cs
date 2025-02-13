@@ -67,7 +67,7 @@ namespace PQuery
         }
 
         public abstract bool MinimalCast(out MinimalRaycastHit hit);
-        public abstract Result<MinimalRaycastHit> MinimalCastNonAlloc(ResultSortType sortType);
+        public abstract Result<MinimalRaycastHit> MinimalCastNonAlloc(ResultSortMinimal resultSort);
         public abstract bool Check();
         public abstract Result<Component> MinimalOverlapNonAlloc();
     }
