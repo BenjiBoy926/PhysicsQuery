@@ -82,18 +82,21 @@ namespace PQuery
         {
             Matrix4x4 matrix = GetTransformationMatrix();
             TVector origin = GetWorldStart();
-            TVector startToEnd = Subtract(GetWorldEnd(), origin);
-            TVector direction = Normalize(startToEnd);
-            float distance = Magnitude(startToEnd);
-            return new(matrix, LayerMask, TriggerInteraction, origin, direction, distance, GetHitCache(), GetColliderCache());
+            TVector end = GetWorldEnd();
+
+            Vector3 startToEnd = Unwrap(end) - Unwrap(origin);
+            Vector3 direction = startToEnd.normalized;
+            float distance = startToEnd.magnitude;
+            
+            return new(matrix, LayerMask, TriggerInteraction, origin, Wrap(direction), distance, GetHitCache(), GetColliderCache());
         }
         public TVector GetWorldStart()
         {
-            return Space == Space.Self ? TransformAsPoint(_start) : _start;
+            return TransformPoint(_start);
         }
         public TVector GetWorldEnd()
         {
-            return Space == Space.Self ? TransformAsPoint(_end) : _end;
+            return TransformPoint(_end);
         }
         public void RefreshCache()
         {
@@ -141,16 +144,23 @@ namespace PQuery
             return OverlapNonAlloc().Select(ColliderAsComponent);
         }
 
-        public Component ColliderAsComponent(TCollider collider)
+        private Component ColliderAsComponent(TCollider collider)
         {
             return collider;
         }
+        private TVector TransformPoint(TVector point)
+        {
+            Vector3 result = Unwrap(point);
+            if (Space == Space.Self)
+            {
+                result = transform.TransformPoint(result);
+            }
+            return Wrap(result);
+        }
 
-        public abstract TResultSort GetSort(ResultSortType sortType);
-        public abstract MinimalRaycastHit Minimize(TRaycastHit raycastHit);
-        public abstract float Magnitude(TVector vector);
-        public abstract TVector Normalize(TVector vector);
-        public abstract TVector Subtract(TVector minuend, TVector subtrahend);
-        public abstract TVector TransformAsPoint(TVector point);
+        protected abstract TResultSort GetSort(ResultSortType sortType);
+        protected abstract MinimalRaycastHit Minimize(TRaycastHit raycastHit);
+        protected abstract TVector Wrap(Vector3 vector);
+        protected abstract Vector3 Unwrap(TVector vector);
     }
 }
