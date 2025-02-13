@@ -192,6 +192,15 @@ namespace PQuery
             return Wrap(result);
         }
 
+        protected override void Reset()
+        {
+            base.Reset();
+            _advanced = GetDefaultOptions();
+            _shape = GetDefaultShape();
+        }
+
+        protected abstract TPhysicsShape GetDefaultShape();
+        protected abstract TAdvancedOptions GetDefaultOptions();
         protected abstract TResultSort GetNoneSort();
         protected abstract MinimalRaycastHit MinimizeRaycastHit(TRaycastHit raycastHit);
         protected abstract TVector Wrap(Vector3 vector);

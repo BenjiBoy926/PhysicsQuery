@@ -6,6 +6,12 @@ namespace PQuery
     [Serializable]
     public class AdvancedOptions2D : AdvancedOptions
     {
+        public static readonly AdvancedOptions2D Default = new(
+            Settings.DefaultLayerMask,
+            Settings.DefaultTriggerInteraction,
+            Settings.DefaultCacheCapacity,
+            false, -100, 100,
+            false, 0, 360);
         public ContactFilter2D Filter => new()
         {
             useLayerMask = true,
@@ -27,12 +33,15 @@ namespace PQuery
         public float MinDepth => _minDepth;
         public float MaxDepth => _maxDepth;
 
+        [Space]
         [SerializeField]
         private bool _isDepthFilterFlipped;
         [SerializeField]
         private float _minDepth = float.MinValue;
         [SerializeField]
         private float _maxDepth = float.MaxValue;
+
+        [Space]
         [SerializeField]
         private bool _isNormalAngleFilterFlipped;
         [SerializeField]

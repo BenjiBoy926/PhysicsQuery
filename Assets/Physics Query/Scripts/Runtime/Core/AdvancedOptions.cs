@@ -5,10 +5,6 @@ namespace PQuery
 {
     public class AdvancedOptions
     {
-        public static readonly AdvancedOptions Default = new(
-            Settings.DefaultLayerMask,
-            Settings.DefaultTriggerInteraction,
-            Settings.DefaultCacheCapacity);
         public LayerMask LayerMask => _layerMask;
         public QueryTriggerInteraction TriggerInteraction => _triggerInteraction;
         public int CacheCapacity => _cacheCapacity;

@@ -475,7 +475,6 @@ GameObject:
   m_Component:
   - component: {fileID: 740925315}
   - component: {fileID: 740925316}
-  - component: {fileID: 740925317}
   m_Layer: 0
   m_Name: Query
   m_TagString: Untagged
@@ -518,35 +517,21 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 51
     _triggerInteraction: 0
-    _cacheCapacity: 0
+    _cacheCapacity: 8
     _isDepthFilterFlipped: 0
-    _minDepth: 0
-    _maxDepth: 0
+    _minDepth: -100
+    _maxDepth: 100
     _isNormalAngleFilterFlipped: 0
     _minNormalAngle: 0
-    _maxNormalAngle: 0
+    _maxNormalAngle: 360
   _shape:
-    rid: 4639093840108584961
+    rid: 4639093840108584967
   references:
     version: 2
     RefIds:
-    - rid: 4639093840108584961
-      type: {class: PhysicsShape2D_Circle, ns: PQuery, asm: PhysicsQuery}
-      data:
-        _radius: 0.47
---- !u!114 &740925317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 740925314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29adb9ecc502adc49ae43117d1f0bdf7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _query: {fileID: 740925316}
+    - rid: 4639093840108584967
+      type: {class: PhysicsShape2D_Ray, ns: PQuery, asm: PhysicsQuery}
+      data: 
 --- !u!1 &1918110347
 GameObject:
   m_ObjectHideFlags: 0
