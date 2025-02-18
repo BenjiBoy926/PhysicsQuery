@@ -1,6 +1,6 @@
 namespace PQuery
 {
-    internal class CachedArray<TElement>
+    public class CachedArray<TElement>
     {
         private TElement[] _array;
 

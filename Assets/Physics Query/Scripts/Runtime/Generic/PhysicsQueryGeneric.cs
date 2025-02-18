@@ -29,7 +29,7 @@ namespace PQuery
             get => _currentShape;
             set => _currentShape = value;
         }
-        private int CacheCapacity => _advanced.CacheCapacity;
+        public override int CacheCapacity => _advanced.CacheCapacity;
         private Func<TRaycastHit, AgnosticRaycastHit> AgnosticizeHitDelegate => _agnosticizeHitDelegate ??= Agnosticize;
         private Func<TRaycastHit, BoxedRaycastHit> BoxHitDelegate => _boxHitDelegate ??= Box;
         private Func<TCollider, Component> AgnosticizeColliderDelegate => _agnosticizeColliderDelegate ??= Agnosticize;
@@ -49,9 +49,6 @@ namespace PQuery
 
         private readonly CachedArray<TRaycastHit> _hitCache = new();
         private readonly CachedArray<TCollider> _colliderCache = new();
-        private readonly CachedArray<AgnosticRaycastHit> _agnosticHitCache = new();
-        private readonly CachedArray<BoxedRaycastHit> _boxedHitCache = new();
-        private readonly CachedArray<Component> _agnosticColliderCache = new();
 
         private readonly ProfilerMarker _castMarker = new($"{nameof(PhysicsQuery3D)}.{nameof(Cast)}");
         private readonly ProfilerMarker _castNonAllocMarker = new($"{nameof(PhysicsQuery3D)}.{nameof(CastNonAlloc)}");
@@ -77,7 +74,7 @@ namespace PQuery
             }
             _castNonAllocMarker.Begin();
             Result<TRaycastHit> result = _currentShape.CastNonAlloc(GetParameters());
-            sort.Execute(result._cache, result.Count);
+            sort.Execute(result.Cache, result.Count);
             _castNonAllocMarker.End();
             return result;
         }
@@ -123,12 +120,11 @@ namespace PQuery
         {
             return TransformPoint(_end);
         }
-        public void RefreshCache()
+        public override void RefreshCache()
         {
+            base.RefreshCache();
             RefreshHitCache();
             RefreshColliderCache();
-            RefreshMinimalHitCache();
-            RefreshMinimalColliderCache();
         }
         public void RefreshHitCache()
         {
@@ -137,14 +133,6 @@ namespace PQuery
         public void RefreshColliderCache()
         {
             _colliderCache.SetCapacity(CacheCapacity);
-        }
-        public void RefreshMinimalHitCache()
-        {
-            _agnosticHitCache.SetCapacity(CacheCapacity);
-        }
-        public void RefreshMinimalColliderCache()
-        {
-            _agnosticColliderCache.SetCapacity(CacheCapacity);
         }
 
         public void DrawOverlapGizmo()
@@ -158,40 +146,44 @@ namespace PQuery
 
         public override bool AgnosticCast(out AgnosticRaycastHit hit)
         {
-            bool didHit = Cast(out TRaycastHit genericHit);
-            hit = Agnosticize(genericHit);
-            return didHit;
+            return SelectCastResult(AgnosticizeHitDelegate, out hit);
         }
         public override bool BoxedCast(out BoxedRaycastHit hit)
         {
-            bool didHit = Cast(out TRaycastHit genericHit);
-            hit = Box(genericHit);
-            return didHit;
+            return SelectCastResult(BoxHitDelegate, out hit);
         }
         public override Result<AgnosticRaycastHit> AgnosticCastNonAlloc(ResultSort<AgnosticRaycastHit> resultSort)
         {
-            return RetypeCastNonAlloc(resultSort, _agnosticHitCache, AgnosticizeHitDelegate);
+            return SelectCastNonAllocResult(resultSort, AgnosticHitCache, AgnosticizeHitDelegate);
         }
         public override Result<BoxedRaycastHit> BoxedCastNonAlloc(ResultSort<BoxedRaycastHit> resultSort)
         {
-            return RetypeCastNonAlloc(resultSort, _boxedHitCache, BoxHitDelegate);
+            return SelectCastNonAllocResult(resultSort, BoxedHitCache, BoxHitDelegate);
         }
         public override Result<Component> AgnosticOverlapNonAlloc()
         {
-            Result<TCollider> result = OverlapNonAlloc();
-            Component[] cache = _agnosticColliderCache.GetArray(CacheCapacity);
-            result.Select(cache, AgnosticizeColliderDelegate);
-            return new(cache, result.Count);
+            return SelectResult(OverlapNonAlloc(), AgnosticColliderCache, AgnosticizeColliderDelegate);
         }
 
-        private Result<TNewRaycastHit> RetypeCastNonAlloc<TNewRaycastHit>(ResultSort<TNewRaycastHit> resultSort, CachedArray<TNewRaycastHit> cache, Func<TRaycastHit, TNewRaycastHit> cast)
+        private bool SelectCastResult<TNewRaycastHit>(Func<TRaycastHit, TNewRaycastHit> cast, out TNewRaycastHit result)
+        {
+            bool didHit = Cast(out TRaycastHit genericHit);
+            result = cast(genericHit);
+            return didHit;
+        }
+        private Result<TNewRaycastHit> SelectCastNonAllocResult<TNewRaycastHit>(ResultSort<TNewRaycastHit> resultSort, CachedArray<TNewRaycastHit> cache, Func<TRaycastHit, TNewRaycastHit> cast)
         {
             ResultSort<TRaycastHit> none = GetNoneSort();
-            Result<TRaycastHit> result = CastNonAlloc(none);
-            TNewRaycastHit[] array = cache.GetArray(CacheCapacity);
-            result.Select(array, cast);
-            resultSort.Execute(array, result.Count);
-            return new(array, result.Count);
+            Result<TRaycastHit> inResult = CastNonAlloc(none);
+            Result<TNewRaycastHit> outResult = SelectResult(inResult, cache, cast);
+            resultSort.Execute(outResult.Cache, inResult.Count);
+            return outResult;
+        }
+        private Result<TOut> SelectResult<TIn, TOut>(Result<TIn> inResult, CachedArray<TOut> outCache, Func<TIn, TOut> cast)
+        {
+            TOut[] outArray = outCache.GetArray(CacheCapacity);
+            inResult.Select(outArray, cast);
+            return new(outArray, inResult.Count);
         }
 
         private Component Agnosticize(TCollider collider)

@@ -7,20 +7,20 @@ namespace PQuery
 {
     public readonly struct Result<TElement> : IReadOnlyList<TElement>
     {
-        public bool IsEmpty => _cache == null || _cache.Length == 0 || _count == 0;
-        public bool IsFull => _cache != null && _cache.Length <= _count;
+        public bool IsEmpty => Cache == null || Cache.Length == 0 || _count == 0;
+        public bool IsFull => Cache != null && Cache.Length <= _count;
         public int Count => _count;
-        public int Capacity => _cache != null ? _cache.Length : 0;
+        public int Capacity => Cache != null ? Cache.Length : 0;
         public TElement this[int index] => Get(index);
         public TElement First => Get(0);
         public TElement Last => Get(_count - 1);
 
-        internal readonly TElement[] _cache;
+        internal readonly TElement[] Cache;
         private readonly int _count;
 
         public Result(TElement[] cache, int count)
         {
-            _cache = cache;
+            Cache = cache;
             _count = count;
         }
 
@@ -35,7 +35,7 @@ namespace PQuery
         private TElement Get(int i)
         {
             ValidateIndex(i);
-            return _cache[i];
+            return Cache[i];
         }
         private void ValidateIndex(int i)
         {
