@@ -24,6 +24,12 @@ namespace PQuery
         private readonly CachedArray<BoxedRaycastHit> _boxedHitCache = new();
         private readonly CachedArray<Component> _agnosticColliderCache = new();
 
+        public Ray GetAgnosticWorldRay()
+        {
+            Vector3 start = GetAgnosticWorldStart();
+            Vector3 end = GetAgnosticWorldEnd();
+            return new Ray(start, end - start);
+        }
         public Matrix4x4 GetTransformationMatrix()
         {
             return _space == Space.World ? Matrix4x4.identity : transform.localToWorldMatrix;
@@ -61,11 +67,15 @@ namespace PQuery
         }
 
         public abstract int CacheCapacity { get; }
+        public abstract Vector3 GetAgnosticWorldStart();
+        public abstract Vector3 GetAgnosticWorldEnd();
         public abstract bool AgnosticCast(out AgnosticRaycastHit hit);
         public abstract bool BoxedCast(out BoxedRaycastHit hit);
         public abstract Result<AgnosticRaycastHit> AgnosticCastNonAlloc(ResultSort<AgnosticRaycastHit> resultSort);
         public abstract Result<BoxedRaycastHit> BoxedCastNonAlloc(ResultSort<BoxedRaycastHit> resultSort);
         public abstract bool Check();
         public abstract Result<Component> AgnosticOverlapNonAlloc();
+        public abstract void DrawOverlapGizmo();
+        public abstract void DrawGizmo(Vector3 center);
     }
 }

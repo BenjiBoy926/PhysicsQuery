@@ -135,15 +135,23 @@ namespace PQuery
             _colliderCache.SetCapacity(CacheCapacity);
         }
 
-        public void DrawOverlapGizmo()
+        public override void DrawOverlapGizmo()
         {
             _currentShape.DrawOverlapGizmo(GetParameters());
         }
-        public void DrawGizmo(TVector center)
+        public override void DrawGizmo(Vector3 center)
         {
             _currentShape.DrawGizmo(GetParameters(), center);
         }
 
+        public override Vector3 GetAgnosticWorldStart()
+        {
+            return Unwrap(GetWorldStart());
+        }
+        public override Vector3 GetAgnosticWorldEnd()
+        {
+            return Unwrap(GetWorldEnd());
+        }
         public override bool AgnosticCast(out AgnosticRaycastHit hit)
         {
             return SelectCastResult(AgnosticizeHitDelegate, out hit);

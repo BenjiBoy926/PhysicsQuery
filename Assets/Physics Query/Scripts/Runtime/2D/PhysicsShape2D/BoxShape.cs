@@ -62,13 +62,13 @@ namespace PQuery
             {
                 DrawGizmo(parameters, parameters.Origin);
             }
-            public override void DrawGizmo(Parameters parameters, Vector2 center)
+            public override void DrawGizmo(Parameters parameters, Vector3 center)
             {
                 Vector2 extents = _size * 0.5f;
                 ReadOnlySpan<Vector3> corners = stackalloc Vector3[]
                 {
-                extents, new(extents.x, -extents.y, 0), -extents, new(-extents.x, extents.y, 0)
-            };
+                    extents, new(extents.x, -extents.y, 0), -extents, new(-extents.x, extents.y, 0)
+                };
                 Gizmos.matrix = GetGizmoTransformMatrix(parameters, center, _angle);
                 Gizmos.DrawLineStrip(corners, true);
                 Gizmos.matrix = Matrix4x4.identity;

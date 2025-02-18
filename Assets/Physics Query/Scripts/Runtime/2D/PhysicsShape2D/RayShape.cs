@@ -52,7 +52,7 @@ namespace PQuery
                 Vector2 end = GetEnd(parameters);
                 Gizmos.DrawLine(start, end);
             }
-            public override void DrawGizmo(Parameters parameters, Vector2 center)
+            public override void DrawGizmo(Parameters parameters, Vector3 center)
             {
 
             }

@@ -14,7 +14,7 @@ namespace PQuery
             public abstract bool Check(Parameters parameters);
             public abstract Result<TCollider> OverlapNonAlloc(Parameters parameters);
             public abstract void DrawOverlapGizmo(Parameters parameters);
-            public abstract void DrawGizmo(Parameters parameters, TVector center);
+            public abstract void DrawGizmo(Parameters parameters, Vector3 center);
         }
     }
 }

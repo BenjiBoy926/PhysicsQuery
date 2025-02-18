@@ -55,7 +55,7 @@ namespace PQuery
             {
                 DrawGizmo(parameters, parameters.Origin);
             }
-            public override void DrawGizmo(Parameters parameters, Vector2 center)
+            public override void DrawGizmo(Parameters parameters, Vector3 center)
             {
                 float radius = GetWorldRadius(parameters);
                 CircleGizmo2D.Draw(center, radius);

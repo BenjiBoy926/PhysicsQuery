@@ -4,7 +4,7 @@ namespace PQuery.Editor
 {
     public abstract class GizmoPreview
     {
-        protected void DrawShapeAtHit(PhysicsQuery3D query, RaycastHit hit)
+        protected void DrawShapeAtHit(PhysicsQuery query, RaycastHit hit)
         {
             Vector3 center = GetShapeCenter(query, hit);
             query.DrawGizmo(center);
@@ -22,11 +22,9 @@ namespace PQuery.Editor
             Gizmos.DrawSphere(normal.origin, Preferences.HitSphereRadius.Value);
         }
 
-        protected Vector3 GetShapeCenter(PhysicsQuery3D query, RaycastHit hit)
+        protected Vector3 GetShapeCenter(PhysicsQuery query, RaycastHit hit)
         {
-            var parameters = query.GetParameters();
-            Ray ray = new(parameters.Origin, parameters.Direction);
-            return ray.GetPoint(hit.distance);
+            return query.GetAgnosticWorldRay().GetPoint(hit.distance);
         }
 
         public abstract void DrawGizmos(PhysicsQuery3D query);
