@@ -4,10 +4,10 @@ namespace PQuery.Editor
 {
     public class GizmoPreview_Cast : GizmoPreview
     {
-        public override void DrawGizmos(PhysicsQuery3D query)
+        public override void DrawGizmos(PhysicsQuery query)
         {
-            bool result = query.Cast(out RaycastHit hit);
-            Vector3 start = query.GetWorldStart();
+            bool result = query.AgnosticCast(out AgnosticRaycastHit hit);
+            Vector3 start = query.GetAgnosticWorldStart();
             if (result)
             {
                 DrawHit(hit);
@@ -19,7 +19,7 @@ namespace PQuery.Editor
             else
             {
                 Gizmos.color = Preferences.MissColor.Value;
-                Vector3 end = query.GetWorldEnd();
+                Vector3 end = query.GetAgnosticWorldEnd();
                 query.DrawGizmo(start);
                 query.DrawGizmo(end);
                 Gizmos.DrawLine(start, end);

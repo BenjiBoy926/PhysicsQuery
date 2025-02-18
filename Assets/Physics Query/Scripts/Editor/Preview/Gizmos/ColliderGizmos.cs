@@ -4,6 +4,13 @@ namespace PQuery.Editor
 {
     public static class ColliderGizmos
     {
+        public static void DrawGizmos(Component collider)
+        {
+            if (collider is Collider collider3D)
+            {
+                DrawGizmos(collider3D);
+            }
+        }
         public static void DrawGizmos(Collider collider)
         {
             if (collider == null)

@@ -4,12 +4,12 @@ namespace PQuery.Editor
 {
     public class GizmoPreview_CastNonAlloc : GizmoPreview
     {
-        public override void DrawGizmos(PhysicsQuery3D query)
+        public override void DrawGizmos(PhysicsQuery query)
         {
-            var result = query.CastNonAlloc(ResultSort3D.Distance);
+            var result = query.AgnosticCastNonAlloc(ResultSortAgnostic.Distance);
 
             Gizmos.color = Preferences.GetColorForResult(result);
-            query.DrawGizmo(query.GetWorldStart());
+            query.DrawGizmo(query.GetAgnosticWorldStart());
 
             // Note: we draw each hit and the collider first before the shapes so that the shapes show up on top
             DrawEachHit(result);
@@ -17,28 +17,28 @@ namespace PQuery.Editor
             DrawShapeAtEachHit(query, result); 
 
             Gizmos.color = Preferences.MissColor.Value;
-            query.DrawGizmo(query.GetWorldEnd());
+            query.DrawGizmo(query.GetAgnosticWorldEnd());
         }
-        private void DrawShapeAtEachHit(PhysicsQuery3D query, Result<RaycastHit> result)
+        private void DrawShapeAtEachHit(PhysicsQuery query, Result<AgnosticRaycastHit> result)
         {
             Gizmos.color = result.IsFull ? Preferences.CacheFullColor.Value : Preferences.HitColor.Value;
             for (int i = 0; i < result.Count; i++)
             {
-                RaycastHit hit = result[i];
+                AgnosticRaycastHit hit = result[i];
                 DrawShapeAtHit(query, hit);
             }
         }
-        private void DrawEachHit(Result<RaycastHit> result)
+        private void DrawEachHit(Result<AgnosticRaycastHit> result)
         {
             for (int i = 0; i < result.Count; i++)
             {
                 DrawHit(result[i]);
             }
         }
-        private void DrawResultLine(PhysicsQuery3D query, Result<RaycastHit> result)
+        private void DrawResultLine(PhysicsQuery query, Result<AgnosticRaycastHit> result)
         {
-            Vector3 start = query.GetWorldStart();
-            Vector3 end = query.GetWorldEnd();
+            Vector3 start = query.GetAgnosticWorldStart();
+            Vector3 end = query.GetAgnosticWorldEnd();
 
             if (result.IsFull)
             {
