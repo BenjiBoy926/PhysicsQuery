@@ -25,7 +25,7 @@ namespace PQuery
         public AgnosticRaycastHit(RaycastHit2D hit)
         {
             Collider = hit.collider;
-            ColliderInstanceID = hit.collider.GetInstanceID();
+            ColliderInstanceID = hit.collider ? hit.collider.GetInstanceID() : 0;
             Distance = hit.distance;
             Normal = hit.normal;
             Point = hit.point;

@@ -313,7 +313,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 302093945}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -491,7 +491,7 @@ Transform:
   m_GameObject: {fileID: 740925314}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.02, y: 2.72, z: 0}
+  m_LocalPosition: {x: -2.36, y: -0.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -511,7 +511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _space: 1
   _start: {x: 0, y: 0}
-  _end: {x: 0, y: 0}
+  _end: {x: 10, y: 0}
   _advanced:
     _layerMask:
       serializedVersion: 2
@@ -522,18 +522,17 @@ MonoBehaviour:
     _minDepth: -100
     _maxDepth: 100
     _isNormalAngleFilterFlipped: 0
-    _minNormalAngle: 0
-    _maxNormalAngle: 360
+    _minNormalAngle: -180
+    _maxNormalAngle: 180
   _currentShape:
-    rid: 2234344276833861636
+    rid: 2234344394054172675
   references:
     version: 2
     RefIds:
-    - rid: 2234344276833861636
-      type: {class: PhysicsQuery2D/CapsuleShape, ns: PQuery, asm: PhysicsQuery}
+    - rid: 2234344394054172675
+      type: {class: PhysicsQuery2D/CircleShape, ns: PQuery, asm: PhysicsQuery}
       data:
-        _size: {x: 1, y: 2}
-        _direction: 0
+        _radius: 0.5
 --- !u!1 &1918110347
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,7 +580,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
