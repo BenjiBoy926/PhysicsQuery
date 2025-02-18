@@ -24,7 +24,7 @@ namespace PQuery
             _count = count;
         }
 
-        public void CopyTo<TSelected>(TSelected[] destination, Func<TElement, TSelected> selector)
+        public void Select<TSelected>(TSelected[] destination, Func<TElement, TSelected> selector)
         {
             int count = Mathf.Min(_count, destination.Length);
             for (int i = 0; i < count; i++)

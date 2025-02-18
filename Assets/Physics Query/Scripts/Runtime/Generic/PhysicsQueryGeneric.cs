@@ -170,28 +170,28 @@ namespace PQuery
         }
         public override Result<AgnosticRaycastHit> AgnosticCastNonAlloc(ResultSort<AgnosticRaycastHit> resultSort)
         {
-            ResultSort<TRaycastHit> none = GetNoneSort();
-            Result<TRaycastHit> result = CastNonAlloc(none);
-            AgnosticRaycastHit[] cache = _agnosticHitCache.GetArray(CacheCapacity);
-            result.CopyTo(cache, AgnosticizeHitDelegate);
-            resultSort.Execute(cache, result.Count);
-            return new(cache, result.Count);
+            return RetypeCastNonAlloc(resultSort, _agnosticHitCache, AgnosticizeHitDelegate);
         }
         public override Result<BoxedRaycastHit> BoxedCastNonAlloc(ResultSort<BoxedRaycastHit> resultSort)
         {
-            ResultSort<TRaycastHit> none = GetNoneSort();
-            Result<TRaycastHit> result = CastNonAlloc(none);
-            BoxedRaycastHit[] cache = _boxedHitCache.GetArray(CacheCapacity);
-            result.CopyTo(cache, BoxHitDelegate);
-            resultSort.Execute(cache, result.Count);
-            return new(cache, result.Count);
+            return RetypeCastNonAlloc(resultSort, _boxedHitCache, BoxHitDelegate);
         }
         public override Result<Component> AgnosticOverlapNonAlloc()
         {
-            Component[] cache = _agnosticColliderCache.GetArray(CacheCapacity);
             Result<TCollider> result = OverlapNonAlloc();
-            result.CopyTo(cache, AgnosticizeColliderDelegate);
+            Component[] cache = _agnosticColliderCache.GetArray(CacheCapacity);
+            result.Select(cache, AgnosticizeColliderDelegate);
             return new(cache, result.Count);
+        }
+
+        private Result<TNewRaycastHit> RetypeCastNonAlloc<TNewRaycastHit>(ResultSort<TNewRaycastHit> resultSort, CachedArray<TNewRaycastHit> cache, Func<TRaycastHit, TNewRaycastHit> cast)
+        {
+            ResultSort<TRaycastHit> none = GetNoneSort();
+            Result<TRaycastHit> result = CastNonAlloc(none);
+            TNewRaycastHit[] array = cache.GetArray(CacheCapacity);
+            result.Select(array, cast);
+            resultSort.Execute(array, result.Count);
+            return new(array, result.Count);
         }
 
         private Component Agnosticize(TCollider collider)

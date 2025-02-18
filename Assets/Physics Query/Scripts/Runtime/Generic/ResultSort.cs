@@ -20,6 +20,8 @@ namespace PQuery
             {
                 return;
             }
+            // Note: it'd be simpler to use Array.Sort, but the overload with IComparer always allocates garbage and the overload with Comparison sorts the entire array.
+            // To avoid BOTH sorting the entire list AND allocating garbage on every Sort call, we need to read-sort-write using this static list
             _marker.Begin();
             List<TRaycastHit> list = ReadFromArray(cache, count);
             list.Sort(Comparison);
