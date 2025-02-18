@@ -69,7 +69,8 @@ namespace PQuery.Editor
             for (int i = 0; i < labels.Length; i++)
             {
                 string subtypeName = Subtypes[i].Name;
-                string labelText = subtypeName.Replace(prefix, string.Empty);
+                string removedPrefix = subtypeName.Replace(prefix, string.Empty);
+                string labelText = ObjectNames.NicifyVariableName(removedPrefix);
                 labels[i] = new(labelText);
             }
             return labels;

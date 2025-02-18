@@ -745,7 +745,7 @@ MonoBehaviour:
       type: {class: PhysicsQuery3D/BoxShape, ns: PQuery, asm: PhysicsQuery}
       data:
         _size: {x: 1, y: 1, z: 1}
-        _orientation: {x: 0, y: 0, z: 0, w: 1}
+        _orientation: {x: 0.4035453, y: 0, z: 0, w: 0.91495967}
 --- !u!4 &1270232015
 Transform:
   m_ObjectHideFlags: 0
