@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using UnityEditor;
 
@@ -32,19 +31,19 @@ namespace PQuery.Editor
             _scene = scene;
         }
 
-        public static void DrawGizmos(PhysicsQuery3D query)
+        public static void DrawGizmos(PhysicsQuery query)
         {
             Get(query).DrawThisGizmo(query);
         }
-        public static void DrawInspectorGUI(PhysicsQuery3D query)
+        public static void DrawInspectorGUI(PhysicsQuery query)
         {
             Get(query).DrawThisInspectorGUI(query);
         }
-        public static void DrawSceneGUI(PhysicsQuery3D query)
+        public static void DrawSceneGUI(PhysicsQuery query)
         {
             Get(query).DrawThisSceneGUI(query);
         }
-        public static Preview Get(PhysicsQuery3D query)
+        public static Preview Get(PhysicsQuery query)
         {
             int index = Preferences.GetPreviewIndex(query);
             return Get(index);
@@ -58,15 +57,15 @@ namespace PQuery.Editor
             return _previews.Select(x => x.Label).ToArray();
         }
 
-        public void DrawThisGizmo(PhysicsQuery3D query)
+        public void DrawThisGizmo(PhysicsQuery query)
         {
             _gizmo.DrawGizmos(query);
         }
-        public void DrawThisInspectorGUI(PhysicsQuery3D query)
+        public void DrawThisInspectorGUI(PhysicsQuery query)
         {
             _inspector.DrawInspectorGUI(query);
         }
-        public void DrawThisSceneGUI(PhysicsQuery3D query)
+        public void DrawThisSceneGUI(PhysicsQuery query)
         {
             _scene.DrawSceneGUI(query);
         }
