@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public class InspectorPreview_OverlapNonAlloc : InspectorPreview_NonAlloc<Collider>
+    public class InspectorPreview_OverlapNonAlloc : InspectorPreview_NonAlloc<Component>
     {
-        protected override void DrawElementInspectorGUI(PhysicsQuery3D query, Collider element, int index)
+        protected override void DrawElementInspectorGUI(PhysicsQuery query, Component element, int index)
         {
             string label = $"Element {index}";
             EditorGUILayout.ObjectField(label, element, element.GetType(), true);
         }
-        protected override Result<Collider> GetResult(PhysicsQuery3D query)
+        protected override Result<Component> GetResult(PhysicsQuery query)
         {
-            return query.OverlapNonAlloc();
+            return query.AgnosticOverlapNonAlloc();
         }
     }
 }

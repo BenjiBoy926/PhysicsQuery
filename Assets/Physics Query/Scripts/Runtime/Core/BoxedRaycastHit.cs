@@ -6,7 +6,7 @@ namespace PQuery
     {
         public Component Collider => _info.Collider;
         public int ColliderInstanceID => _info.ColliderInstanceID;
-        public float Distance => _info.ColliderInstanceID;
+        public float Distance => _info.Distance;
         public Vector3 Normal => _info.Normal;
         public Vector3 Point => _info.Point;
         public Component Rigidbody => _info.Rigidbody;

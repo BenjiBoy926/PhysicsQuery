@@ -7,9 +7,9 @@ namespace PQuery.Editor
 {
     public abstract class InspectorPreview
     {
-        public abstract void DrawInspectorGUI(PhysicsQuery3D query);
+        public abstract void DrawInspectorGUI(PhysicsQuery query);
 
-        protected void DrawEachPropertyInspectorGUI(RaycastHit hit)
+        protected void DrawEachPropertyInspectorGUI(BoxedRaycastHit hit)
         {
             PropertyInfo[] properties = hit.GetType().GetProperties();
             for (int i = 0; i < properties.Length; i++)
@@ -17,7 +17,7 @@ namespace PQuery.Editor
                 DrawPropertyInspectorGUI(hit, properties[i]);
             }
         }
-        private void DrawPropertyInspectorGUI(RaycastHit instance, PropertyInfo property)
+        private void DrawPropertyInspectorGUI(BoxedRaycastHit instance, PropertyInfo property)
         {
             string label = ObjectNames.NicifyVariableName(property.Name);
             object value = property.GetValue(instance, null);

@@ -538,12 +538,15 @@ MonoBehaviour:
     _triggerInteraction: 0
     _cacheCapacity: 8
   _currentShape:
-    rid: -2
+    rid: 2234344394054172673
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 2234344394054172673
+      type: {class: PhysicsQuery3D/BoxShape, ns: PQuery, asm: PhysicsQuery}
+      data:
+        _size: {x: 1, y: 1, z: 1}
+        _orientation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,7 +748,7 @@ MonoBehaviour:
       type: {class: PhysicsQuery3D/BoxShape, ns: PQuery, asm: PhysicsQuery}
       data:
         _size: {x: 1, y: 1, z: 1}
-        _orientation: {x: 0.4035453, y: 0, z: 0, w: 0.91495967}
+        _orientation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!4 &1270232015
 Transform:
   m_ObjectHideFlags: 0
@@ -754,13 +757,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1270232013}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.16841154, z: -0, w: 0.98571676}
-  m_LocalPosition: {x: 0.19, y: 0, z: 3.21}
-  m_LocalScale: {x: 0.89748, y: 1.0636, z: 0.71618}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.04}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 19.391, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1472763613
 GameObject:
   m_ObjectHideFlags: 0
