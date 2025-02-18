@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public partial class PhysicsQuery2D : PhysicsQueryGeneric<Vector2, RaycastHit2D, Collider2D, ResultSort2D, PhysicsQuery2D.Shape, AdvancedOptions2D>
+    public partial class PhysicsQuery2D : PhysicsQueryGeneric<Vector2, RaycastHit2D, Collider2D, PhysicsQuery2D.Shape, AdvancedOptions2D>
     {
         public class RayShape : Shape
         {

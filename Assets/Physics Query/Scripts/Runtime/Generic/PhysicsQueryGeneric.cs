@@ -4,10 +4,9 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public abstract partial class PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TSort, TShape, TAdvancedOptions> : PhysicsQuery
+    public abstract partial class PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TShape, TAdvancedOptions> : PhysicsQuery
         where TCollider : Component
-        where TSort : ResultSortGeneric<TRaycastHit>
-        where TShape : PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TSort, TShape, TAdvancedOptions>.AbstractShape
+        where TShape : PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TShape, TAdvancedOptions>.AbstractShape
         where TAdvancedOptions : AdvancedOptions
     {
         public TVector Start
@@ -34,7 +33,6 @@ namespace PQuery
         private Func<TRaycastHit, MinimalRaycastHit> MinimizeRaycastHitDelegate => _minimizeRaycastHitDelegate ??= MinimizeRaycastHit;
         private Func<TCollider, Component> MinimizeColliderDelegate => _minimizeColliderDelegate ??= MinimizeCollider;
 
-        [Space]
         [SerializeField]
         private TVector _start;
         [SerializeField]
@@ -68,7 +66,7 @@ namespace PQuery
             _castMarker.End();
             return didHit;
         }
-        public Result<TRaycastHit> CastNonAlloc(TSort sort)
+        public Result<TRaycastHit> CastNonAlloc(ResultSort<TRaycastHit> sort)
         {
             if (sort == null)
             {
@@ -161,9 +159,9 @@ namespace PQuery
             hit = MinimizeRaycastHit(genericHit);
             return didHit;
         }
-        public override Result<MinimalRaycastHit> MinimalCastNonAlloc(ResultSortMinimal resultSort)
+        public override Result<MinimalRaycastHit> MinimalCastNonAlloc(ResultSort<MinimalRaycastHit> resultSort)
         {
-            TSort none = GetNoneSort();
+            ResultSort<TRaycastHit> none = GetNoneSort();
             Result<TRaycastHit> result = CastNonAlloc(none);
             MinimalRaycastHit[] cache = _minimalHitCache.GetArray(CacheCapacity);
             result.CopyTo(cache, MinimizeRaycastHitDelegate);
@@ -201,7 +199,7 @@ namespace PQuery
 
         protected abstract TShape GetDefaultShape();
         protected abstract TAdvancedOptions GetDefaultOptions();
-        protected abstract TSort GetNoneSort();
+        protected abstract ResultSort<TRaycastHit> GetNoneSort();
         protected abstract MinimalRaycastHit MinimizeRaycastHit(TRaycastHit raycastHit);
         protected abstract TVector Wrap(Vector3 vector);
         protected abstract Vector3 Unwrap(TVector vector);

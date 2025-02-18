@@ -2,24 +2,20 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public abstract class ResultSort3D : ResultSortGeneric<RaycastHit>
+    public static class ResultSort3D
     {
-        public static readonly ResultSort3D None = new ResultSort3D_None();
-        public static readonly ResultSort3D Distance = new ResultSort3D_Distance();
+        public static readonly ResultSort<RaycastHit> None = new ResultSort3D_None();
+        public static readonly ResultSort<RaycastHit> Distance = new ResultSort3D_Distance();
     }
-    public class ResultSort3D_None : ResultSort3D
+    public class ResultSort3D_None : ResultSort_None<RaycastHit>
     {
-        protected override bool WillSort => false;
-        protected override int Compare(RaycastHit a, RaycastHit b)
-        {
-            return 0;
-        }
+
     }
-    public class ResultSort3D_Distance : ResultSort3D
+    public class ResultSort3D_Distance : ResultSort_Distance<RaycastHit>
     {
-        protected override int Compare(RaycastHit a, RaycastHit b)
+        protected override float Distance(RaycastHit hit)
         {
-            return a.distance.CompareTo(b.distance);
+            return hit.distance;
         }
     }
 }

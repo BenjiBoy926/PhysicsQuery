@@ -1,23 +1,19 @@
 ﻿namespace PQuery
 {
-    public abstract class ResultSortMinimal : ResultSortGeneric<MinimalRaycastHit>
+    public static class ResultSortMinimal
     {
-        public static readonly ResultSortMinimal None = new ResultSortMinimal_None();
-        public static readonly ResultSortMinimal Distance = new ResultSortMinimal_Distance();
+        public static readonly ResultSort<MinimalRaycastHit> None = new ResultSortMinimal_None();
+        public static readonly ResultSort<MinimalRaycastHit> Distance = new ResultSortMinimal_Distance();
     }
-    public class ResultSortMinimal_None : ResultSortMinimal
+    public class ResultSortMinimal_None : ResultSort_None<MinimalRaycastHit>
     {
-        protected override bool WillSort => false;
-        protected override int Compare(MinimalRaycastHit a, MinimalRaycastHit b)
-        {
-            return 0;
-        }
+
     }
-    public class ResultSortMinimal_Distance : ResultSortMinimal
+    public class ResultSortMinimal_Distance : ResultSort_Distance<MinimalRaycastHit>
     {
-        protected override int Compare(MinimalRaycastHit a, MinimalRaycastHit b)
+        protected override float Distance(MinimalRaycastHit hit)
         {
-            return a.Distance.CompareTo(b.Distance);
+            return hit.Distance;
         }
     }
 }

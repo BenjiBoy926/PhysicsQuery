@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public partial class PhysicsQuery3D : PhysicsQueryGeneric<Vector3, RaycastHit, Collider, ResultSort3D, PhysicsQuery3D.Shape, AdvancedOptions3D>
+    public partial class PhysicsQuery3D : PhysicsQueryGeneric<Vector3, RaycastHit, Collider, PhysicsQuery3D.Shape, AdvancedOptions3D>
     {
         protected override Shape GetDefaultShape()
         {
@@ -12,7 +12,7 @@ namespace PQuery
         {
             return AdvancedOptions3D.Default;
         }
-        protected override ResultSort3D GetNoneSort()
+        protected override ResultSort<RaycastHit> GetNoneSort()
         {
             return ResultSort3D.None;
         }

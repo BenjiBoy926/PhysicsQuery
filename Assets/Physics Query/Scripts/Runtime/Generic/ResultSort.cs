@@ -5,7 +5,7 @@ using Unity.Profiling;
 
 namespace PQuery
 {
-    public abstract class ResultSortGeneric<TRaycastHit>
+    public abstract class ResultSort<TRaycastHit>
     {
         protected virtual bool WillSort => true;
         private Comparison<TRaycastHit> Comparison => _comparison ??= Compare;
@@ -49,5 +49,21 @@ namespace PQuery
         }
 
         protected abstract int Compare(TRaycastHit a, TRaycastHit b);
+    }
+    public class ResultSort_None<TRaycastHit> : ResultSort<TRaycastHit>
+    {
+        protected override bool WillSort => false;
+        protected override int Compare(TRaycastHit a, TRaycastHit b)
+        {
+            return 0;
+        }
+    }
+    public abstract class ResultSort_Distance<TRaycastHit> : ResultSort<TRaycastHit>
+    {
+        protected override int Compare(TRaycastHit a, TRaycastHit b)
+        {
+            return Distance(a).CompareTo(Distance(b));
+        }
+        protected abstract float Distance(TRaycastHit hit);
     }
 }

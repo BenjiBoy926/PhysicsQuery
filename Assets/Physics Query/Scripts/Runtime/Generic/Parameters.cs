@@ -2,10 +2,9 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public abstract partial class PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TSort, TShape, TAdvancedOptions> : PhysicsQuery
+    public abstract partial class PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TShape, TAdvancedOptions> : PhysicsQuery
         where TCollider : Component
-        where TSort : ResultSortGeneric<TRaycastHit>
-        where TShape : PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TSort, TShape, TAdvancedOptions>.AbstractShape
+        where TShape : PhysicsQueryGeneric<TVector, TRaycastHit, TCollider, TShape, TAdvancedOptions>.AbstractShape
         where TAdvancedOptions : AdvancedOptions
     {
         public readonly struct Parameters

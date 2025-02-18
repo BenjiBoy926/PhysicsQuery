@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public partial class PhysicsQuery2D : PhysicsQueryGeneric<Vector2, RaycastHit2D, Collider2D, ResultSort2D, PhysicsQuery2D.Shape, AdvancedOptions2D>
+    public partial class PhysicsQuery2D : PhysicsQueryGeneric<Vector2, RaycastHit2D, Collider2D, PhysicsQuery2D.Shape, AdvancedOptions2D>
     {
         protected override Shape GetDefaultShape()
         {
@@ -12,7 +12,7 @@ namespace PQuery
         {
             return AdvancedOptions2D.Default;
         }
-        protected override ResultSort2D GetNoneSort()
+        protected override ResultSort<RaycastHit2D> GetNoneSort()
         {
             return ResultSort2D.None;
         }
