@@ -6,27 +6,27 @@ namespace PQuery.Editor
 {
     public abstract class ScenePreview
     {
-        public delegate void ColliderClickHandler(Collider collider);
+        public delegate void ColliderClickHandler(Component collider);
         public static event ColliderClickHandler ColliderClicked = delegate { };
 
-        private static readonly List<PhysicsQuery3D> _selectedQueries = new();
+        private static readonly List<PhysicsQuery> _selectedQueries = new();
 
-        protected static void ClickCollider(Collider collider)
+        protected static void ClickCollider(Component collider)
         {
             EditorGUIUtility.PingObject(collider);
             ExpandRaycastHitsWithCollider(collider);
             ColliderClicked(collider);
         }
-        private static void ExpandRaycastHitsWithCollider(Collider collider)
+        private static void ExpandRaycastHitsWithCollider(Component collider)
         {
-            List<PhysicsQuery3D> queries = GetSelectedQueries();
+            List<PhysicsQuery> queries = GetSelectedQueries();
             for (int i = 0; i < queries.Count; i++)
             {
                 Preferences.CollapseAllRaycastHitFoldouts(queries[i]);
                 Preferences.ExpandRaycastHitFoldout(queries[i], collider);
             }
         }
-        private static List<PhysicsQuery3D> GetSelectedQueries()
+        private static List<PhysicsQuery> GetSelectedQueries()
         {
             Transform[] selected = Selection.transforms;
             _selectedQueries.Clear();
@@ -36,14 +36,14 @@ namespace PQuery.Editor
             }
             return _selectedQueries;
         }
-        private static void AddQuery(Transform transform, List<PhysicsQuery3D> queries)
+        private static void AddQuery(Transform transform, List<PhysicsQuery> queries)
         {
-            if (transform.TryGetComponent(out PhysicsQuery3D query))
+            if (transform.TryGetComponent(out PhysicsQuery query))
             {
                 queries.Add(query);
             }
         }
 
-        public abstract void DrawSceneGUI(PhysicsQuery3D query);
+        public abstract void DrawSceneGUI(PhysicsQuery query);
     }
 }

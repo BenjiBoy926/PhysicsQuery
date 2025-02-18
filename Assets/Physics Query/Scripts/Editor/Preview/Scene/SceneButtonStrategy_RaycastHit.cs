@@ -3,11 +3,11 @@ using UnityEditor;
 
 namespace PQuery.Editor
 {
-    public class SceneButtonStrategy_RaycastHit : SceneButtonStrategy<RaycastHit>
+    public class SceneButtonStrategy_RaycastHit : SceneButtonStrategy<AgnosticRaycastHit>
     {
-        protected override Rect GetPosition(RaycastHit value, string label)
+        protected override Rect GetPosition(AgnosticRaycastHit value, string label)
         {
-            Vector3 center = value.point;
+            Vector3 center = value.Point;
             Vector3 offset = 2 * Preferences.HitSphereRadius.Value * Vector3.up;
             Vector3 bottomEdgeWorldPosition = center + offset;
 
@@ -18,15 +18,15 @@ namespace PQuery.Editor
 
             return new(position, size);
         }
-        protected override string GetTooltip(RaycastHit value)
+        protected override string GetTooltip(AgnosticRaycastHit value)
         {
-            return $"Point: {value.point}\n" +
-                $"Normal: {value.normal}\n" +
-                $"Distance: {value.distance}";
+            return $"Point: {value.Point}\n" +
+                $"Normal: {value.Normal}\n" +
+                $"Distance: {value.Distance}";
         }
-        protected override bool IsVisible(RaycastHit value)
+        protected override bool IsVisible(AgnosticRaycastHit value)
         {
-            return value.collider != null && IsPositionOnScreen(value.point);
+            return value.Collider != null && IsPositionOnScreen(value.Point);
         }
     }
 }

@@ -3,21 +3,21 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public class ScenePreview_CastNonAlloc : ScenePreview_NonAlloc<RaycastHit>
+    public class ScenePreview_CastNonAlloc : ScenePreview_NonAlloc<AgnosticRaycastHit>
     {
-        protected override Result<RaycastHit> GetResult(PhysicsQuery3D query)
+        protected override Result<AgnosticRaycastHit> GetResult(PhysicsQuery query)
         {
-            return query.CastNonAlloc(ResultSort3D.Distance);
+            return query.AgnosticCastNonAlloc(ResultSortAgnostic.Distance);
         }
-        protected override string GetLabel(RaycastHit element, int index)
+        protected override string GetLabel(AgnosticRaycastHit element, int index)
         {
-            return $"[{index}]: {element.collider.name}";
+            return $"[{index}]: {element.Collider.name}";
         }
-        protected override Collider GetCollider(RaycastHit element)
+        protected override Component GetCollider(AgnosticRaycastHit element)
         {
-            return element.collider;
+            return element.Collider;
         }
-        protected override SceneButtonStrategy<RaycastHit> GetSceneButtonStrategy()
+        protected override SceneButtonStrategy<AgnosticRaycastHit> GetSceneButtonStrategy()
         {
             return new SceneButtonStrategy_RaycastHit();
         }

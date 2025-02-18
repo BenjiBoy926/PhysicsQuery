@@ -7,9 +7,9 @@ namespace PQuery.Editor
     {
         private readonly SceneButtonStrategy_RaycastHit _button = new();
 
-        public override void DrawSceneGUI(PhysicsQuery3D query)
+        public override void DrawSceneGUI(PhysicsQuery query)
         {
-            bool didHit = query.Cast(out RaycastHit hit);
+            bool didHit = query.AgnosticCast(out AgnosticRaycastHit hit);
             Handles.BeginGUI();
             if (didHit)
             {
@@ -21,11 +21,11 @@ namespace PQuery.Editor
             }
             Handles.EndGUI();
         }
-        private void DrawButton(RaycastHit hit)
+        private void DrawButton(AgnosticRaycastHit hit)
         {
-            if (_button.Draw(hit, hit.collider.name))
+            if (_button.Draw(hit, hit.Collider.name))
             {
-                ClickCollider(hit.collider);
+                ClickCollider(hit.Collider);
             }
         }
     }

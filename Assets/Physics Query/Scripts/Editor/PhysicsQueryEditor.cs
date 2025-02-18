@@ -16,7 +16,7 @@ namespace PQuery.Editor
             ScenePreview.ColliderClicked -= OnColliderClicked;
         }
 
-        private void OnColliderClicked(Collider other)
+        private void OnColliderClicked(Component other)
         {
             Repaint();
         }

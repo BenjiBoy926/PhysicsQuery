@@ -3,21 +3,21 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public class ScenePreview_OverlapNonAlloc : ScenePreview_NonAlloc<Collider>
+    public class ScenePreview_OverlapNonAlloc : ScenePreview_NonAlloc<Component>
     {
-        protected override Result<Collider> GetResult(PhysicsQuery3D query)
+        protected override Result<Component> GetResult(PhysicsQuery query)
         {
-            return query.OverlapNonAlloc();
+            return query.AgnosticOverlapNonAlloc();
         }
-        protected override string GetLabel(Collider element, int index)
+        protected override string GetLabel(Component element, int index)
         {
             return $"[{index}]: {element.name}";
         }
-        protected override Collider GetCollider(Collider element)
+        protected override Component GetCollider(Component element)
         {
             return element;
         }
-        protected override SceneButtonStrategy<Collider> GetSceneButtonStrategy()
+        protected override SceneButtonStrategy<Component> GetSceneButtonStrategy()
         {
             return new SceneButtonStrategy_Collider();
         }
