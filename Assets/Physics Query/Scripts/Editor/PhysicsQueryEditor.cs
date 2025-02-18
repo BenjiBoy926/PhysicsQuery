@@ -4,7 +4,7 @@ using UnityEditor;
 namespace PQuery.Editor
 {
     [CanEditMultipleObjects]
-    [CustomEditor(typeof(PhysicsQuery3D), true)]
+    [CustomEditor(typeof(PhysicsQuery), true)]
     public class PhysicsQueryEditor : UnityEditor.Editor
     {
         private void OnEnable()
@@ -27,15 +27,15 @@ namespace PQuery.Editor
             Object[] targets = serializedObject.targetObjects;
             for (int i = 0; i < targets.Length; i++)
             {
-                DrawInspectorPreview((PhysicsQuery3D)targets[i]);
+                DrawInspectorPreview((PhysicsQuery)targets[i]);
             }
         }
         private void OnSceneGUI()
         {
-            Preview.DrawSceneGUI((PhysicsQuery3D)target);
+            Preview.DrawSceneGUI((PhysicsQuery)target);
         }
 
-        private void DrawInspectorPreview(PhysicsQuery3D query)
+        private void DrawInspectorPreview(PhysicsQuery query)
         {
             EditorGUILayout.Space();
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -63,7 +63,7 @@ namespace PQuery.Editor
             {
                 return;
             }
-            PhysicsQuery3D[] queries = FindObjectsByType<PhysicsQuery3D>(FindObjectsSortMode.None);
+            PhysicsQuery[] queries = FindObjectsByType<PhysicsQuery>(FindObjectsSortMode.None);
             for (int i = 0; i < queries.Length; i++)
             {
                 Preview.DrawSceneGUI(queries[i]);
@@ -71,14 +71,14 @@ namespace PQuery.Editor
         }
         private static void OnDrawGizmos(PhysicsQuery obj)
         {
-            if (Preferences.AlwaysDrawGizmos.Value && obj is PhysicsQuery3D query3D)
+            if (Preferences.AlwaysDrawGizmos.Value && obj is PhysicsQuery query3D)
             {
                 Preview.DrawGizmos(query3D);
             }
         }
         private static void OnDrawGizmosSelected(PhysicsQuery obj)
         {
-            if (!Preferences.AlwaysDrawGizmos.Value && obj is PhysicsQuery3D query3D)
+            if (!Preferences.AlwaysDrawGizmos.Value && obj is PhysicsQuery query3D)
             {
                 Preview.DrawGizmos(query3D);
             }
