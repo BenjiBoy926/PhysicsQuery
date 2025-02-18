@@ -11,13 +11,14 @@ namespace PQuery.Editor
 
         protected void DrawEachPropertyInspectorGUI(BoxedRaycastHit hit)
         {
-            PropertyInfo[] properties = hit.GetType().GetProperties();
+            object originalHit = hit.Original;
+            PropertyInfo[] properties = originalHit.GetType().GetProperties();
             for (int i = 0; i < properties.Length; i++)
             {
-                DrawPropertyInspectorGUI(hit, properties[i]);
+                DrawPropertyInspectorGUI(originalHit, properties[i]);
             }
         }
-        private void DrawPropertyInspectorGUI(BoxedRaycastHit instance, PropertyInfo property)
+        private void DrawPropertyInspectorGUI(object instance, PropertyInfo property)
         {
             string label = ObjectNames.NicifyVariableName(property.Name);
             object value = property.GetValue(instance, null);
