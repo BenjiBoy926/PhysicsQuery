@@ -11,7 +11,6 @@ namespace PQuery
         public readonly Vector3 Point;
         public readonly Component Rigidbody;
         public readonly Transform Transform;
-        public readonly object Original;
 
         public MinimalRaycastHit(RaycastHit hit)
         {
@@ -22,7 +21,6 @@ namespace PQuery
             Point = hit.point;
             Rigidbody = hit.rigidbody;
             Transform = hit.transform;
-            Original = hit;
         }
         public MinimalRaycastHit(RaycastHit2D hit)
         {
@@ -33,7 +31,6 @@ namespace PQuery
             Point = hit.point;
             Rigidbody = hit.rigidbody;
             Transform = hit.transform;
-            Original = hit;
         }
     }
 }
