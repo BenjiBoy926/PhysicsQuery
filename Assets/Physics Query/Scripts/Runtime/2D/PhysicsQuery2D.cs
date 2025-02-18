@@ -16,7 +16,11 @@ namespace PQuery
         {
             return ResultSort2D.None;
         }
-        protected override MinimalRaycastHit MinimizeRaycastHit(RaycastHit2D raycastHit)
+        protected override AgnosticRaycastHit Agnosticize(RaycastHit2D raycastHit)
+        {
+            return new(raycastHit);
+        }
+        protected override BoxedRaycastHit Box(RaycastHit2D raycastHit)
         {
             return new(raycastHit);
         }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public readonly struct MinimalRaycastHit
+    public readonly struct AgnosticRaycastHit
     {
         public readonly Component Collider;
         public readonly int ColliderInstanceID;
@@ -12,7 +12,7 @@ namespace PQuery
         public readonly Component Rigidbody;
         public readonly Transform Transform;
 
-        public MinimalRaycastHit(RaycastHit hit)
+        public AgnosticRaycastHit(RaycastHit hit)
         {
             Collider = hit.collider;
             ColliderInstanceID = hit.colliderInstanceID;
@@ -22,7 +22,7 @@ namespace PQuery
             Rigidbody = hit.rigidbody;
             Transform = hit.transform;
         }
-        public MinimalRaycastHit(RaycastHit2D hit)
+        public AgnosticRaycastHit(RaycastHit2D hit)
         {
             Collider = hit.collider;
             ColliderInstanceID = hit.collider.GetInstanceID();

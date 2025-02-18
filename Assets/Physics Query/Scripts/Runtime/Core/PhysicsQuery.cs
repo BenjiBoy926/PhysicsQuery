@@ -35,9 +35,11 @@ namespace PQuery
             DrawGizmosSelected(this);
         }
 
-        public abstract bool MinimalCast(out MinimalRaycastHit hit);
-        public abstract Result<MinimalRaycastHit> MinimalCastNonAlloc(ResultSort<MinimalRaycastHit> resultSort);
+        public abstract bool AgnosticCast(out AgnosticRaycastHit hit);
+        public abstract bool BoxedCast(out BoxedRaycastHit hit);
+        public abstract Result<AgnosticRaycastHit> AgnosticCastNonAlloc(ResultSort<AgnosticRaycastHit> resultSort);
+        public abstract Result<BoxedRaycastHit> BoxedCastNonAlloc(ResultSort<BoxedRaycastHit> resultSort);
         public abstract bool Check();
-        public abstract Result<Component> MinimalOverlapNonAlloc();
+        public abstract Result<Component> AgnosticOverlapNonAlloc();
     }
 }
