@@ -19,7 +19,9 @@ namespace PQuery
             }
             else
             {
-                Vector2 axisDirection = Vector2.up;
+                Vector2 axisDirection = GetLocalLengthAxis(transformation, localDirection);
+                axisDirection = Vector3.ProjectOnPlane(axisDirection, Vector3.forward);
+                axisDirection = axisDirection.normalized;
                 Draw(center, axisDirection * axisLength, radius);
             }
         }
@@ -66,17 +68,19 @@ namespace PQuery
 
         private static float GetOverallLength(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            Vector3 local = GetLocalLengthAxis(transformation, direction);
-            Vector3 projected = Vector3.ProjectOnPlane(local, Vector3.forward);
-            size *= projected.magnitude;
+            size = ScaleSize(size, GetLocalLengthAxis(transformation, direction));
             return direction == CapsuleDirection2D.Vertical ? size.y : size.x;
         }
         private static float GetDiameter(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            Vector3 local = GetLocalWidthAxis(transformation, direction);
-            Vector3 projected = Vector3.ProjectOnPlane(local, Vector3.forward);
-            size *= projected.magnitude;
+            size = ScaleSize(size, GetLocalWidthAxis(transformation, direction));
             return direction == CapsuleDirection2D.Vertical ? size.x : size.y;
+        }
+
+        private static Vector2 ScaleSize(Vector2 size, Vector3 localAxis)
+        {
+            Vector3 projected = Vector3.ProjectOnPlane(localAxis, Vector3.forward);
+            return size * projected.magnitude;
         }
 
         private static Vector3 GetLocalLengthAxis(Matrix4x4 transformation, CapsuleDirection2D direction)
