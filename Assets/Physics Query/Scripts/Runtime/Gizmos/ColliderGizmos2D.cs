@@ -19,6 +19,10 @@ namespace PQuery.Editor
             {
                 DrawGizmos(capsuleCollider);
             }
+            else if (collider is CircleCollider2D circleCollider)
+            {
+                DrawGizmos(circleCollider);
+            }
         }
         private static void DrawGizmos(BoxCollider2D collider)
         {
@@ -39,6 +43,12 @@ namespace PQuery.Editor
         private static void DrawGizmos(CapsuleCollider2D collider)
         {
             CapsuleGizmo2D.Draw(collider.transform.localToWorldMatrix, collider.offset, collider.size, collider.direction);
+        }
+        private static void DrawGizmos(CircleCollider2D collider)
+        {
+            Vector3 scale = collider.transform.lossyScale;
+            float worldRadius = Mathf.Max(scale.x, scale.y) * collider.radius;
+            CircleGizmo2D.Draw(collider.transform.position, worldRadius);
         }
     }
 }
