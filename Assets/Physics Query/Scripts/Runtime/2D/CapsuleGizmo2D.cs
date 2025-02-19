@@ -11,7 +11,7 @@ namespace PQuery
             Vector2 lossyScale = transformation.lossyScale;
             Vector2 size = localSize * lossyScale;
             float radius = GetRadius(size, localDirection);
-            float axisLength = GetAxisLength(size, localDirection);
+            float axisLength = GetStraightSideExtent(size, localDirection);
 
             if (axisLength < 1E-6f)
             {
@@ -19,7 +19,7 @@ namespace PQuery
             }
             else
             {
-                Vector2 axisDirection = localDirection == CapsuleDirection2D.Vertical ? transformation.GetColumn(1) : transformation.GetColumn(0);
+                Vector2 axisDirection = Vector2.up;
                 Draw(center, axisDirection * axisLength, radius);
             }
         }
@@ -47,19 +47,30 @@ namespace PQuery
             new EllipseGizmo(bottomCapCenter, right, hemisphereDown).DrawHalf();
         }
 
-        private static float GetAxisLength(Vector2 size, CapsuleDirection2D direction)
+        private static float GetStraightSideExtent(Vector2 size, CapsuleDirection2D direction)
         {
-            return GetLength(size, direction) - GetRadius(size, direction);
+            return GetStraightSideLength(size, direction) / 2;
         }
-        private static float GetLength(Vector2 size, CapsuleDirection2D direction)
+        private static float GetStraightSideLength(Vector2 size, CapsuleDirection2D direction)
         {
-            Vector2 extents = size / 2;
-            return direction == CapsuleDirection2D.Vertical ? extents.y : extents.x;
+            return GetOverallLength(size, direction) - GetDiameter(size, direction);
+        }
+        private static float GetOverallExtent(Vector2 size, CapsuleDirection2D direction)
+        {
+            return GetOverallLength(size, direction) / 2;
         }
         private static float GetRadius(Vector2 size, CapsuleDirection2D direction)
         {
-            Vector2 extents = size / 2;
-            return direction == CapsuleDirection2D.Vertical ? extents.x : extents.y;
+            return GetDiameter(size, direction) / 2;
+        }
+
+        private static float GetOverallLength(Vector2 size, CapsuleDirection2D direction)
+        {
+            return size.y;
+        }
+        private static float GetDiameter(Vector2 size, CapsuleDirection2D direction)
+        {
+            return size.x;
         }
     }
 }
