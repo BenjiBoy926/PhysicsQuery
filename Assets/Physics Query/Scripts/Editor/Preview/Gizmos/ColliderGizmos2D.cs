@@ -15,6 +15,10 @@ namespace PQuery.Editor
             {
                 DrawGizmos(boxCollider);
             }
+            else if (collider is CapsuleCollider2D capsuleCollider)
+            {
+                DrawGizmos(capsuleCollider);
+            }
         }
         private static void DrawGizmos(BoxCollider2D collider)
         {
@@ -31,6 +35,12 @@ namespace PQuery.Editor
                 corners[i] = world;
             }
             Gizmos.DrawLineStrip(corners, true);
+        }
+        private static void DrawGizmos(CapsuleCollider2D collider)
+        {
+            Gizmos.matrix = collider.transform.localToWorldMatrix;
+            CapsuleGizmo2D.Draw(collider.offset, collider.size, collider.direction);
+            Gizmos.matrix = Matrix4x4.identity;
         }
     }
 }
