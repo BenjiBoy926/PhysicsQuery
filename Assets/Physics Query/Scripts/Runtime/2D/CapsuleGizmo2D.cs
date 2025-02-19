@@ -53,27 +53,29 @@ namespace PQuery
         }
         private static float GetStraightSideLength(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            return GetOverallLength(size, direction) - GetDiameter(transformation, size, direction);
+            return GetOverallLength(transformation, size, direction) - GetDiameter(transformation, size, direction);
         }
-        private static float GetOverallExtent(Vector2 size, CapsuleDirection2D direction)
+        private static float GetOverallExtent(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            return GetOverallLength(size, direction) / 2;
+            return GetOverallLength(transformation, size, direction) / 2;
         }
         private static float GetRadius(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
             return GetDiameter(transformation, size, direction) / 2;
         }
 
-        private static float GetOverallLength(Vector2 size, CapsuleDirection2D direction)
+        private static float GetOverallLength(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
+            Vector3 local = GetLocalLengthAxis(transformation, direction);
+            Vector3 projected = Vector3.ProjectOnPlane(local, Vector3.forward);
+            size *= projected.magnitude;
             return direction == CapsuleDirection2D.Vertical ? size.y : size.x;
         }
         private static float GetDiameter(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
             Vector3 local = GetLocalWidthAxis(transformation, direction);
-            Vector3 world = GetWorldWidthAxis(direction);
-            float sizeScale = Vector3.Dot(local, world);
-            size *= Mathf.Abs(sizeScale);
+            Vector3 projected = Vector3.ProjectOnPlane(local, Vector3.forward);
+            size *= projected.magnitude;
             return direction == CapsuleDirection2D.Vertical ? size.x : size.y;
         }
 
@@ -84,15 +86,6 @@ namespace PQuery
         private static Vector3 GetLocalWidthAxis(Matrix4x4 transformation, CapsuleDirection2D direction)
         {
             return direction == CapsuleDirection2D.Vertical ? transformation.GetColumn(0) : transformation.GetColumn(1);
-        }
-
-        private static Vector3 GetWorldLengthAxis(CapsuleDirection2D direction)
-        {
-            return direction == CapsuleDirection2D.Vertical ? Vector3.up : Vector3.right;
-        }
-        private static Vector3 GetWorldWidthAxis(CapsuleDirection2D direction) 
-        {
-            return direction == CapsuleDirection2D.Vertical ? Vector3.right : Vector3.up;
         }
     }
 }
