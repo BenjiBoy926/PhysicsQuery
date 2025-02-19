@@ -10,8 +10,8 @@ namespace PQuery
             Vector3 center = transformation.MultiplyPoint3x4(localCenter);
             Vector2 lossyScale = transformation.lossyScale;
             Vector2 size = localSize * lossyScale;
-            float radius = GetRadius(size, localDirection);
-            float axisLength = GetStraightSideExtent(size, localDirection);
+            float radius = GetRadius(transformation, size, localDirection);
+            float axisLength = GetStraightSideExtent(transformation, size, localDirection);
 
             if (axisLength < 1E-6f)
             {
@@ -47,30 +47,52 @@ namespace PQuery
             new EllipseGizmo(bottomCapCenter, right, hemisphereDown).DrawHalf();
         }
 
-        private static float GetStraightSideExtent(Vector2 size, CapsuleDirection2D direction)
+        private static float GetStraightSideExtent(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            return GetStraightSideLength(size, direction) / 2;
+            return GetStraightSideLength(transformation, size, direction) / 2;
         }
-        private static float GetStraightSideLength(Vector2 size, CapsuleDirection2D direction)
+        private static float GetStraightSideLength(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            return GetOverallLength(size, direction) - GetDiameter(size, direction);
+            return GetOverallLength(size, direction) - GetDiameter(transformation, size, direction);
         }
         private static float GetOverallExtent(Vector2 size, CapsuleDirection2D direction)
         {
             return GetOverallLength(size, direction) / 2;
         }
-        private static float GetRadius(Vector2 size, CapsuleDirection2D direction)
+        private static float GetRadius(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            return GetDiameter(size, direction) / 2;
+            return GetDiameter(transformation, size, direction) / 2;
         }
 
         private static float GetOverallLength(Vector2 size, CapsuleDirection2D direction)
         {
-            return size.y;
+            return direction == CapsuleDirection2D.Vertical ? size.y : size.x;
         }
-        private static float GetDiameter(Vector2 size, CapsuleDirection2D direction)
+        private static float GetDiameter(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            return size.x;
+            Vector3 local = GetLocalWidthAxis(transformation, direction);
+            Vector3 world = GetWorldWidthAxis(direction);
+            float sizeScale = Vector3.Dot(local, world);
+            size *= Mathf.Abs(sizeScale);
+            return direction == CapsuleDirection2D.Vertical ? size.x : size.y;
+        }
+
+        private static Vector3 GetLocalLengthAxis(Matrix4x4 transformation, CapsuleDirection2D direction)
+        {
+            return direction == CapsuleDirection2D.Vertical ? transformation.GetColumn(1) : transformation.GetColumn(0);
+        }
+        private static Vector3 GetLocalWidthAxis(Matrix4x4 transformation, CapsuleDirection2D direction)
+        {
+            return direction == CapsuleDirection2D.Vertical ? transformation.GetColumn(0) : transformation.GetColumn(1);
+        }
+
+        private static Vector3 GetWorldLengthAxis(CapsuleDirection2D direction)
+        {
+            return direction == CapsuleDirection2D.Vertical ? Vector3.up : Vector3.right;
+        }
+        private static Vector3 GetWorldWidthAxis(CapsuleDirection2D direction) 
+        {
+            return direction == CapsuleDirection2D.Vertical ? Vector3.right : Vector3.up;
         }
     }
 }
