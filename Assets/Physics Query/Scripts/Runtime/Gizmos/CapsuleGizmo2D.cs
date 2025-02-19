@@ -23,16 +23,16 @@ namespace PQuery
         private static void Draw(Matrix4x4 transformation, Vector2 localCenter, float radius, float axisLength, CapsuleDirection2D direction)
         {
             Vector3 center = transformation.MultiplyPoint3x4(localCenter);
-            Vector2 axisDirection = GetLocalLengthAxis(transformation, direction);
+            Vector3 axisDirection = GetLocalLengthAxis(transformation, direction);
             axisDirection = Vector3.ProjectOnPlane(axisDirection, Vector3.forward);
             axisDirection = axisDirection.normalized;
             Draw(center, axisDirection * axisLength, radius);
         }
 
-        private static void Draw(Vector3 center, Vector2 axis, float radius)
+        private static void Draw(Vector3 center, Vector3 axis, float radius)
         {
-            Vector3 topCapCenter = center + (Vector3)axis;
-            Vector3 bottomCapCenter = center - (Vector3)axis;
+            Vector3 topCapCenter = center + axis;
+            Vector3 bottomCapCenter = center - axis;
 
             Vector3 down = -axis;
             Vector3 right = Vector2.Perpendicular(axis).normalized * radius;
@@ -42,9 +42,9 @@ namespace PQuery
 
             ReadOnlySpan<Vector3> linePoints = stackalloc Vector3[]
             {
-                center + (Vector3)axis + right,
+                center + axis + right,
                 center + down + right,
-                center + (Vector3)axis + left,
+                center + axis + left,
                 center + down + left
             };
             Gizmos.DrawLineList(linePoints);
@@ -72,31 +72,18 @@ namespace PQuery
 
         private static float GetOverallLength(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            size = ScaleSize(transformation, size);
+            size = CapsuleMath2D.GetScaledSize(transformation, size);
             return direction == CapsuleDirection2D.Vertical ? size.y : size.x;
         }
         private static float GetDiameter(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            size = ScaleSize(transformation, size);
+            size = CapsuleMath2D.GetScaledSize(transformation, size);
             return direction == CapsuleDirection2D.Vertical ? size.x : size.y;
-        }
-
-        private static Vector2 ScaleSize(Matrix4x4 transformation, Vector2 size)
-        {
-            Vector3 right = transformation.GetColumn(0);
-            Vector3 up = transformation.GetColumn(1);
-            Vector3 projectedRight = Vector3.ProjectOnPlane(right, Vector3.forward);
-            Vector3 projectedUp = Vector3.ProjectOnPlane(up, Vector3.forward);
-            return new(size.x * projectedRight.magnitude, size.y * projectedUp.magnitude);
         }
 
         private static Vector3 GetLocalLengthAxis(Matrix4x4 transformation, CapsuleDirection2D direction)
         {
             return direction == CapsuleDirection2D.Vertical ? transformation.GetColumn(1) : transformation.GetColumn(0);
-        }
-        private static Vector3 GetLocalWidthAxis(Matrix4x4 transformation, CapsuleDirection2D direction)
-        {
-            return direction == CapsuleDirection2D.Vertical ? transformation.GetColumn(0) : transformation.GetColumn(1);
         }
     }
 }
