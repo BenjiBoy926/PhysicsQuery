@@ -10,6 +10,10 @@ namespace PQuery.Editor
             {
                 ColliderGizmos3D.DrawGizmos(collider3D);
             }
+            else if (collider is Collider2D collider2D)
+            {
+                ColliderGizmos2D.DrawGizmos(collider2D);
+            }
         }
     }
 }

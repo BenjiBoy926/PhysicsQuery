@@ -183,7 +183,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 273150801}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -313,7 +313,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 302093945}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -366,13 +366,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 302093945}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.24230304, w: 0.97020066}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 28.045}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &402686418
 GameObject:
   m_ObjectHideFlags: 0
@@ -491,7 +491,7 @@ Transform:
   m_GameObject: {fileID: 740925314}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.36, y: -0.17, z: 0}
+  m_LocalPosition: {x: -4.11, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -525,14 +525,15 @@ MonoBehaviour:
     _minNormalAngle: -180
     _maxNormalAngle: 180
   _currentShape:
-    rid: 2234344394054172675
+    rid: 2234344412484206592
   references:
     version: 2
     RefIds:
-    - rid: 2234344394054172675
-      type: {class: PhysicsQuery2D/CircleShape, ns: PQuery, asm: PhysicsQuery}
+    - rid: 2234344412484206592
+      type: {class: PhysicsQuery2D/CapsuleShape, ns: PQuery, asm: PhysicsQuery}
       data:
-        _radius: 0.5
+        _size: {x: 1, y: 2}
+        _direction: 0
 --- !u!1 &1918110347
 GameObject:
   m_ObjectHideFlags: 0
