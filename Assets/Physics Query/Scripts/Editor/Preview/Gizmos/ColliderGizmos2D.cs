@@ -38,9 +38,7 @@ namespace PQuery.Editor
         }
         private static void DrawGizmos(CapsuleCollider2D collider)
         {
-            Gizmos.matrix = collider.transform.localToWorldMatrix;
-            CapsuleGizmo2D.Draw(collider.offset, collider.size, collider.direction);
-            Gizmos.matrix = Matrix4x4.identity;
+            CapsuleGizmo2D.Draw(collider.transform.localToWorldMatrix, collider.offset, collider.size, collider.direction);
         }
     }
 }

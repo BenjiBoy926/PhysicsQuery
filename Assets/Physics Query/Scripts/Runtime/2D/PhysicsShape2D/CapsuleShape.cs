@@ -67,9 +67,8 @@ namespace PQuery
             }
             public override void DrawGizmo(Parameters parameters, Vector3 center)
             {
-                Gizmos.matrix = GetGizmoTransformMatrix(parameters, center, 0);
-                CapsuleGizmo2D.Draw(Vector2.zero, _size, _direction);
-                Gizmos.matrix = Matrix4x4.identity;
+                Matrix4x4 transformation = GetGizmoTransformMatrix(parameters, center, 0);
+                CapsuleGizmo2D.Draw(transformation, Vector2.zero, _size, _direction);
             }
 
             public Vector2 GetWorldSize(Parameters parameters)
