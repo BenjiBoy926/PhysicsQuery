@@ -5,26 +5,30 @@ namespace PQuery
 {
     public static class CapsuleGizmo2D
     {
-        public static void Draw(Matrix4x4 transformation, Vector2 localCenter, Vector2 localSize, CapsuleDirection2D localDirection)
+        public static void Draw(Matrix4x4 transformation, Vector2 localCenter, Vector2 localSize, CapsuleDirection2D direction)
         {
-            Vector3 center = transformation.MultiplyPoint3x4(localCenter);
-            Vector2 lossyScale = transformation.lossyScale;
-            Vector2 size = localSize * lossyScale;
-            float radius = GetRadius(transformation, size, localDirection);
-            float axisLength = GetStraightSideExtent(transformation, size, localDirection);
+            float radius = GetRadius(transformation, localSize, direction);
+            float axisLength = GetStraightSideExtent(transformation, localSize, direction);
 
             if (axisLength < 1E-6f)
             {
-                CircleGizmo2D.Draw(center, radius);
+                CircleGizmo2D.Draw(transformation.MultiplyPoint3x4(localCenter), radius);
             }
             else
             {
-                Vector2 axisDirection = GetLocalLengthAxis(transformation, localDirection);
-                axisDirection = Vector3.ProjectOnPlane(axisDirection, Vector3.forward);
-                axisDirection = axisDirection.normalized;
-                Draw(center, axisDirection * axisLength, radius);
+                Draw(transformation, localCenter, radius, axisLength, direction);
             }
         }
+
+        private static void Draw(Matrix4x4 transformation, Vector2 localCenter, float radius, float axisLength, CapsuleDirection2D direction)
+        {
+            Vector3 center = transformation.MultiplyPoint3x4(localCenter);
+            Vector2 axisDirection = GetLocalLengthAxis(transformation, direction);
+            axisDirection = Vector3.ProjectOnPlane(axisDirection, Vector3.forward);
+            axisDirection = axisDirection.normalized;
+            Draw(center, axisDirection * axisLength, radius);
+        }
+
         private static void Draw(Vector3 center, Vector2 axis, float radius)
         {
             Vector3 topCapCenter = center + (Vector3)axis;
@@ -68,19 +72,22 @@ namespace PQuery
 
         private static float GetOverallLength(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            size = ScaleSize(size, GetLocalLengthAxis(transformation, direction));
+            size = ScaleSize(transformation, size);
             return direction == CapsuleDirection2D.Vertical ? size.y : size.x;
         }
         private static float GetDiameter(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            size = ScaleSize(size, GetLocalWidthAxis(transformation, direction));
+            size = ScaleSize(transformation, size);
             return direction == CapsuleDirection2D.Vertical ? size.x : size.y;
         }
 
-        private static Vector2 ScaleSize(Vector2 size, Vector3 localAxis)
+        private static Vector2 ScaleSize(Matrix4x4 transformation, Vector2 size)
         {
-            Vector3 projected = Vector3.ProjectOnPlane(localAxis, Vector3.forward);
-            return size * projected.magnitude;
+            Vector3 right = transformation.GetColumn(0);
+            Vector3 up = transformation.GetColumn(1);
+            Vector3 projectedRight = Vector3.ProjectOnPlane(right, Vector3.forward);
+            Vector3 projectedUp = Vector3.ProjectOnPlane(up, Vector3.forward);
+            return new(size.x * projectedRight.magnitude, size.y * projectedUp.magnitude);
         }
 
         private static Vector3 GetLocalLengthAxis(Matrix4x4 transformation, CapsuleDirection2D direction)
