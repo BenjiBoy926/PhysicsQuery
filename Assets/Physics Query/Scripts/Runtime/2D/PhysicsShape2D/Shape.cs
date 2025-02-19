@@ -6,7 +6,7 @@ namespace PQuery
     {
         public abstract class Shape : AbstractShape
         {
-            public Matrix4x4 GetGizmoTransformMatrix(Parameters parameters, Vector3 center, float localAngle)
+            public Matrix4x4 GetProjectedTransformation(Parameters parameters, Vector3 center, float localAngle)
             {
                 float worldAngle = localAngle + GetTransformAngle(parameters);
                 Quaternion rotation = Quaternion.Euler(0, 0, worldAngle);

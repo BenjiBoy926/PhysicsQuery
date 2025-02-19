@@ -67,13 +67,14 @@ namespace PQuery
             }
             public override void DrawGizmo(Parameters parameters, Vector3 center)
             {
-                Matrix4x4 transformation = GetGizmoTransformMatrix(parameters, center, 0);
+                Matrix4x4 transformation = GetProjectedTransformation(parameters, center, 0);
                 CapsuleGizmo2D.Draw(transformation, Vector2.zero, _size, _direction);
             }
 
             public Vector2 GetWorldSize(Parameters parameters)
             {
-                return _size * parameters.LossyScale;
+                Matrix4x4 transformation = GetProjectedTransformation(parameters, Vector3.zero, 0);
+                return CapsuleMath2D.GetScaledSize(transformation, _size);
             }
             public float GetWorldAngle(Parameters parameters)
             {

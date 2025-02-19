@@ -69,7 +69,7 @@ namespace PQuery
                 {
                     extents, new(extents.x, -extents.y, 0), -extents, new(-extents.x, extents.y, 0)
                 };
-                Gizmos.matrix = GetGizmoTransformMatrix(parameters, center, _angle);
+                Gizmos.matrix = GetProjectedTransformation(parameters, center, _angle);
                 Gizmos.DrawLineStrip(corners, true);
                 Gizmos.matrix = Matrix4x4.identity;
             }
