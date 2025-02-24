@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public static class CapsuleGizmo2D
+    public struct CapsuleGizmo2D
     {
         public static void Draw(Matrix4x4 transformation, Vector2 localCenter, Vector2 localSize, CapsuleDirection2D direction)
         {

@@ -1,15 +1,14 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace PQuery
 {
-    public static class CircleGizmo2D
+    public struct CircleGizmo2D
     {
-        public static void Draw(Vector3 center, float radius)
+        public static void Draw(Vector3 worldCenter, float worldRadius)
         {
-            Vector2 right = Vector2.right * radius;
-            Vector2 up = Vector2.up * radius;
-            new EllipseGizmo(center, right, up).Draw();
+            Vector2 right = Vector2.right * worldRadius;
+            Vector2 up = Vector2.up * worldRadius;
+            new EllipseGizmo(worldCenter, right, up).Draw();
         }
     }
 }
