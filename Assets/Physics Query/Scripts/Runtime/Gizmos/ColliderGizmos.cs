@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PQuery.Editor
 {
-    public static class ColliderGizmos
+    public struct ColliderGizmos
     {
         public static void DrawGizmos(Component collider)
         {

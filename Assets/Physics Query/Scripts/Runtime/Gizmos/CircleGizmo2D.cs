@@ -8,7 +8,7 @@ namespace PQuery
         {
             Vector2 right = Vector2.right * worldRadius;
             Vector2 up = Vector2.up * worldRadius;
-            new EllipseGizmo(worldCenter, right, up).Draw();
+            EllipseGizmo.Draw(worldCenter, right, up);
         }
     }
 }

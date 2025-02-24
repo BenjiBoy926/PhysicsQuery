@@ -49,8 +49,8 @@ namespace PQuery
             };
             Gizmos.DrawLineList(linePoints);
 
-            new EllipseGizmo(topCapCenter, right, hemisphereUp).DrawHalf();
-            new EllipseGizmo(bottomCapCenter, right, hemisphereDown).DrawHalf();
+            EllipseGizmo.DrawHalf(topCapCenter, right, hemisphereUp);
+            EllipseGizmo.DrawHalf(bottomCapCenter, right, hemisphereDown);
         }
 
         private static float GetStraightSideExtent(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)

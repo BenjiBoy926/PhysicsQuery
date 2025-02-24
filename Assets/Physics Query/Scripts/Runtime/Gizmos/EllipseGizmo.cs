@@ -2,49 +2,38 @@ using UnityEngine;
 
 namespace PQuery
 {
-    public readonly struct EllipseGizmo
+    public struct EllipseGizmo
     {
         private const int SegmentsPerArc = 32;
 
-        private readonly Vector3 _center;
-        private readonly Vector3 _xAxis;
-        private readonly Vector3 _yAxis;
-
-        public EllipseGizmo(Vector3 center, Vector3 xAxis, Vector3 yAxis)
+        public static void Draw(Vector3 center, Vector3 xAxis, Vector3 yAxis)
         {
-            _center = center;
-            _xAxis = xAxis;
-            _yAxis = yAxis;
+            DrawArc(center, xAxis, yAxis, 2 * Mathf.PI);
         }
-
-        public void Draw()
+        public static void DrawHalf(Vector3 center, Vector3 xAxis, Vector3 yAxis)
         {
-            DrawArc(2 * Mathf.PI);
+            DrawArc(center, xAxis, yAxis, Mathf.PI);
         }
-        public void DrawHalf()
-        {
-            DrawArc(Mathf.PI);
-        }
-        public void DrawArc(float totalAngle)
+        public static void DrawArc(Vector3 center, Vector3 xAxis, Vector3 yAxis, float totalAngle)
         {
             for (int i = 0; i < SegmentsPerArc; i++)
             {
-                DrawArcSegment(totalAngle, i);
+                DrawArcSegment(center, xAxis, yAxis, totalAngle, i);
             }
         }
-        private void DrawArcSegment(float totalAngle, int segment)
+        private static void DrawArcSegment(Vector3 center, Vector3 xAxis, Vector3 yAxis, float totalAngle, int segment)
         {
-            Vector3 position1 = GetPositionOnArc(totalAngle, segment);
-            Vector3 position2 = GetPositionOnArc(totalAngle, segment + 1);
+            Vector3 position1 = GetPositionOnArc(center, xAxis, yAxis, totalAngle, segment);
+            Vector3 position2 = GetPositionOnArc(center, xAxis, yAxis, totalAngle, segment + 1);
             Gizmos.DrawLine(position1, position2);
         }
-        private Vector3 GetPositionOnArc(float totalAngle, int segment)
+        private static Vector3 GetPositionOnArc(Vector3 center, Vector3 xAxis, Vector3 yAxis, float totalAngle, int segment)
         {
             float proportion = (float)segment / SegmentsPerArc;
             float angle = totalAngle * proportion;
-            float x = Mathf.Cos(angle);
-            float y = Mathf.Sin(angle);
-            return _center + _xAxis * x + _yAxis * y;
+            float xAngle = Mathf.Cos(angle);
+            float yAngle = Mathf.Sin(angle);
+            return center + xAxis * xAngle + yAxis * yAngle;
         }
     }
 }

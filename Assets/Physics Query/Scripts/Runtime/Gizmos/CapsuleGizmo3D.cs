@@ -34,9 +34,9 @@ namespace PQuery
         }
         private static void DrawHemisphere(Vector3 center, Vector3 right, Vector3 up, Vector3 forward)
         {
-            new EllipseGizmo(center, forward, right).Draw();
-            new EllipseGizmo(center, forward, up).DrawHalf();
-            new EllipseGizmo(center, right, up).DrawHalf();
+            EllipseGizmo.Draw(center, forward, right);
+            EllipseGizmo.DrawHalf(center, forward, up);
+            EllipseGizmo.DrawHalf(center, right, up);
         }
         private static void GetBasisVectors(Vector3 up, out Vector3 right, out Vector3 forward)
         {
