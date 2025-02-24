@@ -4,7 +4,7 @@ namespace PQuery
 {
     public struct CapsuleMath2D
     {
-        public static Vector2 GetScaledSize(Matrix4x4 transformation, Vector2 size)
+        public static Vector2 TransformSize(Matrix4x4 transformation, Vector2 size)
         {
             return new(GetScaledSize(transformation, size, 0), GetScaledSize(transformation, size, 1));
         }

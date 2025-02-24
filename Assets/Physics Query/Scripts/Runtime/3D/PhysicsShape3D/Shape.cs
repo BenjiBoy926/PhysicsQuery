@@ -6,7 +6,10 @@ namespace PQuery
     {
         public abstract class Shape : AbstractShape
         {
-
+            protected Ray GetRay(Parameters parameters)
+            {
+                return new(parameters.Origin, parameters.Direction);
+            }
         }
     }
 }

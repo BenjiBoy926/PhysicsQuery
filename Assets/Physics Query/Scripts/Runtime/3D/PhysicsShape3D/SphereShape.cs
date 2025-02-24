@@ -75,11 +75,6 @@ namespace PQuery
                 float max = Mathf.Max(lossyScale.x, lossyScale.y, lossyScale.z);
                 return _radius * max;
             }
-
-            private Ray GetRay(Parameters parameters)
-            {
-                return new(parameters.Origin, parameters.Direction);
-            }
         }
     }
 }

@@ -72,12 +72,12 @@ namespace PQuery
 
         private static float GetOverallLength(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            size = CapsuleMath2D.GetScaledSize(transformation, size);
+            size = CapsuleMath2D.TransformSize(transformation, size);
             return direction == CapsuleDirection2D.Vertical ? size.y : size.x;
         }
         private static float GetDiameter(Matrix4x4 transformation, Vector2 size, CapsuleDirection2D direction)
         {
-            size = CapsuleMath2D.GetScaledSize(transformation, size);
+            size = CapsuleMath2D.TransformSize(transformation, size);
             return direction == CapsuleDirection2D.Vertical ? size.x : size.y;
         }
 

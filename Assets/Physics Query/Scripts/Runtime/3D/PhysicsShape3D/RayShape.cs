@@ -63,10 +63,6 @@ namespace PQuery
             {
                 return GetRay(parameters).GetPoint(parameters.Distance);
             }
-            private Ray GetRay(Parameters parameters)
-            {
-                return new(parameters.Origin, parameters.Direction);
-            }
         }
     }
 }

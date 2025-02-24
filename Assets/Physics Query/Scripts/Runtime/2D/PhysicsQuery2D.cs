@@ -32,11 +32,5 @@ namespace PQuery
         {
             return vector;
         }
-
-        protected override void OnDrawGizmosSelected()
-        {
-            base.OnDrawGizmosSelected();
-            CurrentShape.DrawGizmo(GetParameters(), transform.position);
-        }
     }
 }
