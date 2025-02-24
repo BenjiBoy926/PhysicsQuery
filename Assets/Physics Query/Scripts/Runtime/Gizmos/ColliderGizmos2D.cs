@@ -26,19 +26,8 @@ namespace PQuery.Editor
         }
         private static void DrawGizmos(BoxCollider2D collider)
         {
-            Vector2 extents = collider.size * 0.5f;
-            Span<Vector3> corners = stackalloc Vector3[]
-            {
-                    extents, new(extents.x, -extents.y, 0), -extents, new(-extents.x, extents.y, 0)
-            };
-            Matrix4x4 matrix = collider.transform.localToWorldMatrix;
-            for (int i = 0; i < corners.Length; i++)
-            {
-                Vector3 world = matrix.MultiplyPoint3x4(corners[i]);
-                world.z = 0;
-                corners[i] = world;
-            }
-            Gizmos.DrawLineStrip(corners, true);
+            Matrix4x4 transformation = collider.transform.localToWorldMatrix;
+            SquareGizmo2D.Draw(transformation, collider.offset, collider.size);
         }
         private static void DrawGizmos(CapsuleCollider2D collider)
         {
