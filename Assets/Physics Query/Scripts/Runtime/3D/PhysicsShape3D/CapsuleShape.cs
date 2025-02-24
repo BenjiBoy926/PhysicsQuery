@@ -16,11 +16,11 @@ namespace PQuery
                 public readonly Vector3 Cap2;
                 public readonly float Radius;
 
-                public Position(Parameters parameters, Axis3D axis, float height, float radius)
+                public Position(Parameters parameters, Axis3D axis, Quaternion rotation, float height, float radius)
                 {
                     float extent = height * 0.5f;
                     Vector3 center = parameters.Origin;
-                    Vector3 direction = parameters.TransformDirection(axis.Vector);
+                    Vector3 direction = rotation * parameters.TransformDirection(axis.Vector);
 
                     Vector3 lossyScale = parameters.LossyScale;
                     float distance = extent * lossyScale[axis.Dimension];
@@ -41,7 +41,9 @@ namespace PQuery
             }
 
             [SerializeReference, SubtypeDropdown]
-            private Axis3D _axis = new Axis_Y();
+            private Axis3D _axis = new Axis3D_Y();
+            [SerializeField]
+            private Quaternion _rotation = Quaternion.identity;
             [SerializeField]
             private float _height = 1;
             [SerializeField]
@@ -50,9 +52,10 @@ namespace PQuery
             public CapsuleShape()
             {
             }
-            public CapsuleShape(Axis3D axis, float height, float radius)
+            public CapsuleShape(Axis3D axis, Quaternion rotation, float height, float radius)
             {
                 _axis = axis;
+                _rotation = rotation;
                 _height = height;
                 _radius = radius;
             }
@@ -118,7 +121,7 @@ namespace PQuery
 
             public Position GetPosition(Parameters parameters)
             {
-                return new(parameters, _axis, _height, _radius);
+                return new(parameters, _axis, _rotation, _height, _radius);
             }
         }
     }

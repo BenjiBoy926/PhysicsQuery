@@ -525,15 +525,15 @@ MonoBehaviour:
     _minNormalAngle: -180
     _maxNormalAngle: 180
   _currentShape:
-    rid: 2234344529242357762
+    rid: 2234344529242357766
   references:
     version: 2
     RefIds:
-    - rid: 2234344529242357762
-      type: {class: PhysicsQuery2D/BoxShape, ns: PQuery, asm: PhysicsQuery}
+    - rid: 2234344529242357766
+      type: {class: PhysicsQuery2D/CapsuleShape, ns: PQuery, asm: PhysicsQuery}
       data:
-        _size: {x: 1.04, y: 1}
-        _angle: 0
+        _size: {x: 1, y: 2}
+        _direction: 0
 --- !u!1 &1918110347
 GameObject:
   m_ObjectHideFlags: 0

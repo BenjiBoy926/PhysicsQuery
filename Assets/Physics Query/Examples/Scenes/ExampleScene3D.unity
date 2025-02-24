@@ -740,15 +740,21 @@ MonoBehaviour:
     _triggerInteraction: 0
     _cacheCapacity: 8
   _currentShape:
-    rid: 2234344394054172672
+    rid: 2234344529242357763
   references:
     version: 2
     RefIds:
-    - rid: 2234344394054172672
-      type: {class: PhysicsQuery3D/BoxShape, ns: PQuery, asm: PhysicsQuery}
+    - rid: 2234344529242357763
+      type: {class: PhysicsQuery3D/CapsuleShape, ns: PQuery, asm: PhysicsQuery}
       data:
-        _size: {x: 1, y: 1, z: 1}
-        _orientation: {x: 0, y: 0, z: 0, w: 1}
+        _axis:
+          rid: 2234344529242357765
+        _rotation: {x: 0, y: 0, z: 0, w: 1}
+        _height: 1
+        _radius: 0.5
+    - rid: 2234344529242357765
+      type: {class: Axis3D_X, ns: PQuery, asm: PhysicsQuery}
+      data: 
 --- !u!4 &1270232015
 Transform:
   m_ObjectHideFlags: 0
