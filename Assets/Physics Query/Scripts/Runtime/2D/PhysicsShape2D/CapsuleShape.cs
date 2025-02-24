@@ -7,9 +7,11 @@ namespace PQuery
         public class CapsuleShape : Shape
         {
             [SerializeField]
-            private Vector2 _size = new(1, 2);
-            [SerializeField]
             private CapsuleDirection2D _direction = CapsuleDirection2D.Vertical;
+            [SerializeField]
+            private float _angle = 0;
+            [SerializeField]
+            private Vector2 _size = new(1, 2);
 
             public override bool Cast(Parameters parameters, out RaycastHit2D hit)
             {
@@ -67,18 +69,18 @@ namespace PQuery
             }
             public override void DrawGizmo(Parameters parameters, Vector3 center)
             {
-                Matrix4x4 transformation = GetProjectedTransformation(parameters, center, 0);
+                Matrix4x4 transformation = GetProjectedTransformation(parameters, center, _angle);
                 CapsuleGizmo2D.Draw(transformation, Vector2.zero, _size, _direction);
             }
 
             public Vector2 GetWorldSize(Parameters parameters)
             {
-                Matrix4x4 transformation = GetProjectedTransformation(parameters, Vector3.zero, 0);
+                Matrix4x4 transformation = GetProjectedTransformation(parameters, Vector3.zero, _angle);
                 return CapsuleMath2D.TransformSize(transformation, _size);
             }
             public float GetWorldAngle(Parameters parameters)
             {
-                return GetTransformAngle(parameters);
+                return _angle + GetTransformAngle(parameters);
             }
         }
     }
