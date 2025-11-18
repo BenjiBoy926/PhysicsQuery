@@ -45,7 +45,8 @@ namespace PQuery
         }
         private static void DrawGizmos(PolygonCollider2D collider)
         {
-
+            Matrix4x4 transformation = collider.transform.localToWorldMatrix;
+            PolygonGizmo2D.Draw(transformation, collider.points);
         }
     }
 }
