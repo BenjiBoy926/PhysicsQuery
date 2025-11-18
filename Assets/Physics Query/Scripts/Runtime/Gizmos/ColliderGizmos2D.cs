@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace PQuery.Editor
+namespace PQuery
 {
     public struct ColliderGizmos2D
     {
@@ -23,6 +23,10 @@ namespace PQuery.Editor
             {
                 DrawGizmos(circleCollider);
             }
+            else if (collider is PolygonCollider2D polygonCollider)
+            {
+                DrawGizmos(polygonCollider);
+            }
         }
         private static void DrawGizmos(BoxCollider2D collider)
         {
@@ -38,6 +42,10 @@ namespace PQuery.Editor
             Vector3 scale = collider.transform.lossyScale;
             float worldRadius = Mathf.Max(scale.x, scale.y) * collider.radius;
             CircleGizmo2D.Draw(collider.transform.position, worldRadius);
+        }
+        private static void DrawGizmos(PolygonCollider2D collider)
+        {
+
         }
     }
 }
